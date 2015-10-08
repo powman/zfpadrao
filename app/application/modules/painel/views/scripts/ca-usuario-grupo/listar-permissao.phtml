@@ -1,0 +1,26 @@
+<?php if(count($this->permissao) > 0) :?>
+
+<link href="<?php echo $this->baseUrl($this->cssHelper) ;?>"
+	media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <span class="badge"><input name="selecionarTodos" class="selecionarTodos" type="checkbox"></span>
+        <strong>SELECIONAR TODOS</strong>
+    </li>
+    <?php 
+    foreach ($this->permissaousuario as $value):
+        $aNewArray[] = array($value['permissao'],$value['resource_id']);
+    endforeach;
+    foreach ($this->permissao as $value):
+    ?>
+      <li class="list-group-item">
+        <span class="badge"><input name="permissao[]" <?php echo in_array(array($value['permissao'],$value['resource_id']), $aNewArray) ? 'checked="checked"' : ""; ?> type="checkbox" class="checkbox1" value="<?php echo $this->role_id;?>,<?php echo $value['resource_id'];?>,<?php echo $value['permissao'];?>"></span>
+        <?php echo strtoupper($value['permissao']);?>
+      </li> 
+    <?php endforeach;?>
+</ul>
+
+<?php endif;?>

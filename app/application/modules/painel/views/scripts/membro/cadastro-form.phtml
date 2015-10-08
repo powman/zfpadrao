@@ -1,0 +1,550 @@
+<link href="<?php echo $this->baseUrl($this->cssHelper) ;?>"
+	media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+	
+<div class="container">
+	<div class="jumbotron">
+		<div class="row">
+		<div class="col-md-12 col-xs-12 col-sm-12">
+		    <div align="right">
+		        <a href="javascript:history.go(-1);" class="btn btn-primary">Voltar</a>
+		    </div>
+		    <form id="commentForm" action="javascript:;" class="form-horizontal cadastrarForm" data-url="<?php echo $this->baseUrl('default/membro/cadastrar-acao/type/json');?>">
+    		    <div id="rootwizard">
+        		    <div role="tabpanel">
+        
+                      <!-- Nav tabs -->
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li><a href="#home" data-toggle="tab">Dados Pessoais</a></li>
+                        <li><a href="#profile" data-toggle="tab">Dados do Membro</a></li>
+                        <li><a href="#messages" data-toggle="tab">Observações</a></li>
+                        <li><a href="#settings" data-toggle="tab">Finalizar</a></li>
+                      </ul>
+                      <!-- Tab panes -->
+                      <div class="tab-content">
+                        <div class="tab-pane" id="home">
+                            <div class="row" style="padding: 10px 0px;">
+                        
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="nomeForm">Status</label>  
+                                  <div class="col-md-6">
+                                      <select name="status" id="usuario_grupo_idEditar input-md required" class="form-control">
+                    				       <option value="0">Inativo</option>
+                    				       <option value="1">Ativo</option>
+                    				  </select>
+                                  </div>
+                                </div>
+                        
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="nomeForm">Nome</label>  
+                                  <div class="col-md-6">
+                                  <input id="nomeForm" name="nome" class="form-control input-md required" required type="text">
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="emailForm">E-mail</label>  
+                                  <div class="col-md-6">
+                                  <input id="emailForm" name="email" class="form-control input-md required" required type="text">
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="senhaForm">Senha</label>  
+                                  <div class="col-md-6">
+                                  <input id="senhaForm" name="senha" class="form-control input-md required" required type="password">
+                                  </div>
+                                </div>
+                                
+                                 <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Estado Civil</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="estado_civil-0">
+                                      <input name="estado_civil" id="estado_civil-0" value="1" type="radio" onclick="$('.casadoGrupo').fadeOut();" required>
+                                      Solteiro
+                                    </label>
+                                	</div>
+                                    <div class="checkbox">
+                                    <label for="estado_civil-1">
+                                      <input name="estado_civil" id="estado_civil-1" value="2" type="radio" onclick="$('.casadoGrupo').fadeIn();">
+                                      Casado
+                                    </label>
+                                	</div>
+                                    <div class="checkbox">
+                                    <label for="estado_civil-2">
+                                      <input name="estado_civil" id="estado_civil-2" value="3" type="radio" onclick="$('.casadoGrupo').fadeOut();">
+                                      Divorciado
+                                    </label>
+                                	</div>
+                                    <div class="checkbox">
+                                    <label for="estado_civil-3">
+                                      <input name="estado_civil" id="estado_civil-3" value="4" type="radio" onclick="$('.casadoGrupo').fadeOut();">
+                                      Viúvo
+                                    </label>
+                                	</div>
+                                    <div class="checkbox">
+                                    <label for="estado_civil-4">
+                                      <input name="estado_civil" id="estado_civil-4" value="5" type="radio" onclick="$('.casadoGrupo').fadeIn();">
+                                      Civil
+                                    </label>
+                                	</div>
+                                    <div class="checkbox">
+                                    <label for="estado_civil-5">
+                                      <input name="estado_civil" id="estado_civil-5" value="6" type="radio" onclick="$('.casadoGrupo').fadeIn();">
+                                      Religioso
+                                    </label>
+                                	</div>
+                                    <div class="checkbox">
+                                    <label for="estado_civil-6">
+                                      <input name="estado_civil" id="estado_civil-6" value="7" type="radio" onclick="$('.casadoGrupo').fadeOut();">
+                                      Outros
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="estado_civil" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group casadoGrupo" style="display: none;">
+                                  <label class="col-md-3 control-label" for="conjugeForm">Conjuge</label>  
+                                  <div class="col-md-6">
+                                  <input id="conjugeForm" name="conjuge" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group casadoGrupo" style="display: none;">
+                                  <label class="col-md-3 control-label" for="data_casamentoForm">Data de Casamento</label>  
+                                  <div class="col-md-6">
+                                  <input id="data_casamentoForm" name="data_casamento" mask-input="data" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="telefoneForm">Telefone</label>  
+                                  <div class="col-md-6">
+                                  <input id="telefoneForm" name="telefone" class="form-control input-md required" mask-input="telefone" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="telefoneForm">Celular</label>  
+                                  <div class="col-md-6">
+                                  <input id="celularForm" name="celular" class="form-control input-md required" mask-input="telefone" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="dataNascForm">Data de Nascimento</label>  
+                                  <div class="col-md-6">
+                                  <input id="dataNascForm" name="data_nascimento" mask-input="data" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="cepForm">Cep</label>  
+                                  <div class="col-md-6">
+                                  <input id="cepForm" name="cep" mask-input="cep" class="form-control input-md" type="text">
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="cidadeForm">Cidade</label>  
+                                  <div class="col-md-6">
+                                  <input id="cidadeForm" name="cidade" class="form-control input-md" type="text">
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="bairroForm">Bairro</label>  
+                                  <div class="col-md-6">
+                                  <input id="bairroForm" name="bairro" class="form-control input-md" type="text">
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="profissaoForm">Profissão</label>  
+                                  <div class="col-md-6">
+                                  <input id="profissaoForm" name="profissao" class="form-control input-md" type="text">
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Filhos?</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="filho-0">
+                                      <input name="filho" id="filho-0" value="1" type="radio" onclick="$('#filhosQtdeForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="filho-1">
+                                      <input name="filho" id="filho-1" value="0" type="radio" onclick="$('#filhosQtdeForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="filho" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group" id="filhosQtdeForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="qtd_filhoForm">Qtde de Filhos</label>  
+                                  <div class="col-md-6">
+                                  <input id="qtd_filhoForm" name="qtd_filho" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="profile">
+                            <div class="row" style="padding: 10px 0px;">
+                        
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="discipuladorForm">Discipulador</label>  
+                                  <div class="col-md-6">
+                                  <input id="discipuladorForm" name="discipulador" class="form-control input-md" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Batizado?</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="batizado-0">
+                                      <input name="batizado" id="batizado-0" value="1" type="radio" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="batizado-1">
+                                      <input name="batizado" id="batizado-1" value="0" type="radio">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="batizado" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Pré - Encontro com Deus</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="preEncontro-0">
+                                      <input name="pre_encontro" id="preEncontro-0" value="1" type="radio" onclick="$('.preForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="preEncontro-1">
+                                      <input name="pre_encontro" id="preEncontro-1" value="0" type="radio" onclick="$('.preForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="pre_encontro" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group preForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="pre_encontro_localForm">Pré - Encontro com Deus - Local</label>  
+                                  <div class="col-md-6">
+                                  <input id="pre_encontro_localForm" name="pre_encontro_local" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Encontro com Deus</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="encontro-0">
+                                      <input name="encontro_com_deus" id="encontro-0" value="1" type="radio" onclick="$('.encontroForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="encontro-1">
+                                      <input name="encontro_com_deus" id="encontro-1" value="0" type="radio" onclick="$('.encontroForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="encontro_com_deus" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group encontroForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="encontro_com_deus_localForm">Pré - Encontro com Deus - Local</label>  
+                                  <div class="col-md-6">
+                                  <input id="encontro_com_deus_localForm" name="encontro_com_deus_local" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Pós - Encontro com Deus</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="posEncontro-0">
+                                      <input name="pos_encontro" id="posEncontro-0" value="1" type="radio" onclick="$('.posEncontroForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="posEncontro-1">
+                                      <input name="pos_encontro" id="posEncontro-1" value="0" type="radio" onclick="$('.posEncontroForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="pos_encontro" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group posEncontroForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="pos_encontro_localForm">Pós - Encontro com Deus - Local</label>  
+                                  <div class="col-md-6">
+                                  <input id="pos_encontro_localForm" name="pos_encontro_local" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Reencontro</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="reencontro-0">
+                                      <input name="reencontro" id="reencontro-0" value="1" type="radio" onclick="$('.reencontroForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="reencontro-1">
+                                      <input name="reencontro" id="reencontro-1" value="0" type="radio" onclick="$('.reencontroForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="reencontro" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group reencontroForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="reencontro_localForm">Reencontro - Local</label>  
+                                  <div class="col-md-6">
+                                  <input id="reencontro_localForm" name="reencontro_local" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Mover Celular</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="mover_celular-0">
+                                      <input name="mover_celular" id="mover_celular-0" value="1" type="radio" onclick="$('.mover_celularForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="mover_celular-1">
+                                      <input name="mover_celular" id="mover_celular-1" value="0" type="radio" onclick="$('.mover_celularForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="mover_celular" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group mover_celularForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="mover_celular_localForm">Mover Celular - Local</label>  
+                                  <div class="col-md-6">
+                                  <input id="mover_celular_localForm" name="mover_celular_local" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Resgatão</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="resgatao-0">
+                                      <input name="resgatao" id="resgatao-0" value="1" type="radio" onclick="$('.resgataoForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="resgatao-1">
+                                      <input name="resgatao" id="resgatao-1" value="0" type="radio" onclick="$('.resgataoForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="resgatao" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group resgataoForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="resgatao_localForm">Resgatão - Local</label>  
+                                  <div class="col-md-6">
+                                  <input id="resgatao_localForm" name="resgatao_local" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Encontro com Deus Revisão</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="revisao-0">
+                                      <input name="revisao" id="revisao-0" value="1" type="radio" onclick="$('.revisaoForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="revisao-1">
+                                      <input name="revisao" id="revisao-1" value="0" type="radio" onclick="$('.revisaoForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="revisao" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group revisaoForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="revisao_localForm">Encontro com Deus Revisão - Local</label>  
+                                  <div class="col-md-6">
+                                  <input id="revisao_localForm" name="revisao_local" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+                                
+                                <!-- Multiple Checkboxes -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label">Encontro Levita</label>
+                                  <div class="col-md-6">
+                                  <div class="checkbox">
+                                    <label for="levita-0">
+                                      <input name="levita" id="levita-0" value="1" type="radio" onclick="$('.levitaForm').fadeIn();" required>
+                                      Sim
+                                    </label>
+                                	</div>
+                                  <div class="checkbox">
+                                    <label for="levita-1">
+                                      <input name="levita" id="levita-1" value="0" type="radio" onclick="$('.levitaForm').fadeOut();">
+                                      Não
+                                    </label>
+                                	</div>
+                                	<div style="padding: 10px 0 0 0;">
+                                	    <label for="levita" class="error"></label>
+                                	</div>
+                                  </div>
+                                </div>
+                                
+                                <!-- Text input-->
+                                <div class="form-group levitaForm" style="display: none;">
+                                  <label class="col-md-3 control-label" for="levita_localForm">Encontro Levita - Local</label>  
+                                  <div class="col-md-6">
+                                  <input id="levita_localForm" name="levita_local" class="form-control input-md required" type="text" required>
+                                  </div>
+                                </div>
+        
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="messages">
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Textarea -->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label" for="textoForm">Outros encontros ou Seminários</label>
+                                  <div class="col-md-6">                     
+                                    <textarea class="form-control" id="textoForm" name="texto"></textarea>
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="settings">
+                            <div class="row" style="padding: 10px 0px;">
+                    			<div class="col-md-12 col-xs-12 col-sm-12">
+                                    <!-- Multiple Checkboxes -->
+                                    <div class="form-group">
+                                      <label class="col-md-3 control-label">Avisar Usuário por e-mail?</label>
+                                      <div class="col-md-6">
+                                      <div class="checkbox">
+                                        <label for="avisar-0">
+                                          <input name="avisar" id="avisar-0" value="1" type="radio">
+                                          Sim
+                                        </label>
+                                    	</div>
+                                      <div class="checkbox">
+                                        <label for="avisar-1">
+                                          <input name="avisar" id="avisar-1" checked="checked" value="0" type="radio">
+                                          Não
+                                        </label>
+                                    	</div>
+                                      </div>
+                                    </div>
+                    				<div align="center" style="padding-top: 10px;">
+                    					<a href="javascript:;" class="btn btn-primary cadastrarBotao">Cadastrar Dados</a>
+                    				</div>
+                    			</div>
+                    		</div>
+                        </div>
+                        <ul class="pager wizard">
+                        <li class="previous first" style="display:none;"><a href="#">Primeiro</a></li>
+                        <li class="previous"><a href="#">Anterior</a></li>
+                        <li class="next last" style="display:none;"><a href="#">Último</a></li>
+                        <li class="next"><a href="javascript:;">Próximo</a></li>
+                        </ul>
+                      </div>
+                    
+                    </div>
+                </div>
+            </form>
+		
+		    
+		</div>    
+		</div>
+		
+
+	</div>
+</div>

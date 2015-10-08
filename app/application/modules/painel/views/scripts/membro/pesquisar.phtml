@@ -1,0 +1,64 @@
+
+<link href="<?php echo $this->baseUrl($this->cssHelper) ;?>"
+	media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+	
+	
+<div class="modal-dialog modal-md">
+	<div class="modal-content">
+		<form action="javascript:;" id="frmPesquisar" data-url="<?php echo $this->baseUrl();?>/default/membro/listar/type/json" class="form">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">X</span>
+					<span class="sr-only">Fechar</span>
+				</button>
+				<h4 class="modal-title">Filtrar Resultados</h4>
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Id</label>
+				<input type="text" name="id" id="idPesquisar" class="form-control">
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Nome</label>
+				<input type="text" name="nome" id="nomePesquisar" class="form-control">
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Status</label>
+				<select name="status" id="usuario_grupo_idEditar input-md required" class="form-control">
+			       <option value="">Selecione...</option>
+			       <option value="0">Inativo</option>
+			       <option value="1">Ativo</option>
+			    </select>
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Email</label>
+				<input type="text" name="email" id="emailPesquisar" class="form-control">
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Telefone</label>
+				<input type="text" name="telefone" id="telefonePesquisar" class="form-control" mask-input="telefone">
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Data de Nascimento</label>
+				<input type="text" name="data_nascimento" id="dataNascPesquisar" class="form-control" mask-input="data">
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Cidade</label>
+				<input type="text" name="cidade" id="cidadePesquisar" class="form-control">
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Endereço</label>
+				<input type="text" name="endereco" id="enderecoPesquisar" class="form-control">
+			</div>
+			<div class="modal-body" style="padding: 3px 15px 0px 15px;">
+				<label>Bairro</label>
+				<input type="text" name="bairro" id="bairroPesquisar" class="form-control">
+			</div>
+			<div class="modal-footer" style="margin-top: 5px;">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				<button type="button" class="btn btn-primary botaoPesquisar">Pesquisar</button>
+			</div>
+		</form>
+	</div> <!-- /.modal-content -->
+</div> <!-- /.modal-dialog -->

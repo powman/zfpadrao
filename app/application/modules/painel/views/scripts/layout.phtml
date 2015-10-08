@@ -1,0 +1,168 @@
+<?php /*<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="Content-Language" content="pt-BR" />
+        <meta http-equiv="Cache-Control" content="no-cache" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <meta name="robots" content="ALL" />
+        <meta name="keywords" content="<?php //echo $this->headTags(); ?>" />
+        <meta name="description" content="<?php //echo $this->headDescricao(); ?>"/>
+        <meta name="resource-types" content="document" />
+        <meta name="revisit-after" content="1 day" />
+        <meta name="distribution" content="Global" />
+        <meta name="rating" content="General" />
+        <meta name="author" content="Paulo" />
+        <meta name="language" content="pt-br" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="icon" href="http://www.netsuprema.com.br/net.ico" />
+        
+        <?php $this->headScript()->appendFile('http://html5shim.googlecode.com/svn/trunk/html5.js','text/javascript',array('conditional' => 'if lt IE 9'));?>
+        
+        <?php $this->headLink()->appendStylesheet($this->baseUrl() . '/js/bower_components/bootstrap/dist/css/bootstrap.min.css') ?> 
+        <?php $this->headLink()->appendStylesheet($this->baseUrl() . '/js/bower_components/components-font-awesome/css/font-awesome.min.css') ?>
+        <?php $this->headLink()->appendStylesheet($this->baseUrl() . '/js/bower_components/bootstrap-modal/css/bootstrap-modal.css') ?>
+        <?php $this->headLink()->appendStylesheet($this->baseUrl() . '/js/bower_components/jQuery-Validation-Engine/css/validationEngine.jquery.css') ?>
+        <?php $this->headLink()->appendStylesheet($this->baseUrl() . '/css/all.css') ?>
+        
+        
+        <script>
+			var pathSite = '<?php echo $this->baseUrl() ?>';
+			var Controller = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getControllerName();?>';
+			var Modulo = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>';
+        </script>
+        
+        <?php
+            echo $this->headScript()->prependFile($this->baseUrl('js/scripts.js'))
+                                      ->prependFile($this->baseUrl('js/bower_components/multupload/multupload.js'))
+                                      ->prependFile($this->baseUrl('js/bower_components/jQuery-Validation-Engine/js/languages/jquery.validationEngine-pt_BR.js'))
+                                      ->prependFile($this->baseUrl('js/bower_components/jQuery-Validation-Engine/js/jquery.validationEngine.js'))
+                                      ->prependFile($this->baseUrl('js/bower_components/jQuery-Mask-Plugin/dist/jquery.mask.min.js'))
+                                      ->prependFile($this->baseUrl('js/bower_components/bootstrap-modal/js/bootstrap-modalmanager.js'))
+                                      ->prependFile($this->baseUrl('js/bower_components/bootstrap-modal/js/bootstrap-modal.js'))
+                                      ->prependFile($this->baseUrl('js/bower_components/bootstrap/dist/js/bootstrap.min.js'))
+                                      ->prependFile($this->baseUrl('js/bower_components/jquery/dist/jquery.min.js'));
+        ?>
+
+        
+        <link rel="canonical" href="<?=isset($_SERVER['SCRIPT_URI'])?>" />
+
+		<?php echo $this->headMeta(); ?>
+		<title>PAINEL ADMINISTRATIVO - SIG</title>
+		<?php echo $this->headLink(); ?>
+	</head>
+	<body>
+	    <div id="fb-root"></div>
+	    <?php if($this->mostra_head_footer):?>
+	    <header>
+			<!-- Static navbar -->
+			<nav role="navigation" class="navbar navbar-default">
+				<div class="container-fluid primary">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" class="navbar-toggle" type="button">
+							<span class="sr-only">Navegação</span> <span class="icon-bar"></span>
+							<span class="icon-bar"></span> <span class="icon-bar"></span>
+						</button>
+						<a href="<?php echo $this->baseUrl() ?>/painel/index/index" class="navbar-brand"> 
+							LOGO
+						</a>
+					</div>
+					<!-- Menu -->
+					<div id="bs-example-navbar-collapse-1"
+						class="collapse navbar-collapse">
+						<ul class="nav navbar-nav">
+						  <?php echo $this->menu() ?>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+						  <li>
+		                    <button type="button" class="btn navbar-btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Configurações <span class="caret"></span></button>
+		                    <ul class="dropdown-menu">
+		                      <li><a href="<?php echo $this->baseUrl() ?>/painel/ca-auth/sair">Sair</a></li>
+		                    </ul>
+		                  </li>
+						</ul>
+					</div>
+					<!-- /.navbar-collapse -->
+				</div>
+				<!-- /.container-fluid --> 
+			</nav>
+		</header>
+		<div>
+		
+		</div>
+		<?php endif; ?>
+		<div>
+    		<div class="row">
+                <div class="col-xs-12" id="mensagemDenotificacao">
+                    <?php $this->errorpermissao;?>
+                </div>
+            </div>
+		    
+		</div>
+        <div class="container">
+		    <?php echo $this->layout()->content; ?>
+		</div>
+		
+		<?php if($this->mostra_head_footer):?>
+		<footer id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <p>Painel Administrativo © - <?php echo date('Y')?></p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <?php endif;?>
+        
+
+	</body>
+</html>
+
+*/?>
+
+<!doctype html>
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Painel Administrativo</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+        <!-- needs images, font... therefore can not be part of ui.css -->
+        <?php $this->headLink()->appendStylesheet($this->baseUrl('bower_components/font-awesome/css/font-awesome.min.css')) ?> 
+        <?php $this->headLink()->appendStylesheet($this->baseUrl('bower_components/weather-icons/css/weather-icons.min.css')) ?> 
+        <?php $this->headLink()->appendStylesheet($this->baseUrl('assets/css/main.css')) ?> 
+        <?php echo $this->headLink();?>
+        <!-- end needs images -->
+
+    </head>
+    <body data-ng-app="app" id="app" data-custom-background="" data-off-canvas-nav="">
+        <!--[if lt IE 9]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <div data-ng-controller="AppCtrl">
+            <div data-ng-hide="isSpecificPage()" data-ng-cloak="" class="no-print">
+                <section data-ng-include=" '<?php echo $this->baseUrl('views/header.html') ?>' " id="header" class="top-header"></section>
+
+                <aside data-ng-include=" '<?php echo $this->baseUrl('views/nav.html') ?>' " id="nav-container"></aside>
+            </div>
+
+            <div class="view-container">
+                <section data-ng-view="" id="content" class="animate-fade-up"></section>
+            </div>
+        </div>
+
+
+        <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <?php echo $this->headScript()->appendFile($this->baseUrl('assets/js/vendor.js'))
+                                      ->appendFile($this->baseUrl('assets/js/ui.js'))
+                                      //->appendFile($this->baseUrl('assets/js/app.js')); 
+        ?>
+        
+    </body>
+</html>

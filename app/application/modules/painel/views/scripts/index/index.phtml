@@ -1,0 +1,55 @@
+<div>
+	<div class="jumbotron">
+		<div>
+			<div class="table-responsive">
+				<div>
+				    <div class="container">
+				        <form action="javascript:;" id="frmPesquisar" data-url="<?php echo $this->baseUrl();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>/logs/listar/type/json" class="form">
+    				        <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label text-right" for="nomeForm">Atributo de pesquisa</label>  
+                                  <div class="col-md-6">
+                                      <input id="pesquisa" name="pesquisa" class="form-control input-md required" required type="text">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                    			<div class="col-md-12 col-xs-12 col-sm-12">
+                    				<div align="center" style="padding-top: 10px;">
+                    					<button type="button" class="btn btn-default botaoPesquisar">Pesquisar</button>
+                    				</div>
+                    			</div>
+                    		</div>
+                		</form>
+				    </div>
+				</div>
+				<table id="tblflat" class="table table-hover table-striped"
+					width="100%" data-toggle="table" data-show-refresh="true"
+					data-side-pagination="server"
+					exportTypes="['json', 'xml', 'csv', 'txt', 'sql', 'excel', 'pdf']"
+					data-url="<?php echo $this->baseUrl();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>/logs/listar/type/json"
+					data-show-export="true" data-show-columns="true"
+					data-show-toggle="true" data-show-export="true"
+					data-pagination="true">
+					<thead>
+						<tr>
+							<th data-field="id" data-align="center" data-sortable="true">Id</th>
+                			<th data-field="ctrl" data-align="center" data-sortable="true">Controle</th>
+                			<th data-field="ip" data-align="center" data-sortable="true">Ip</th>
+                			<th data-field="data" data-align="center" data-sortable="true">Data</th>
+                			<th data-field="usuario_id" data-align="center" data-sortable="true">Id do Usuário</th>
+                			<th data-field="usuario_nome" data-align="center" data-sortable="true">Nome do Usuário</th>
+                			<th data-field="descricao" data-align="center" data-sortable="true">Descrição</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<link href="<?php echo $this->baseUrl($this->cssHelper);?>" media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+

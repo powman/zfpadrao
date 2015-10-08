@@ -1,0 +1,106 @@
+<link href="<?php echo $this->baseUrl($this->cssHelper) ;?>"
+	media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+	
+<div class="container">
+	<div class="jumbotron">
+		<div class="row">
+		<div class="col-md-12 col-xs-12 col-sm-12">
+		    <div align="right">
+		        <a href="javascript:history.go(-1);" class="btn btn-primary">Voltar</a>
+		    </div>
+		    <form action="<?php echo $this->baseUrl();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getControllerName();?>/cadastrar-acao/type/json" class="form formAjax">
+    		    <div id="rootwizard">
+        		    <div role="tabpanel">
+        
+                      <!-- Nav tabs -->
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#home" data-toggle="tab" aria-expanded="true">Módulo Submenu</a></li>
+                      </ul>
+                      <!-- Tab panes -->
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="home">
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 text-right control-label" for="nomeForm">Módulo</label>  
+                                  <div class="col-md-6">
+                                      <select name="modulo_id" id="modulo_idForm" class="form-control">
+                    				    <?php foreach ($this->modulo as $value):?>
+                    				        <option value="<?php echo $value['id'];?>"><?php echo $value['nome'];?></option>
+                    				    <?php endforeach;?>
+                    				 </select>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 text-right control-label">Nome</label>  
+                                  <div class="col-md-6">
+                                      <input id="nomeForm" name="nome" class="form-control input-md validate[required]" type="text">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 text-right control-label">Controller</label>  
+                                  <div class="col-md-4">
+                                      <input id="ctrlForm" name="ctrl" class="form-control input-md validate[required]" type="text">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 text-right control-label">Ação</label>  
+                                  <div class="col-md-4">
+                                      <input id="acaoForm" name="acao" class="form-control input-md validate[required]" type="text">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 text-right control-label" for="statusForm">Status</label>  
+                                  <div class="col-md-2">
+                                      <select name="status" id="statusForm" class="form-control">
+                    				     <option value="0">Inativo</option>
+                    				     <option value="1">Ativo</option>
+                    				  </select>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 text-right control-label">Ordem</label>  
+                                  <div class="col-md-1">
+                                      <input id="ordemForm" name="ordem" class="form-control input-md" type="text">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                    			<div class="col-md-12 col-xs-12 col-sm-12">
+                    				<div align="center" style="padding-top: 10px;">
+                    					<button type="submit" class="btn btn-primary">Cadastrar</button>
+                    				</div>
+                    			</div>
+                    		</div>
+                        </div>
+                      </div>
+                    
+                    </div>
+                </div>
+                <input type="hidden" name="retornoUrl" id="retornoUrl" value="<?php echo $this->baseUrl(''.Zend_Controller_Front::getInstance()->getRequest()->getModuleName().'/'.Zend_Controller_Front::getInstance()->getRequest()->getControllerName().'/editar-form/id/');?>"/>
+            </form>
+		
+		    
+		</div>    
+		</div>
+		
+
+	</div>
+</div>

@@ -1,0 +1,106 @@
+<link href="<?php echo $this->baseUrl($this->cssHelper) ;?>"
+	media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+	
+<div class="container">
+	<div class="jumbotron">
+		<div class="row">
+		<div class="col-md-12 col-xs-12 col-sm-12">
+		    <div align="right">
+		        <a href="javascript:history.go(-1);" class="btn btn-primary">Voltar</a>
+		    </div>
+		    <form action="<?php echo $this->baseUrl();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getControllerName();?>/editar-acao/type/json" class="form formAjax">
+    		    <div id="rootwizard">
+        		    <div role="tabpanel">
+        
+                      <!-- Nav tabs -->
+                      <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#modulo" data-toggle="tab" aria-expanded="true">Módulo Submenu</a></li>
+                      </ul>
+                      <!-- Tab panes -->
+                      <div class="tab-content">
+                        <div class="tab-pane active" id="modulo">
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label text-right">Módulo</label>  
+                                  <div class="col-md-6">
+                                      <select name="modulo_id" id="modulo_idForm" class="form-control">
+                    				    <?php foreach ($this->modulo as $value):?>
+                    				        <option <?php echo $value['id'] == $this->menu['modulo_id'] ? 'selected="selected"' : ''; ?> value="<?php echo $value['id'];?>"><?php echo $value['nome'];?></option>
+                    				    <?php endforeach;?>
+                    				 </select>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label text-right">Nome</label>  
+                                  <div class="col-md-6">
+                                  <input id="nomeForm" name="nome" class="form-control input-md validate[required]" type="text" value="<?php echo $this->menu['nome']?>">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label text-right">Controller</label>  
+                                  <div class="col-md-4">
+                                  <input id="ctrlForm" name="ctrl" class="form-control input-md validate[required]" type="text" value="<?php echo $this->menu['ctrl']?>">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label text-right">Ação</label>  
+                                  <div class="col-md-4">
+                                  <input id="acaoForm" name="acao" class="form-control input-md validate[required]" type="text" value="<?php echo $this->menu['action']?>">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 text-right control-label" for="statusForm">Status</label>  
+                                  <div class="col-md-2">
+                                      <select name="status" id="statusForm" class="form-control">
+                    				     <option <?php echo !$this->menu['status'] ? "selected='selected'" : "";?> value="0">Inativo</option>
+				                         <option <?php echo $this->menu['status'] ? "selected='selected'" : "";?> value="1">Ativo</option>
+                    				  </select>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                                <!-- Text input-->
+                                <div class="form-group">
+                                  <label class="col-md-3 control-label text-right">Ordem</label>  
+                                  <div class="col-md-1">
+                                  <input id="ordemForm" name="ordem" class="form-control input-md validate[required]" type="text" value="<?php echo $this->menu['ordem']?>">
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 10px 0px;">
+                    			<div class="col-md-12 col-xs-12 col-sm-12">
+                    				<div align="center" style="padding-top: 10px;">
+                    				    <input type="hidden" name="id" id="idForm" value="<?php echo $this->menu['id'];?>"/>
+                    					<button type="submit" class="btn btn-primary">Alterar</button>
+                    				</div>
+                    			</div>
+                    		</div>
+                        </div>
+                      </div>
+                    
+                    </div>
+                </div>
+            </form>
+		
+		    
+		</div>    
+		</div>
+		
+
+	</div>
+</div>

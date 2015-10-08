@@ -1,0 +1,73 @@
+<div>
+	<div class="jumbotron">
+		<div>
+			<div class="table-responsive" style="padding: 30px;">
+				<div class="container">
+			        <form action="<?php echo $this->baseUrl();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getControllerName();?>/listar/type/json" id="frmPesquisar" class="form">
+				        <div class="row" style="padding: 10px 0px;">
+                            <!-- Text input-->
+                            <div class="form-group">
+                              <label class="col-md-3 control-label text-right" for="nomeForm">Atributo de pesquisa</label>  
+                              <div class="col-md-6">
+                                  <input id="pesquisa" name="pesquisa" class="form-control input-md validate[required]" type="text">
+                              </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding: 10px 0px;">
+                			<div class="col-md-12 col-xs-12 col-sm-12">
+                				<div align="center" style="padding-top: 10px;">
+                					<button type="submit" class="btn btn-default">Pesquisar</button>
+                					<button type="button" class="btn btn-default limparForm">Limpar</button>
+                				</div>
+                			</div>
+                		</div>
+            		</form>
+				</div>
+				<table id="tblflat" class="table table-hover table-striped"
+					width="100%" data-toggle="table" data-show-refresh="true"
+					data-side-pagination="server"
+					exportTypes="['json', 'xml', 'csv', 'txt', 'sql', 'excel', 'pdf']"
+					data-url="<?php echo $this->baseUrl();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>/<?php echo Zend_Controller_Front::getInstance()->getRequest()->getControllerName();?>/listar/type/json"
+					data-show-export="true" data-show-columns="true"
+					data-show-toggle="true" data-show-export="true"
+					data-pagination="true">
+					<thead>
+						<tr>
+							<th data-field="id" data-align="center" data-sortable="true">Id</th>
+							<th data-field="grupo" data-align="center" data-sortable="true">Grupo</th>
+							<th data-field="nome" data-align="center" data-sortable="true">Nome</th>
+							<th data-field="email" data-align="center" data-sortable="true">Email</th>
+							<th data-field="status" data-align="center" data-sortable="true">Status</th>
+							<th data-field="operate" data-formatter="operateFormatter" data-width="200" data-events="operateEvents">Ação</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12 col-xs-12 col-sm-12">
+				<div align="center" style="padding-top: 10px;">
+					<button type="button" class="btn btn-default cadastro-rapido" data-action="cadastro-rapido" data-ctrl="<?php echo Zend_Controller_Front::getInstance()->getRequest()->getControllerName();?>" data-modulo="<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>">Cadastrar Novo
+				    </button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<link href="<?php echo $this->baseUrl($this->cssHelper);?>"
+	media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+
+
+
+<div class="modal fade forget-modal-all" tabindex="-1" role="dialog" aria-labelledby="myForgetModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content"></div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

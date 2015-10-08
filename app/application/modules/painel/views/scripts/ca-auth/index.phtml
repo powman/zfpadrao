@@ -1,0 +1,58 @@
+
+<section id="login">
+    <div class="container">
+    	<div class="row">
+    	    <div class="col-xs-12">
+        	    <div class="form-wrap">
+                <h1>Painel Administrativo</h1>
+                    <form role="form" action="javascript:;" method="post" id="frmLogar" autocomplete="on">
+                        <div class="form-group">
+                            <label for="email" class="sr-only">Email</label>
+                            <input type="email" name="email" id="email" class="form-control validate[required,custom[email]]" placeholder="exemplo@teste.com.br">
+                        </div>
+                        <div class="form-group">
+                            <label for="senha" class="sr-only">Senha</label>
+                            <input type="password" name="senha" id="senha" class="form-control validate[required]" placeholder="Senha">
+                        </div>
+                        <div class="checkbox">
+                            <span class="character-checkbox" onclick="showPassword()"></span>
+                            <span class="label">Mostrar Senha</span>
+                        </div>
+                        <input type="submit" id="btn-login" class="btn btn-custom btn-lg btn-block">
+                    </form>
+                    <a href="javascript:;" class="forget" data-toggle="modal" data-target=".forget-modal">Esqueci minha Senha?</a>
+                    <hr>
+        	    </div>
+    		</div> <!-- /.col-xs-12 -->
+    	</div> <!-- /.row -->
+    </div> <!-- /.container -->
+</section>
+
+<div class="modal fade forget-modal" tabindex="-1" role="dialog" aria-labelledby="myForgetModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+		    <form action="javascript:;" id="frmRecuperarSenha" class="form">
+    			<div class="modal-header">
+    				<button type="button" class="close" data-dismiss="modal">
+    					<span aria-hidden="true">X</span>
+    					<span class="sr-only">Fechar</span>
+    				</button>
+    				<h4 class="modal-title">Recuperar Senha</h4>
+    			</div>
+    			<div class="modal-body">
+    				<p>Seu Email</p>
+    				<input type="email" name="recuperaremail" id="recuperaremail" class="form-control validate[required,custom[email]]" autocomplete="off">
+    			</div>
+    			<div class="modal-footer">
+    				<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+    				<button type="button" class="btn btn-custom" onclick="$('#frmRecuperarSenha').submit();">Enviar</button>
+    			</div>
+			</form>
+		</div> <!-- /.modal-content -->
+	</div> <!-- /.modal-dialog -->
+</div> <!-- /.modal -->
+<link href="<?php echo $this->baseUrl($this->cssHelper) ;?>"
+	media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript"
+	src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+
