@@ -1,6 +1,6 @@
 <?php
 
-class Painel_CaUsuarioGrupoController extends Zend_Controller_Action
+class CaUsuarioGrupoController extends Zend_Controller_Action
 {
     
     public function init(){

@@ -7,7 +7,6 @@ class App_Plugin_Layout extends Zend_Controller_plugin_Abstract
                             ->getParam('bootstrap')->getOptions();
 
         $moduleName = $request->getModuleName();
-
         if (isset($config[$moduleName]['resources']['layout']['layout'])) {
             $layoutScript = $config[$moduleName]['resources']['layout']['layout'];
             Zend_Layout::getMvcInstance()->setLayout($layoutScript);

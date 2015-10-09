@@ -1,6 +1,6 @@
 <?php
 
-class Painel_CgModuloSubmenuController extends Zend_Controller_Action
+class CgModuloSubmenuController extends Zend_Controller_Action
 {
     
     public function init()

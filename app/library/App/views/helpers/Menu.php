@@ -6,20 +6,23 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
         $view = Zend_Layout::getMvcInstance()->getView();
         $registy = Zend_Auth::getInstance()->getIdentity();
         $menu = $this->_getMenu();
-        $modulos = $this->_getResource($registy->role_id,'modulo');
-        $controles = $this->_getResource($registy->role_id,'resource');
+       // $modulos = $this->_getResource($registy->role_id,'modulo');
+        //$controles = $this->_getResource($registy->role_id,'resource');
+        $modulos = $this->_getResource(null,'modulo');
+        $controles = $this->_getResource(null,'resource');
         
         $array = $this->_montaArray($menu, $modulos, $controles);
         $i = 0;
         $html = '';
         foreach ($array as $val) {
-            $html  .= '<li class="dropdown">';
-            $html  .= '    <a tabindex="'.$i.'" data-toggle="dropdown">';
+            $html  .= '<li>';
+            $html  .= '    <a href="javascript:;" >';
             $html  .= '        <i class="fa fa-'.$val['awsome'].'"></i>';
-            $html  .= '            '.strtoupper($val['nome']).'';
-            $html  .= '        <span class="caret"></span>';
+            $html  .= '            '.$val['nome'].'';
+			if(count($val['submenu']))
+            	$html  .= '        <span class="caret"></span>';
             $html  .= '    </a>';
-            $html  .= '    <ul class="dropdown-menu">';
+            $html  .= '    <ul class="nav nav-second-level">';
             foreach ($val['submenu'] as $value){
                 $html  .= '    <li>';
                 $html  .= '        <a href="'.$view->baseUrl().'/'.$val['modulo'].'/'.$value['ctrl'].'/'.$value['action'].'">';
@@ -97,7 +100,8 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
         $sql .= '	resource r ';
         $sql .= '	left join permissao p on p.resource_id = r.id ';
         $sql .= '	left join usuario u on u.role_id = p.role_id ';
-        $sql .= 'where p.role_id = '.$role_id.' ';
+        //$sql .= 'where p.role_id = '.$role_id.' ';
+		$sql .= 'where p.role_id = 2 ';
         $sql .= 'group by r.'.$retorno.' ';
         
         $result = $db->fetchAll($sql);

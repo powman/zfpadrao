@@ -1,6 +1,6 @@
 <?php
 
-class Painel_IndexController extends Zend_Controller_Action 
+class IndexController extends Zend_Controller_Action 
 {
     public function init(){
         $this->view->cssHelper = Painel_Plugin_CssHelper::CssHelper();

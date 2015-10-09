@@ -1,6 +1,6 @@
 <?php
 
-class Painel_LogsController extends Zend_Controller_Action
+class LogsController extends Zend_Controller_Action
 {
     
     public function init(){

@@ -12,8 +12,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	public function _initAutoload()
 	{
 	    $modules = array(
-	            'Painel',
-		    'Site',
+	            'Site',
+		        'Painel',
 	    );
 	
 	    foreach ($modules as $module) {
@@ -37,7 +37,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $front = $bootstrap->getResource('FrontController');
         $bootstrap->bootstrap('FrontController');
         $front = $bootstrap->getResource('FrontController');
-        $front->registerPlugin(new App_Plugin_Acl(Zend_Db_Table::getDefaultAdapter()));
+        //$front->registerPlugin(new App_Plugin_Acl(Zend_Db_Table::getDefaultAdapter()));
         $front->registerPlugin(new App_Plugin_Layout());
         
         
