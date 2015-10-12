@@ -1,5 +1,5 @@
 //Flot Line Chart
-$(document).ready(function() {
+/*$(document).ready(function() {
     console.log("document ready");
     var offset = 0;
     plot();
@@ -1239,4 +1239,4 @@ $(function() {
     };
     $.plot($("#flot-bar-chart"), [barData], barOptions);
 
-});
+});*/

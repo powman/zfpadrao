@@ -29,4 +29,10 @@ class Painel_Model_CaUsuario extends Zend_Db_Table_Abstract
             return false;
         }
     }
+	
+	public function excluir($id)
+    {
+        $result = $this->model->getAdapter()->delete("usuario",'id = '.$id);
+		return result;
+    }
 }

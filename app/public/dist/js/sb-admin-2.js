@@ -1,6 +1,18 @@
 $(function() {
 
     $('#side-menu').metisMenu();
+    
+    //Filtro de busca
+	$("#txtBusca").keyup(function(){ 
+		var texto = $(this).val(); 
+		$("ul#side-menu li").css("display", "block"); 
+		
+		$("ul#side-menu li").each(function(){ 
+			if($(this).find("a").text().toUpperCase().indexOf(texto.toUpperCase()) < 0){ 
+				$(this).css("display", "none"); 
+			}
+		});		
+	});
 
 });
 

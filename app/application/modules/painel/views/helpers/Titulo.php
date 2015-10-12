@@ -1,10 +1,17 @@
 <?php
 class Zend_View_Helper_Awsome extends Zend_View_Helper_Abstract
 {
-    public function awsome($class_prefix = 'fa-')
+	private $titulo = null;
+	
+	public function init() 
+	{
+		$this->titulo = new CgModuloSubmenu();
+	}
+	
+    public function titulo()
     {
         
-        $path = 'bower_components/font-awesome/css/font-awesome.css';
+        $path = 'js/bower_components/components-font-awesome/css/font-awesome.css';
         
         if(!file_exists($path)){
 			return false;//se o caminho nÃ£o existe retorna falso.

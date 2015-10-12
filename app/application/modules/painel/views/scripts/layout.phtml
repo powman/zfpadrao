@@ -252,13 +252,12 @@
             <!-- /.navbar-top-links -->
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
+                	<div class="sidebar-search">
+	                	<div class="custom-search-form">
+	                        <input id="txtBusca" type="text" class="form-control" placeholder="Filtrar Menu">
+	                    </div>
+                    </div>
                     <ul class="nav" id="side-menu">
-                        <li class="sidebar-search">
-                            <div class="custom-search-form">
-                                <input type="text" class="form-control" placeholder="Pesquisar...">
-                            </div>
-                            <!-- /input-group -->
-                        </li>
                         <li>
                             <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
@@ -289,6 +288,12 @@
 								  ->appendFile($this->baseUrl('/js/morris-data.js'))
 								  ->appendFile($this->baseUrl('/dist/js/sb-admin-2.js'))
     ?>
+    <?php if($this->cssHelper): ?>
+    <link href="<?php echo $this->baseUrl($this->cssHelper);?>" media="screen" rel="stylesheet" type="text/css">
+    <?php endif; ?>
+    <?php if($this->jsHelper): ?>
+    <script type="text/javascript" src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+    <?php endif; ?>
 	
 	</body>
 </html>

@@ -1,9 +1,11 @@
 <?php
 
-class CaUsuarioController extends Zend_Controller_Action
+class CaUsuarioController extends App_Controller_BaseController
 {
+	public $models = array('CaUsuarioGrupo');
+	public $modelAtual = 'CaUsuario';
     
-    public function init(){
+   /* public function init(){
         $identity = Zend_Auth::getInstance()->getIdentity();
         $this->model = new Painel_Model_CaUsuario();
         $this->modelLog = new Painel_Model_Logs();
@@ -11,13 +13,13 @@ class CaUsuarioController extends Zend_Controller_Action
         $this->view->cssHelper = Painel_Plugin_CssHelper::CssHelper();
         $this->view->jsHelper = Painel_Plugin_JavascriptHelper::JsHelper();
         $this->view->mostra_head_footer = true;
-        $this->idusuariologado = $identity->id;
+       // $this->idusuariologado = $identity->id;
         $this->uteis = new App_AbstractController();
         
-        if ( !Zend_Auth::getInstance()->hasIdentity() ) {
+        /*if ( !Zend_Auth::getInstance()->hasIdentity() ) {
             return $this->_helper->redirector->goToRoute( array('module' => 'painel','controller' => 'auth'), null, true);
         }
-    }
+    }*/
 	
 	public function indexAction()
 	{
@@ -93,24 +95,15 @@ class CaUsuarioController extends Zend_Controller_Action
 	    
 	    if($this->idusuariologado != $this->getRequest()->getParam('id')){
     
-    	    // total com a pesquisa
-    	    $result = $this->model->getAdapter()->delete("usuario",'id = '.$this->getRequest()->getParam('id'));
+    	    // chama a funcao excluir
+    	    $result = $this->model->excluir($this->getRequest()->getParam('id'));
     	     
     	    if($result){
     	        $resposta['situacao'] = "sucess";
     	        $resposta['msg'] = "Excluido com sucesso!";
     	        
-    	        // Grava Logo
-    	        $data = array();
-    	        $data['modulo'] = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
-    	        $data['controller'] = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-    	        $data['metodo'] = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
-    	        $data['ip'] = $_SERVER['REMOTE_ADDR'];
-    	        $data['data'] = time();
-    	        $data['usuario_id'] = Zend_Auth::getInstance()->getIdentity()->id;
-    	        $data['usuario_nome'] = Zend_Auth::getInstance()->getIdentity()->nome;
-    	        $data['descricao'] = "Exclusão de Usuário";
-    	        $this->modelLog->save($data);
+    	        // Grava o Log
+    	        $this->gravarLog('Excluir um usuário');
     	    }else{
     	        $resposta['situacao'] = "error";
     	        $resposta['msg'] = "Erro ao Excluir!";
@@ -125,15 +118,6 @@ class CaUsuarioController extends Zend_Controller_Action
 	    }
 	     
 	     
-	}
-	public function cadastroRapidoAction()
-	{
-	    $sql = $this->modelUsuarioGrupo->getAdapter()->select()->from('role');
-	     
-	    $data = $this->model->getAdapter()->fetchAll($sql);
-	    $this->view->grupos = $data;
-	     
-	    $this->_helper->layout()->disableLayout();
 	}
 	
 	public function cadastrarAcaoAction()
