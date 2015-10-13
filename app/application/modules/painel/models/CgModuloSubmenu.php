@@ -29,4 +29,18 @@ class Painel_Model_CgModuloSubmenu extends Zend_Db_Table_Abstract
             return false;
         }
     }
+	
+	public function getTituloByCtrlAction($ctrl,$action)
+    {
+        $sql = $this->getAdapter()->select()->from(array('m' => 'modulo_menu_sub'));
+		$sql->where('m.ctrl = ? ',$ctrl);
+		$sql->where('m.action = ? ',$action);
+		$sql->joinLeft('modulo as mo','m.modulo_id = mo.id',array('mo.awsome as awsome'));
+        $res = $this->getAdapter()->fetchRow($sql);
+        //if (isset($res['qtd']) && $res['qtd'] > 0) {
+            return $res;
+        //} else {
+            //return false;
+        //}
+    }
 }
