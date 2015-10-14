@@ -23,7 +23,16 @@ class CaUsuarioController extends App_Controller_BaseController
 	
 	public function indexAction()
 	{
-		
+		// Criação do Objeto Formulário
+       // $form = new Painel_Form_Usuario();
+        // Envio para a Camada de Visualização
+        //$this->view->form = $form;
+        $page = 1;
+		$res = $this->model->listarTodos();
+        
+        $this->view->res   = $res['res'];
+		$this->view->pages = $res['pages'];
+		$this->view->page  = $page;
 		
 	}
 	
