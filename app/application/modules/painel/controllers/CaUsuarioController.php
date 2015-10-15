@@ -28,10 +28,16 @@ class CaUsuarioController extends App_Controller_BaseController
         // Envio para a Camada de Visualização
         //$this->view->form = $form;
         $page = 1;
+		
+		
+		$offset        		= $this->_getParam('offset',0);
+		$page          		= $this->_getParam('page',1);
+		$registroPagina     = $this->_getParam('registroPagina',3);
+		
 		$res = $this->model->listarTodos();
         
         $this->view->res   = $res['res'];
-		$this->view->pages = $res['pages'];
+		$this->view->pages = ceil($res['pages'] / $registroPagina);
 		$this->view->page  = $page;
 		
 	}

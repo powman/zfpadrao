@@ -10,7 +10,7 @@ class Painel_Model_CaUsuario extends Zend_Db_Table_Abstract
 	{
 		// SQL para buscar os registros
 		$sql = $this->getAdapter()->select()
-		->from(array('u' => $this->_name), array('id_usuario', 'email','img','role_id'));
+		->from(array('u' => $this->_name), array('id_usuario', 'email','img','role_id','nome'));
 	
 		if (isset($arraySearch['nome']) && $arraySearch['nome']) {
 			$sql->where('u.nomea LIKE ?', "%{$arraySearch['nome']}%");
