@@ -22,17 +22,21 @@ class App_Controller_BaseController extends Zend_Controller_Action
 		$this->acao = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 		// pega o id do usuario logado
 		$this->idUsuario = $identity->id;
-		// loader dos models $models 
-		foreach ($this->models as $value) {
-			$modelLoader = 'Painel_Model_'.$value.'';
-			$modelName = 'model'.$value.'';
-			$this->{$modelName} = new $modelLoader();
+		if(count($this->models)){
+			// loader dos models $models 
+			foreach ($this->models as $value) {
+				$modelLoader = 'Painel_Model_'.$value.'';
+				$modelName = 'model'.$value.'';
+				$this->{$modelName} = new $modelLoader();
+			}
 		}
 		// inclue o model de logs
 		$this->modelLog = new Painel_Model_Logs();
-		// inclue o model do controle atual
-		$modelAtualLoader = 'Painel_Model_'.$this->modelAtual.'';
-		$this->model = new $modelAtualLoader();
+		if($this->modelAtual){
+			// inclue o model do controle atual
+			$modelAtualLoader = 'Painel_Model_'.$this->modelAtual.'';
+			$this->model = new $modelAtualLoader();
+		}
     }
 
 	public function excluirAction()

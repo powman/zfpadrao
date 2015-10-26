@@ -288,11 +288,11 @@
 								  ->appendFile($this->baseUrl('/js/morris-data.js'))
 								  ->appendFile($this->baseUrl('/dist/js/sb-admin-2.js'))
     ?>
-    <?php if($this->cssHelper): ?>
-    <link href="<?php echo $this->baseUrl($this->cssHelper);?>" media="screen" rel="stylesheet" type="text/css">
+    <?php if($this->CssHelper()): ?>
+    <link href="<?php echo $this->baseUrl($this->CssHelper());?>" media="screen" rel="stylesheet" type="text/css">
     <?php endif; ?>
-    <?php if($this->jsHelper): ?>
-    <script type="text/javascript" src="<?php echo $this->baseUrl($this->jsHelper)?>"></script>
+    <?php if($this->JsHelper()): ?>
+    <script type="text/javascript" src="<?php echo $this->baseUrl($this->JsHelper())?>"></script>
     <?php endif; ?>
 	
 	</body>

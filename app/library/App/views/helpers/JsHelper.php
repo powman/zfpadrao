@@ -1,5 +1,5 @@
 <?php 
-class Site_Plugin_JavascriptHelper extends Zend_Controller_Plugin_Abstract
+class Zend_View_Helper_JsHelper extends Zend_View_Helper_Abstract
 {
     public static function JsHelper() {
         $request = Zend_Controller_Front::getInstance()->getRequest();
