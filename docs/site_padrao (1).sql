@@ -141,53 +141,63 @@ INSERT INTO `permissao` (`id`, `role_id`, `resource_id`, `permissao`) VALUES
 (8073, 2, 181, 'index'),
 (7806, 3, 181, 'index');
 
--- --------------------------------------------------------
 
---
--- Estrutura da tabela `resource`
---
-
-CREATE TABLE IF NOT EXISTS `resource` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `modulo` varchar(255) NOT NULL,
-  `resource` varchar(128) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `resource` (`resource`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=182 ;
-
---
--- Extraindo dados da tabela `resource`
---
-
-INSERT INTO `resource` (`id`, `modulo`, `resource`) VALUES
-(176, 'painel', 'ca-usuario'),
-(177, 'painel', 'ca-usuario-grupo'),
-(178, 'painel', 'cg-modulo'),
-(179, 'painel', 'cg-modulo-submenu'),
-(180, 'painel', 'membro'),
-(181, 'painel', 'cs-template');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `role`
+-- Estrutura da tabela `grupo`
 --
 
-CREATE TABLE IF NOT EXISTS `role` (
+CREATE TABLE IF NOT EXISTS `grupo` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role` varchar(255) DEFAULT NULL,
-  `id_parent` int(11) NOT NULL,
+  `nome` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `role` (`role`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+  UNIQUE KEY `nome` (`nome`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
--- Extraindo dados da tabela `role`
+-- Extraindo dados da tabela `grupo`
 --
 
-INSERT INTO `role` (`id`, `role`, `id_parent`) VALUES
-(2, 'ROOT', 0),
-(3, 'uere', 0);
+INSERT INTO grupo (id, nome) VALUES (1, 'Anonimo');
+INSERT INTO grupo (id, nome) VALUES (2, 'Registered');
+INSERT INTO grupo (id, nome) VALUES (3, 'Admin');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `acl`
+--
+
+CREATE TABLE `acl` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `controller` varchar(100) NOT NULL,
+  `action` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `controller` (`controller`,`action`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 
+  CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `acl`
+-- 
+  
+CREATE TABLE `acl_to_grupo` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `acl_id` int(10) NOT NULL,
+  `grupo_id` tinyint(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `acl_id` (`acl_id`),
+  KEY `grupo_id` (`grupo_id`),
+  CONSTRAINT `acl_to_grupo_ibfk_1` FOREIGN KEY (`acl_id`) 
+     REFERENCES `acl` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `acl_to_grupo_ibfk_2` FOREIGN KEY (`grupo_id`) 
+     REFERENCES `grupo` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --
 -- Estrutura da tabela `usuario`
@@ -200,11 +210,11 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `email` varchar(255) NOT NULL DEFAULT '',
   `img` varchar(255) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '0',
-  `role_id` int(11) NOT NULL,
+  `grupo_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  KEY `fk_usuario_usuario_grupo1_idx` (`role_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+  KEY `grupo_id` (`grupo_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Extraindo dados da tabela `usuario`

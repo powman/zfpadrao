@@ -1,10 +1,12 @@
 <?php
+// http://www.developerfiles.com/creating-acl-with-database-in-zend-framework/
+
 class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 {
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    /*public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
 
-        if($request->getControllerName() != "ca-auth" && $request->getControllerName() != "logs" && $request->getControllerName() != "error"){
+        /*if($request->getControllerName() != "ca-auth" && $request->getControllerName() != "logs" && $request->getControllerName() != "error"){
             $this->db             = Zend_Db_Table::getDefaultAdapter();
             $this->identification = Zend_Auth::getInstance()->getIdentity();
             if($request->getParam('instalar'))
@@ -195,6 +197,70 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
             }
         }
         
-        return $acl;
+        return $acl;*/
+   // }
+   
+   public function preDispatch(Zend_Controller_Request_Abstract $request)
+    {
+        $auth = Zend_Auth::getInstance();
+        $authModel=new Painel_Model_CaAuth();
+        if (!$auth->hasIdentity()){
+            //Se o usuário site e a senha 123 não existir cria ele
+            $authModel->authenticate(array('login'=>'site','password'=>'123'));
+        }
+ 
+        $request=$this->getRequest();
+        $aclResource=new Painel_Model_Acl();
+        //verifica se o controle e a action existe, senao manda para o erro 404
+        if( !$aclResource->resourceValid($request)){
+            $request->setControllerName('error');
+            $request->setActionName('error');
+            return;
+        }
+ 
+        $controller = $request->getControllerName();
+        $action = $request->getActionName();
+        //Verifica se existe o resource no banco de dados, senão cria ele.
+        if( !$aclResource->resourceExists($controller, $action)){
+            $aclResource->createResource($controller,$action);
+        }
+        //Get role_id
+        /*$role_id=$auth->getIdentity()->role_id;
+        $role=Application_Model_Role::getById($role_id);
+        $role=$role[0]->role;
+        // setup acl
+        $acl = new Zend_Acl();
+        // add the role
+        $acl->addRole(new Zend_Acl_Role($role));
+        if($role_id==3){//If role_id=3 "Admin" don't need to create the resources
+            $acl->allow($role);
+        }else{
+            //Create all the existing resources
+            $resources=$aclResource->getAllResources();  
+            // Add the existing resources to ACL
+            foreach($resources as $resource){
+                $acl->add(new Zend_Acl_Resource($resource->getController()));
+                     
+            }       
+            //Create user AllowedResources
+            $userAllowedResources=$aclResource->getCurrentRoleAllowedResources($role_id);                
+             
+            // Add the user permissions to ACL
+            foreach($userAllowedResources as $controllerName =>$allowedActions){
+                $arrayAllowedActions=array();
+                foreach($allowedActions as $allowedAction){
+                    $arrayAllowedActions[]=$allowedAction;
+                }
+                $acl->allow($role, $controllerName,$arrayAllowedActions);
+            }
+        }
+        //Save ACL so it can be used later to check current user permissions
+        Zend_Registry::set('acl', $acl);
+        //Check if user is allowed to acces the url and redirect if needed
+        if(!$acl->isAllowed($role,$controller,$action)){
+            $request->setControllerName('error');
+            $request->setActionName('access-denied');
+            return;
+        }*/
     }
 }

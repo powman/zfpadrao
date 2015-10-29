@@ -27,17 +27,17 @@ class Painel_Model_CaAuth extends Zend_Db_Table_Abstract
             return false;
         }
     }
-    
-    
-    public static function login($email, $senha)
+	
+	public static function authenticate(array $values)
     {
-        
-        $resposta = array();
-        
+        if(!count($values)) throw new Exception('Não foi passado valores para autenticar');
+        // Pegar os dados da autenticacao e checa
+        $email=$values['email'];
+		$senha=$values['senha'];
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
-        
-        $authAdapter->setTableName('usuario')
+		
+		$authAdapter->setTableName('usuario')
         ->setIdentityColumn('email')
         ->setCredentialColumn('senha');
         
@@ -46,9 +46,9 @@ class Painel_Model_CaAuth extends Zend_Db_Table_Abstract
         ->setCredentialTreatment('MD5(?)');
         
         $select = $authAdapter->getDbSelect();
-        $select->join( array('r' => 'role'), 'r.id = usuario.role_id', array('role' => 'role') );
-        
-        //Realiza autenticação
+        $select->join( array('g' => 'grupo'), 'g.id = usuario.grupo_id', array('nome' => 'grupo'));
+		
+		//Realiza autenticação
         $result = $authAdapter->authenticate();
         //Verifica se a autenticação foi válida
         if($result->isValid()){
@@ -60,7 +60,7 @@ class Painel_Model_CaAuth extends Zend_Db_Table_Abstract
             //Redireciona para o Index
             return true;
         }
-        throw new Exception('Nome de usuário ou senha inválida');
+		return false;
     }
     
     public static function logout()
