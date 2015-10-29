@@ -4,12 +4,12 @@ class Painel_Model_Acl extends Zend_Db_Table_Abstract
 {
     
    public static function resourceValid($request){
-        // Check if controller exists and is valid
+        // Verifica se o controller e valido
         $dispatcher = Zend_Controller_Front::getInstance()->getDispatcher();
         if (!$dispatcher->isDispatchable($request)) {
             return false;
         }
-        // Check if action exist and is valid
+        // Verifica se a action e valida
         $front      = Zend_Controller_Front::getInstance();
         $dispatcher = $front->getDispatcher();
         $controllerClass = $dispatcher->getControllerClass($request);
