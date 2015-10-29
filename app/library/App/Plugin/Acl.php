@@ -205,7 +205,7 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         $auth = Zend_Auth::getInstance();
         $authModel=new Painel_Model_CaAuth();
         if (!$auth->hasIdentity()){
-            //Se o usuário site e a senha 123 não existir cria ele
+            //Se o usuário site não existir, pega o usuario do banco com o id=1
             $authModel->authenticate(array('login'=>'site','password'=>'123'));
         }
  
