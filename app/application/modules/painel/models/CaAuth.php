@@ -30,10 +30,12 @@ class Painel_Model_CaAuth extends Zend_Db_Table_Abstract
 	
 	public static function authenticate(array $values)
     {
+    	$email=isset($values['email']) ? $values['email'] : null;
+		$senha=isset($values['senha']) ? $values['senha'] : null;
+
         if(!count($values)) throw new Exception('Não foi passado valores para autenticar');
         // Pegar os dados da autenticacao e checa
-        $email=$values['email'];
-		$senha=$values['senha'];
+       
         $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
         $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
 		
@@ -46,7 +48,7 @@ class Painel_Model_CaAuth extends Zend_Db_Table_Abstract
         ->setCredentialTreatment('MD5(?)');
         
         $select = $authAdapter->getDbSelect();
-        $select->join( array('g' => 'grupo'), 'g.id = usuario.grupo_id', array('nome' => 'grupo'));
+        $select->join( array('g' => 'grupo'), 'g.id = usuario.grupo_id', array('grupo' => 'nome'));
 		
 		//Realiza autenticação
         $result = $authAdapter->authenticate();
