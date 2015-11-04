@@ -2,12 +2,6 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-	protected function _initAutoloader()
-	{
-    	$autoloader = Zend_Loader_Autoloader::getInstance();
-    	$autoloader->registerNamespace('App');
-    	
-	}
 	
 	public function _initAutoload()
 	{
@@ -37,7 +31,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $front = $bootstrap->getResource('FrontController');
         $bootstrap->bootstrap('FrontController');
         $front = $bootstrap->getResource('FrontController');
-        $front->registerPlugin(new App_Plugin_Layout());
         
         
         
