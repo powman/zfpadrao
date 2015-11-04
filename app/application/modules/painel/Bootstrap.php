@@ -21,5 +21,6 @@ class Painel_Bootstrap extends Zend_Application_Module_Bootstrap
 		$front = Zend_Controller_Front::getInstance();
 		$front->registerPlugin(new Painel_Plugin_CssHelper());
 		$front->registerPlugin(new Painel_Plugin_JavascriptHelper());
+		$front->registerPlugin(new App_Plugin_Acl());
 	}
 }

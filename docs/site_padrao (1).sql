@@ -192,11 +192,7 @@ CREATE TABLE `acl_to_grupo` (
   `grupo_id` tinyint(10) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `acl_id` (`acl_id`),
-  KEY `grupo_id` (`grupo_id`),
-  CONSTRAINT `acl_to_grupo_ibfk_1` FOREIGN KEY (`acl_id`) 
-     REFERENCES `acl` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `acl_to_grupo_ibfk_2` FOREIGN KEY (`grupo_id`) 
-     REFERENCES `grupo` (`id`) ON DELETE CASCADE
+  KEY `grupo_id` (`grupo_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 --
