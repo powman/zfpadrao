@@ -4,6 +4,7 @@ class App_Controller_BaseController extends Zend_Controller_Action
 {
 	public $models = array();
 	public $modelAtual = '';
+	public $msg = null;
 	
     public function init(){
     	// pega os dados da sessao
