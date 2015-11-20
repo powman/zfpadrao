@@ -5,6 +5,7 @@
  */
 class App_Model_Default extends Zend_Db_Table_Abstract {
 	
+
 	public $id = null;
 	
 	/**
@@ -43,12 +44,12 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
     	    $data = array_filter($data);
     	    // trim em todos os valores
     	    $data = array_map('trim', $data);
-    	    $id = isset($data[$this->_primary]) ? $data[$this->_primary] : '';
+    	    $id = isset($data[$this->primarykey]) ? $data[$this->primarykey] : '';
     	    // se existir o id no banco faz um update
     	    if ($this->_dataExists($id) && $id) {
     	        // deleta o id para nao conflitar
-    	        unset($data[$this->_primary]);
-    	        $result = $this->update($data, $this->_primary." = {$id}");
+    	        unset($data[$this->primarykey]);
+    	        $result = $this->update($data, $this->primarykey." = {$id}");
     	        $result === 0 || $result === true || $result >= 1 ? true : false;
     	        if ($result) {
     	            $msg = $this->msg['update']['success'];
@@ -62,7 +63,8 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
     	        $retorno = $this->insert($data);
     	        if($retorno){
     	           $msg = $this->msg['insert']['success'];
-    	           return $this->find($retorno)->toArray()[0];
+    	           $result = $this->find($retorno)->toArray();
+    	           return $result[0];
     	        }else{
     	           $msg = $this->msg['insert']['error'];
     	           return false;
@@ -79,7 +81,7 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
 	{
 	    try {
     	    if($id){
-    	        $sql = 'SELECT count(*) as qtd FROM '.$this->_schema.'.'.$this->_name.' WHERE '.$this->_primary.' = ?';
+    	        $sql = 'SELECT count(*) as qtd FROM '.$this->_schema.'.'.$this->_name.' WHERE '.$this->primarykey.' = ?';
         	    $res = $this->getAdapter()->fetchRow($sql,$id);
         	    if (isset($res['qtd']) && $res['qtd'] > 0) {
         	        $msg = str_replace('%n', $res['qtd'], $this->msg['select']['success']);
