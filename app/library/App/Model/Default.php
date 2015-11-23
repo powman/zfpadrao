@@ -98,5 +98,16 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
 	        return false;
 	    }
 	}
+	
+	/**
+	 * Retorna a quantidade de páginas encontradas
+	 *
+	 * @param integer $qtde
+	 */
+	public function getPagesWithCount($qtde)
+	{
+	   // quantidade default 10
+	    return ceil($qtde / 10);
+	}
 			
 }

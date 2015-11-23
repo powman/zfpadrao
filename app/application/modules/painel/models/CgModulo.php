@@ -1,32 +1,36 @@
 <?php
 
-class Painel_Model_CgModulo extends Zend_Db_Table_Abstract
+class Painel_Model_CgModulo extends App_Model_Default
 {
     
     public $id = null;
     protected $_name = 'modulo';
+    protected $primarykey = "id";
     
-    public function save(array $data)
+    public function listarTodos($condicao = array(), $limit = null, $offset = null, &$msg = '')
     {
-        $id = isset($data['id']) ? $data['id'] : '';
-        if ($this->_dataExists($id) && $id) {
-            unset($data['id']);
-            $result = $this->update($data, "id = {$id}");
-            return  $result === 0 || $result === true || $result >= 1 ? true : false;
-        } else {
-            $this->insert($data);
-            return $this->getAdapter()->lastInsertId();
+        // SQL para buscar os registros
+        $sql = $this->select()
+        ->from(array('m' => $this->_name),
+            array(
+                'id',
+                'nome',
+                'icone',
+                'ordem',
+                'status'
+            ));
+        if (isset($condicao["nome"]) && $condicao["nome"]) {
+            $sql->where('m.nome LIKE ? ', "%{$condicao["nome"]}%");
         }
-    }
     
-    private function _dataExists($id)
-    {
-        $sql = $this->getAdapter()->select()->from(array('m' => 'modulo'), 'count(id) as qtd');
-        $res = $this->getAdapter()->fetchRow($sql);
-        if (isset($res['qtd']) && $res['qtd'] > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        // SQL para buscar a quantidade de páginas existentes
+        $sqlCount = $this->getAdapter()->query($sql);
+        
+        $sql->order('m.id')->limit($limit, $offset);
+    
+        $return['res']   = $this->fetchAll($sql)->toArray();
+        $return['pages'] = $this->getPagesWithCount($sqlCount->rowCount());
+    
+        return $return;
     }
 }

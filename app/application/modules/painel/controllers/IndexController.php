@@ -13,7 +13,9 @@ class IndexController extends Zend_Controller_Action
     }
 	public function indexAction()
 	{
-	 
+	 $tblModulo = new Painel_Model_CgModulo();
+	 //$params = array("nome" => "teste");
+	 $tblModulo->listarTodos();
 
 	}
 

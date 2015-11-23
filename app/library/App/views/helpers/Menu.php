@@ -5,27 +5,23 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
     {
         $view = Zend_Layout::getMvcInstance()->getView();
         $registy = Zend_Auth::getInstance()->getIdentity();
-        $menu = $this->_getMenu();
-       // $modulos = $this->_getResource($registy->role_id,'modulo');
-        //$controles = $this->_getResource($registy->role_id,'resource');
-        $modulos = $this->_getResource(null,'modulo');
-        $controles = $this->_getResource(null,'resource');
-        
-        $array = $this->_montaArray($menu, $modulos, $controles);
+        $modulo = $this->_getModulo();
+        $params = array("grupo_id" => 2);
+        $menu = $this->_getMenu($params);
         $i = 0;
         $html = '';
-        foreach ($array as $val) {
+        foreach ($modulo as $val) {
             $html  .= '<li>';
             $html  .= '    <a href="javascript:;" >';
-            $html  .= '        <i class="fa fa-'.$val['awsome'].'"></i>';
+            $html  .= '        <i class="fa fa-'.$val['icone'].'"></i>';
             $html  .= '            '.$val['nome'].'';
-			if(count($val['submenu']))
+			if(count($menu))
             	$html  .= '        <span class="caret"></span>';
             $html  .= '    </a>';
             $html  .= '    <ul class="nav nav-second-level">';
-            foreach ($val['submenu'] as $value){
+            foreach ($menu as $value){
                 $html  .= '    <li>';
-                $html  .= '        <a href="'.$view->baseUrl().'/'.$val['modulo'].'/'.$value['ctrl'].'/'.$value['action'].'">';
+                $html  .= '        <a href="'.$view->baseUrl().'/'.$value['controller'].'/'.$value['action'].'">';
                 $html  .= '            '.$value['nome'].'';
                 $html  .= '        </a>';
                 $html  .= '    </li>';
@@ -37,50 +33,12 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
         return $html;
     }
     
-    private function _montaArray($menu, $modulos, $controles)
-    {
-        $i = 0;
-        $aMenu = array();
-        foreach ($menu as $valor){
-            if($this->in_array_r($valor['modulo'], $modulos)){
-                $aMenu[$i]['id'] = $valor['id'];
-                $aMenu[$i]['nome'] = $valor['nome'];
-                $aMenu[$i]['awsome'] = $valor['awsome'];
-                $aMenu[$i]['modulo'] = $valor['modulo'];
-        
-                $submenu = $this->_getSubMenu($valor['id']);
-        
-                $j = 0;
-                foreach ($submenu as $valorSubmenu){
-                    if($this->in_array_r($valorSubmenu['ctrl'], $controles)) {
-                        $aMenu[$i]['submenu'][$j]['id'] = $valorSubmenu['id'];
-                        $aMenu[$i]['submenu'][$j]['nome'] = $valorSubmenu['nome'];
-                        $aMenu[$i]['submenu'][$j]['ctrl'] = $valorSubmenu['ctrl'];
-                        $aMenu[$i]['submenu'][$j]['action'] = $valorSubmenu['action'];
-                        $aMenu[$i]['submenu'][$j]['modulo_id'] = $valorSubmenu['modulo_id'];
-                        $j++;
-                    }
-                }
-                $i++;
-            }
-        }
-        
-        foreach ($aMenu as $key => $val) {
-            if (!isset($aMenu[$key]['submenu'])) {
-                unset($aMenu[$key]);
-            }
-        }
-        
-        return $aMenu;
-    }
-    
-    private static function _getMenu() {
+    private static function _getModulo() {
         $db = Zend_Db_Table::getDefaultAdapter();
         $sql  = 'select ';
 		$sql .= '	m.id, ';
 		$sql .= '	m.nome, ';
-		$sql .= '	m.awsome, ';
-		$sql .= '	m.modulo ';
+		$sql .= '	m.icone ';
 		$sql .= 'from ';
 		$sql .= '	modulo m ';
 		$sql .= 'where status = 1 ';
@@ -92,17 +50,25 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
         return $result;
     }
     
-    private static function _getResource($role_id, $retorno) {
+    private static function _getMenu($condicao = array()) {
         $db = Zend_Db_Table::getDefaultAdapter();
         $sql  = 'select ';
-        $sql .= '	r.'.$retorno.' ';
+        $sql .= '	m.modulo_id, ';
+        $sql .= '	m.acl_id, ';
+        $sql .= '	m.nome, ';
+        $sql .= '	a.controller, ';
+        $sql .= '	a.action, ';
+        $sql .= '	m.ordem, ';
+        $sql .= '	m.status ';
         $sql .= 'from ';
-        $sql .= '	resource r ';
-        $sql .= '	left join permissao p on p.resource_id = r.id ';
-        $sql .= '	left join usuario u on u.role_id = p.role_id ';
-        //$sql .= 'where p.role_id = '.$role_id.' ';
-		$sql .= 'where p.role_id = 2 ';
-        $sql .= 'group by r.'.$retorno.' ';
+        $sql .= '	menu m ';
+        $sql .= '	left join acl a on m.acl_id = a.id ';
+        $sql .= '	left join acl_to_grupo ag on a.id = ag.acl_id ';
+		$sql .= 'where m.status = 1 ';
+		if(isset($condicao["modulo_id"]) && $condicao["modulo_id"])
+		    $sql .= 'and m.modulo_id = '.$condicao["modulo_id"].' ';
+		if(isset($condicao["grupo_id"]) && $condicao["grupo_id"])
+		    $sql .= 'and ag.grupo_id = '.$condicao["grupo_id"].' ';
         
         $result = $db->fetchAll($sql);
     
@@ -128,21 +94,5 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
         $result = $db->fetchAll($sql);
         
         return $result;
-    }
-    
-    function in_array_r($needle, $haystack) {
-        $found = false;
-        foreach ($haystack as $item) {
-            if ($item === $needle) {
-                $found = true;
-                break;
-            } elseif (is_array($item)) {
-                $found = $this->in_array_r($needle, $item);
-                if($found) {
-                    break;
-                }
-            }
-        }
-        return $found;
     }
 }
