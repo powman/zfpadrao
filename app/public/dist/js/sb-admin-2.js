@@ -1,3 +1,79 @@
+// Declare app level module which depends on views, and components
+var app = angular.module('painel',[]);
+/*app.run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});*/
+
+app.factory('validator', function() {
+    return {
+    	/*
+    	 * Exemplo 
+    	 * 
+    	 * <input type="email" name="email" data-error="Email obrigatório" data-type="email"  required placeholder="E-mail" />
+    	 * 
+    	 * <input type="text" name="celular" mask="telefone" data-error="Celular obrigatório" data-type="string" placeholder="Celular" required />
+    	 * 
+    	 * <form validar="true" action="" method="post"></form>
+    	 */
+        validar: function($form) {
+        	var erros = [];
+            var $form = $("#"+$form);
+            $form.find("input[required]").each(function(index){
+                var $obj = $(this);
+                if($obj.attr("data-type") == "string"){
+                    if (!$obj.inSizeRangeString(1)){
+                        erros.push({
+                            msg: $obj.attr("data-error")
+                        });
+                    }
+                }else if($obj.attr("data-type") == "email"){
+                    if (!$obj.isValidEMAIL()){
+                        erros.push({
+                            msg: $obj.attr("data-error")
+                        });
+                    }
+                }else if($obj.attr("data-type") == "radio-check"){
+                	var $tipos = $(this).attr("name");
+                	if($form.find("input[name="+$tipos+"]").length > 1){
+                		if(!$form.find("input[name="+$tipos+"]:checked").length){
+        	        		erros.push({
+        	                    msg: $("input[name="+$tipos+"]").attr("data-error")
+        	                });
+                		}
+                	}else if(!$passou){
+                		if(!$form.find("input[name="+$tipos+"]:checked").length){
+        	        		erros.push({
+        	                    msg: $("input[name="+$tipos+"]").attr("data-error")
+        	                });
+                		}
+                	}
+                }
+                 
+            });
+            
+            var msg = erros.map(function(obj) { return obj.msg; });
+            erros = msg.filter(function(v,i) { return msg.indexOf(v) == i; });
+            if(erros.length > 0){
+	            var _mensagem = "";
+	            $(erros).each(function(idx, item) {
+	                _mensagem += item + '<br>';
+	            });
+	            noty({
+	    		    text: _mensagem,
+	    		    modal:true,
+	    		    killer: true,
+	    		    layout:"center",
+	    		    type:"information",
+	    		    timeout:5000
+	    		});
+	            return false;
+            }else{
+            	return true;
+            }
+        }
+    };
+});
+
 $(function() {
 
     $('#side-menu').metisMenu();
@@ -46,3 +122,23 @@ $(function() {
         element.addClass('active');
     }
 });
+
+
+
+$.fn.inSizeRangeString = function(min, max) {
+    var len = this.val().length;
+    if (this.val() == this.attr('placeholder')) return false;
+    if (min != null && max != null) {
+        if (len < min || len > max)return false;
+    } else if (min != null && max == null) {
+        if (len < min)return false;
+    } else if (min == null && max != null) {
+        if (len > max)return false;
+    }
+    return true;
+};
+$.fn.isValidEMAIL = function() {
+    var email = this.val();
+    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+};

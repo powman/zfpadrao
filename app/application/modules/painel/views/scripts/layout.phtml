@@ -122,7 +122,7 @@
 
 */?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="painel">
 
 <head>
 
@@ -155,13 +155,21 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <script>
+		var _baseUrl = '<?php echo $this->baseUrl() ?>';
+		var _controller = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getControllerName();?>';
+		var _modulo = '<?php echo Zend_Controller_Front::getInstance()->getRequest()->getModuleName();?>';
+    </script>
 
 </head>
 
 	<body>
 		
 		<div id="wrapper">
-
+        <?php 
+        if(Zend_Auth::getInstance()->hasIdentity()):
+        ?>
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -269,7 +277,7 @@
             <!-- /.navbar-static-side -->
         </nav>
 
-        
+        <?php endif;?>
 		<?php echo $this->layout()->content; ?>
     </div>
     <!-- /#wrapper -->
@@ -285,7 +293,9 @@
 								  ->appendFile($this->baseUrl('/bower_components/metisMenu/dist/metisMenu.min.js'))
 								  ->appendFile($this->baseUrl('/bower_components/raphael/raphael-min.js'))
 								  ->appendFile($this->baseUrl('/bower_components/morrisjs/morris.min.js'))
+								  ->appendFile($this->baseUrl('/bower_components/notify/jquery.noty.packaged.min.js'))
 								  ->appendFile($this->baseUrl('/js/morris-data.js'))
+								  ->appendFile($this->baseUrl('/dist/js/angular.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/sb-admin-2.js'))
     ?>
     <?php if($this->CssHelper()): ?>

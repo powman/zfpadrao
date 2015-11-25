@@ -40,7 +40,7 @@ class Painel_Model_Acl extends App_Model_Default
    }
    
    public function getAllResources(){
-        $sql = $this->getAdapter()->select("controller")->from("acl");
+        $sql = $this->getAdapter()->select("controller")->from("acl")->group("controller");
 		$res = $this->getAdapter()->fetchAll($sql);
         return $res;
     }

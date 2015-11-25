@@ -10,7 +10,13 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         $authModel=new Painel_Model_CaAuth();
         if (!$auth->hasIdentity()){
             //Se o usuário site não existir, pega o usuario do banco com o id=1
-            $authModel->authenticate(array('email'=>'demo@site.com','senha'=>'123'));
+            //$authModel->authenticate(array('email'=>'demo@site.com','senha'=>'123'));
+            $request->setControllerName('index');
+            $request->setActionName('login');
+            //$this->_helper->redirector->goToRoute( array('controller' => 'ca-auth'), null, true);
+            //$baseUrl = new Zend_View_Helper_BaseUrl();
+            //$this->getResponse()->setRedirect($baseUrl->baseUrl().'/index/login');
+            return;
         }
  
         $request=$this->getRequest();
@@ -37,23 +43,26 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         $acl = new Zend_Acl();
         // adciona o grupo
         $acl->addRole(new Zend_Acl_Role($grupo));
+        
 
         if($grupo_id==3){//If grupo_id=3 "Admin" não cria os resources
             $acl->allow($grupo);
         }else{
+            
             //Mostra todos os controllers
             $resources=$aclResource->getAllResources();  
             // Add the existing resources to ACL
             foreach($resources as $resource){
             	if(isset($resource["controller"]))
                 	$acl->add(new Zend_Acl_Resource($resource["controller"]));
-                     
             }  
 			
 			//Pega as permissao deste grupo
             $userAllowedResources=$aclResource->getCurrentRoleAllowedResources($grupo_id);
 			
 			// Adciona as permissão no ACL
+            $acl->allow($grupo, "index",array("login"));
+            $acl->allow($grupo, "error",array("error"));
             foreach($userAllowedResources as $controllerName =>$allowedActions){
                 $arrayAllowedActions=array();
                 foreach($allowedActions as $allowedAction){
