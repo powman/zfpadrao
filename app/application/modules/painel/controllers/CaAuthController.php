@@ -74,6 +74,8 @@ class CaAuthController extends Zend_Controller_Action
 	    $resposta = array();
 	    $this->_helper->viewRenderer->setNoRender(true);
 	    $this->_helper->layout()->disableLayout();
+	    
+	    
 	
 	    $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
 	    $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);

@@ -1,22 +1,23 @@
 // angular calendario
-app.controller('index_login', function index_login($scope,$http,validator) {
+app.controller('index_login', function index_login($scope,$http,$validator,$notify ) {
 	// Http Login
-		
-	    $scope.logar = function(idform){
-	    if(validator.validar(idform)){
-			$http({
-			  method: 'POST',
-			  url: _baseUrl+'/index/logar',
-			  data: { email: $scope.email, senha: $scope.senha }
-			}).then(function successCallback(response) {
-				//$scope.loading = false;
-			    // this callback will be called asynchronously
-			    // when the response is available
-			  }, function errorCallback(response) {
-				  //$scope.loading = false;
-			    // called asynchronously if an error occurs
-			    // or server returns response with an error status.
-			});
+	$scope.logar = function(idform){
+	    if($validator.validar(idform)){
+	    	$notify.open("Carregando...");
+	    	var data = $.param({ email: $scope.email, senha: $scope.senha, lembrar: $scope.lembrar });
+    	    $http.post( _baseUrl+'/index/logar',data).success(function($data){
+    	    	if($data.situacao == "error"){
+    	    		$notify.open($data.msg,2000,"error");
+    	    	}else if($data.situacao == "success"){
+    	    		$notify.open($data.msg,2000,"success");
+    	    		window.location.href= _baseUrl+'/index/index';
+    	    	}else{
+    	    		$notify.close();
+    	    	}
+    	    	
+    	    }).error(function() {
+    	    	$notify.open("Um erro inesperado aconteceu.",2000,"error");
+    	    });
 	    }
 	}
 	

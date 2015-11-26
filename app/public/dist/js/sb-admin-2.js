@@ -4,7 +4,11 @@ var app = angular.module('painel',[]);
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });*/
 
-app.factory('validator', function() {
+app.config(function($httpProvider) {
+    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+});
+
+app.factory('$validator', function() {
     return {
     	/*
     	 * Exemplo 
@@ -13,7 +17,6 @@ app.factory('validator', function() {
     	 * 
     	 * <input type="text" name="celular" mask="telefone" data-error="Celular obrigatório" data-type="string" placeholder="Celular" required />
     	 * 
-    	 * <form validar="true" action="" method="post"></form>
     	 */
         validar: function($form) {
         	var erros = [];
@@ -71,6 +74,43 @@ app.factory('validator', function() {
             	return true;
             }
         }
+    };
+});
+
+app.factory('$notify', function() {
+    return {
+        open: function($msg, $time, $type) {
+        	$type ? $type : "information";
+        	noty({
+    		    text: $msg,
+    		    modal:true,
+    		    killer: true,
+    		    layout:"center",
+    		    type:$type,
+    		    maxVisible: 3,
+    		    force:true,
+    		    timeout:$time ? $time : 100000,
+	    		callback: {
+	    	        onShow: function() {},
+	    	        afterShow: function() {},
+	    	        onClose: function() {
+	    	        	$.noty.closeAll();
+	    		    	$.noty.clearQueue();
+	    	        },
+	    	        afterClose: function() {},
+	    	        onCloseClick: function() {},
+	    	    },
+    		});
+        
+        },
+    
+	    close: function() {
+	    	setTimeout(function(){ 
+	    		$.noty.closeAll();
+		    	$.noty.clearQueue();
+	    	}, 1000);
+	    	
+	    }	
     };
 });
 

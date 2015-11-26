@@ -9,13 +9,15 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         $auth = Zend_Auth::getInstance();
         $authModel=new Painel_Model_CaAuth();
         if (!$auth->hasIdentity()){
+            $controller = $request->getControllerName();
+            $action = $request->getActionName();
             //Se o usuário site não existir, pega o usuario do banco com o id=1
             //$authModel->authenticate(array('email'=>'demo@site.com','senha'=>'123'));
-            $request->setControllerName('index');
-            $request->setActionName('login');
-            //$this->_helper->redirector->goToRoute( array('controller' => 'ca-auth'), null, true);
-            //$baseUrl = new Zend_View_Helper_BaseUrl();
-            //$this->getResponse()->setRedirect($baseUrl->baseUrl().'/index/login');
+            // se for diferente de logar e error redireciona para o login
+            if($action != "logar" && $action != "error"){
+                $request->setControllerName('index');
+                $request->setActionName('login');
+            }
             return;
         }
  
@@ -61,7 +63,7 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
             $userAllowedResources=$aclResource->getCurrentRoleAllowedResources($grupo_id);
 			
 			// Adciona as permissão no ACL
-            $acl->allow($grupo, "index",array("login"));
+            $acl->allow($grupo, "index",array("login","logar"));
             $acl->allow($grupo, "error",array("error"));
             foreach($userAllowedResources as $controllerName =>$allowedActions){
                 $arrayAllowedActions=array();
