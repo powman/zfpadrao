@@ -1,13 +1,11 @@
 <?php
 
-class IndexController extends Zend_Controller_Action 
+class IndexController extends App_Controller_BaseController 
 {
-    public function init(){
+    public $models = array();
+    public $modelAtual = '';
+    public $msg = null;
 
-//         if ( !Zend_Auth::getInstance()->hasIdentity() ) {
-//             return $this->_helper->redirector->goToRoute( array('controller' => 'ca-auth'), null, true);
-//         }
-    }
 	public function indexAction()
 	{
 	 $tblModulo = new Painel_Model_CgModulo();

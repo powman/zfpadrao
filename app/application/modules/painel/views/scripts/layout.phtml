@@ -145,6 +145,7 @@
 	    	->appendStylesheet($this->baseUrl("/bower_components/metisMenu/dist/metisMenu.min.css"))
 			->appendStylesheet($this->baseUrl("/dist/css/timeline.css"))
 			->appendStylesheet($this->baseUrl("/dist/css/sb-admin-2.css"))
+			->appendStylesheet($this->baseUrl("/dist/css/ng-table.min.css"))
 			->appendStylesheet($this->baseUrl("/bower_components/morrisjs/morris.css"))
 			->appendStylesheet($this->baseUrl("/bower_components/font-awesome/css/font-awesome.min.css"))
     ?>
@@ -267,7 +268,7 @@
                     </div>
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href="<?php echo $this->url(array("controller"=>"index","action"=>"index"),null,true); ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <?php echo $this->menu(); ?>
                     </ul>
@@ -296,6 +297,7 @@
 								  ->appendFile($this->baseUrl('/bower_components/notify/jquery.noty.packaged.min.js'))
 								  ->appendFile($this->baseUrl('/js/morris-data.js'))
 								  ->appendFile($this->baseUrl('/dist/js/angular.min.js'))
+								  ->appendFile($this->baseUrl('/dist/js/ng-table.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/sb-admin-2.js'))
     ?>
     <?php if($this->CssHelper()): ?>

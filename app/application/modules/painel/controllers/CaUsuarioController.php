@@ -4,22 +4,7 @@ class CaUsuarioController extends App_Controller_BaseController
 {
 	public $models = array('CaUsuarioGrupo');
 	public $modelAtual = 'CaUsuario';
-    
-   /* public function init(){
-        $identity = Zend_Auth::getInstance()->getIdentity();
-        $this->model = new Painel_Model_CaUsuario();
-        $this->modelLog = new Painel_Model_Logs();
-        $this->modelUsuarioGrupo = new Painel_Model_CaUsuarioGrupo();
-        $this->view->cssHelper = Painel_Plugin_CssHelper::CssHelper();
-        $this->view->jsHelper = Painel_Plugin_JavascriptHelper::JsHelper();
-        $this->view->mostra_head_footer = true;
-       // $this->idusuariologado = $identity->id;
-        $this->uteis = new App_AbstractController();
-        
-        /*if ( !Zend_Auth::getInstance()->hasIdentity() ) {
-            return $this->_helper->redirector->goToRoute( array('module' => 'painel','controller' => 'auth'), null, true);
-        }
-    }*/
+	public $msg = null;
 	
 	public function indexAction()
 	{
@@ -27,7 +12,7 @@ class CaUsuarioController extends App_Controller_BaseController
        // $form = new Painel_Form_Usuario();
         // Envio para a Camada de Visualização
         //$this->view->form = $form;
-        $page = 1;
+        /*$page = 1;
 		
 		
 		$offset        		= $this->_getParam('offset',0);
@@ -38,14 +23,14 @@ class CaUsuarioController extends App_Controller_BaseController
         
         $this->view->res   = $res['res'];
 		$this->view->pages = ceil($res['pages'] / $registroPagina);
-		$this->view->page  = $page;
+		$this->view->page  = $page;*/
 		
 	}
 	
 	public function listarAction()
 	{
 	
-        $resposta = array();
+       /* $resposta = array();
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout()->disableLayout();
         
@@ -99,7 +84,7 @@ class CaUsuarioController extends App_Controller_BaseController
             $values['rows'][$i]['status'] = $logs[$i]['status'] ? "Ativo" : "Inativo";
         }
         
-        echo json_encode($values);
+        echo json_encode($values);*/
 	}
 	public function excluirAction()
 	{

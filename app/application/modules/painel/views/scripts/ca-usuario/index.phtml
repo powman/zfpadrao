@@ -1,4 +1,4 @@
-<div id="page-wrapper">
+<?php /*<div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header"><?php echo $this->titulo(new Painel_Model_CgModuloSubmenu()); ?></h1>
@@ -40,5 +40,27 @@
 	</div>
 	<hr />
 	<?php echo $this->paginacao($this->pages, $this->page); ?>
+</div>
+<!-- /#page-wrapper --> */ ?>
+<?php $controle = Zend_Controller_Front::getInstance()->getRequest()->getControllerName()."_".Zend_Controller_Front::getInstance()->getRequest()->getActionName();?>
+<div id="page-wrapper" ng-controller="<?php echo $controle;?> as ctrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Dashboard</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+
+        <table ng-table="ctrl.tableParams" class="table" show-filter="true">
+            <tr ng-repeat="user in $data">
+                <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
+                    {{user.name}}</td>
+                <td title="'Age'" filter="{ age: 'number'}" sortable="'age'">
+                    {{user.age}}</td>
+            </tr>
+        </table>
+    </div>
 </div>
 <!-- /#page-wrapper -->
