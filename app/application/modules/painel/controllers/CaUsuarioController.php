@@ -8,22 +8,35 @@ class CaUsuarioController extends App_Controller_BaseController
 	
 	public function indexAction()
 	{
-		// Criação do Objeto Formulário
-       // $form = new Painel_Form_Usuario();
-        // Envio para a Camada de Visualização
-        //$this->view->form = $form;
-        /*$page = 1;
-		
-		
-		$offset        		= $this->_getParam('offset',0);
-		$page          		= $this->_getParam('page',1);
-		$registroPagina     = $this->_getParam('registroPagina',3);
-		
-		$res = $this->model->listarTodos();
-        
-        $this->view->res   = $res['res'];
-		$this->view->pages = ceil($res['pages'] / $registroPagina);
-		$this->view->page  = $page;*/
+
+	    if ($this->getRequest()->isXmlHttpRequest()) {
+	        $this->_helper->layout()->disableLayout();
+	        $this->_helper->viewRenderer->setNoRender(true);
+	        
+	        // Criação do Objeto Formulário
+	        $form = new Painel_Form_Usuario();
+
+	        $offset        		= $this->_getParam('offset',0);
+	        $page          		= $this->_getParam('page',1);
+	        $registroPagina     = $this->_getParam('count',10);
+	        
+	        $aPesquisa = array();
+	        $order = "";
+	        $offset = ($registroPagina*$page)-$registroPagina;
+	        if($this->_getParam("filter")){
+    	        // pega todos os dados do filtro de pesquisa
+    	        foreach ($this->_getParam("filter") as $key => $value){
+    	            $aPesquisa[$key] = $value;
+    	        }
+	        }
+	        
+	        // pega os dados de ordenacao
+	        if($this->_getParam("sorting"))
+	           $order = key($this->_getParam("sorting"))." ".$this->_getParam("sorting")[key($this->_getParam("sorting"))];
+	        $res = $this->model->listarTodos($aPesquisa,$registroPagina,$offset,$order);
+
+	        echo json_encode($res);
+	    }
 		
 	}
 	

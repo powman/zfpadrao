@@ -52,15 +52,33 @@
     </div>
     <!-- /.row -->
     <div class="row">
-
-        <table ng-table="ctrl.tableParams" class="table" show-filter="true">
-            <tr ng-repeat="user in $data">
-                <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
-                    {{user.name}}</td>
-                <td title="'Age'" filter="{ age: 'number'}" sortable="'age'">
-                    {{user.age}}</td>
+{{checkboxes.items}}
+        <table ng-table="ctrl.tableParams" class="table table-condensed table-striped table-hover" show-filter="true">
+            <tr ng-repeat="dados in $data">
+                <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
+                    <input type="checkbox" ng-model="checkboxes.items[dados.id]" />
+                </td>
+                <td title="'Id'" filter="{ id: 'text'}" sortable="'u.id'">
+                    {{dados.id}}
+                </td>
+                <td title="'Nome'" filter="{ nome: 'text'}" sortable="'u.nome'">
+                    {{dados.nome}}
+                </td>
+                <td title="'Email'" filter="{ email: 'text'}" sortable="'u.email'">
+                    {{dados.email}}
+                </td>
+                <td>
+                    <button class="btn btn-primary btn-sm" ng-click="demo.save(row, rowForm)" ng-if="row.isEditing" ng-disabled="rowForm.$pristine || rowForm.$invalid"><span class="glyphicon glyphicon-ok"></span></button>
+                    <button class="btn btn-default btn-sm" ng-click="demo.cancel(row, rowForm)" ng-if="row.isEditing"><span class="glyphicon glyphicon-remove"></span></button>
+                    <button class="btn btn-default btn-sm" ng-click="row.isEditing = true" ng-if="!row.isEditing"><span class="glyphicon glyphicon-pencil"></span></button>
+                    <button class="btn btn-danger btn-sm" ng-click="demo.del(row)" ng-if="!row.isEditing"><span class="glyphicon glyphicon-trash"></span></button>
+                </td>
             </tr>
         </table>
     </div>
 </div>
 <!-- /#page-wrapper -->
+
+<script type="text/ng-template" id="ng-table/headers/checkbox.html">
+        <input type="checkbox" ng-model="checkboxes.checked" id="select_all" name="filter-checkbox" value="" />
+</script>

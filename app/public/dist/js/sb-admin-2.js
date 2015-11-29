@@ -6,6 +6,7 @@ var app = angular.module('painel',['ngTable']);
 
 app.config(function($httpProvider) {
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+    $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
 });
 
 app.factory('$validator', function() {
