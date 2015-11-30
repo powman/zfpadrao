@@ -12,17 +12,13 @@ class Painel_Model_CaUsuario extends App_Model_Default
 		// SQL para buscar os registros
 		$sql = $this->getAdapter()->select()
 		->from(array('u' => $this->_name), array('id', 'nome','senha','email','img','status','grupo_id'));
-		
-		if (isset($arraySearch['id']) && $arraySearch['id']) {
-		    $sql->where('u.id in(?)', "{$arraySearch['id']}");
+		if (isset($arraySearch['valor']) && $arraySearch['valor'] && is_int($arraySearch['valor'])) {
+		    $sql->where('u.id = ?', $arraySearch['valor']);
 		}
 	
-		if (isset($arraySearch['nome']) && $arraySearch['nome']) {
-			$sql->where('u.nome LIKE ?', "%{$arraySearch['nome']}%");
-		}
-		
-		if (isset($arraySearch['email']) && $arraySearch['email']) {
-		    $sql->where('u.email LIKE ?', "%{$arraySearch['email']}%");
+		if (isset($arraySearch['valor']) && $arraySearch['valor'] && !is_int($arraySearch['valor'])) {
+			$sql->where('u.nome LIKE ?', "%{$arraySearch['valor']}");
+			$sql->orWhere('u.email LIKE ?', "%{$arraySearch['valor']}");
 		}
 		
 		// SQL para buscar a quantidade de páginas existentes

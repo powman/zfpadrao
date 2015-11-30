@@ -26,7 +26,11 @@ class CaUsuarioController extends App_Controller_BaseController
 	        if($this->_getParam("filter")){
     	        // pega todos os dados do filtro de pesquisa
     	        foreach ($this->_getParam("filter") as $key => $value){
-    	            $aPesquisa[$key] = $value;
+    	            if(!is_numeric($value)){
+    	               $aPesquisa[$key] = urldecode($value);
+    	            }else{
+    	                $aPesquisa[$key] = intval($value);
+    	            }
     	        }
 	        }
 	        

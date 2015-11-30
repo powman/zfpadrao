@@ -115,6 +115,36 @@ app.factory('$notify', function() {
     };
 });
 
+app.factory('$loader', function() {
+	// Cria a vid
+	var $dialog = $(
+		'<div id="loadingPadrao" style="background-color:#fff1a8; width:200px; border:1px solid #ccc; -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75); box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75); -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75); padding: 5px; z-index:9999999; position:fixed; top:-100px; left:50%; margin-left:-100px; text-align:center; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px;">' +
+			'<p></p>'+
+		'</div>' );
+
+	return {
+		/*
+		 * Abre o Dialog
+		 */
+		show: function (message) {
+			$('body').append($dialog);
+			$('#loadingPadrao').stop().animate({
+				top: '0px'
+			},200);
+			$dialog.find('p').text(message);
+		},
+		/**
+		 * Fecha o Dialog
+		 */
+		hide: function () {
+			$('#loadingPadrao').stop().animate({
+				top: '-100px'
+			},200);
+			$('#loadingPadrao').remove();
+		}
+	}
+});
+
 $(function() {
 
     $('#side-menu').metisMenu();
