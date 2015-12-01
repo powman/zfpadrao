@@ -29,7 +29,7 @@ class Painel_Model_CgModulo extends App_Model_Default
         $sql->order('m.id')->limit($limit, $offset);
     
         $return['res']   = $this->fetchAll($sql)->toArray();
-        $return['pages'] = $this->getPagesWithCount($sqlCount->rowCount());
+        $return['total'] = $sqlCount->rowCount();
     
         return $return;
     }

@@ -12,9 +12,6 @@ class CaUsuarioController extends App_Controller_BaseController
 	    if ($this->getRequest()->isXmlHttpRequest()) {
 	        $this->_helper->layout()->disableLayout();
 	        $this->_helper->viewRenderer->setNoRender(true);
-	        
-	        // Criação do Objeto Formulário
-	        $form = new Painel_Form_Usuario();
 
 	        $offset        		= $this->_getParam('offset',0);
 	        $page          		= $this->_getParam('page',1);
@@ -109,21 +106,18 @@ class CaUsuarioController extends App_Controller_BaseController
 	    $resposta = array();
 	    $this->_helper->viewRenderer->setNoRender(true);
 	    $this->_helper->layout()->disableLayout();
-	    
-	    if($this->idusuariologado != $this->getRequest()->getParam('id')){
+
+	    /*if($this->idusuariologado != $this->getRequest()->getParam('id')){
     
     	    // chama a funcao excluir
-    	    $result = $this->model->excluir($this->getRequest()->getParam('id'));
+    	    $result = $this->model->remove("id in()",$this->msg);
     	     
     	    if($result){
     	        $resposta['situacao'] = "sucess";
-    	        $resposta['msg'] = "Excluido com sucesso!";
-    	        
-    	        // Grava o Log
-    	        $this->gravarLog('Excluir um usuário');
+    	        $resposta['msg'] = $this->msg;
     	    }else{
     	        $resposta['situacao'] = "error";
-    	        $resposta['msg'] = "Erro ao Excluir!";
+    	        $resposta['msg'] = $this->msg;
     	    }
     	     
     	    echo json_encode($resposta);
@@ -132,7 +126,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	        $resposta['msg'] = "Erro ao Excluir, você não pode excluir seu usuário!";
 	        
 	        echo json_encode($resposta);
-	    }
+	    }*/
 	     
 	     
 	}

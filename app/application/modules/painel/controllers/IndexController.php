@@ -60,5 +60,18 @@ class IndexController extends App_Controller_BaseController
 	    
 	    echo json_encode($resposta);
 	}
+	
+	public function sessaoAction()
+	{
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    $this->_helper->layout()->disableLayout();
+	    $resposta = array();
+	    
+	    $resposta['situacao'] = "success";
+	    $resposta['dados'] = $this->view->sessao;
+	    
+	    echo json_encode($resposta);
+
+	}
 
 }

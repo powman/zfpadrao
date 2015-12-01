@@ -1,8 +1,12 @@
 // angular calendario
 
-app.controller('ca-usuario_index', ['$scope','NgTableParams','$http','$notify','$loader','$element', function($scope,NgTableParams, $http, $notify,$loader,$element) {
+app.controller('ca-usuario_index', ['$scope','NgTableParams','$http','$notify','$loader','$element','$sessao', function($scope,NgTableParams, $http, $notify,$loader,$element,$sessao) {
 
 	$scope.dados = [];
+	// pega as sessao
+	$sessao.getSessions().success(function(data, status){
+        $scope.sessao = data.dados;
+    });
 	this.tableParams = new NgTableParams({}, {
       getData: function(params) {
         // ajax request to api
@@ -15,8 +19,14 @@ app.controller('ca-usuario_index', ['$scope','NgTableParams','$http','$notify','
     		}).then(function successCallback(response) {
     			$loader.hide();
     			$scope.dados = response.data.res;
+    			angular.forEach($scope.dados, function(value, key) {
+    				$scope.dados[key].del = true;
+    				if($scope.dados[key].id == $scope.sessao.id){
+    					$scope.dados[key].del = false;
+    				}
+		        });
     			params.total(response.data.total); // recal. page nav controls
-    	        return response.data.res;
+    	        return $scope.dados;
     		  }, function errorCallback(response) {
     			  $loader.hide();
     		  });
@@ -24,18 +34,21 @@ app.controller('ca-usuario_index', ['$scope','NgTableParams','$http','$notify','
     });
 	
 	$scope.checkboxes = { 'checked': false, items: {} };
-	this.changePageSize = changePageSize;
-	
-	function changePageSize(newSize){
+	this.changePageSize = function (newSize){
       this.tableParams.count(newSize);
-    }
+    };
 	
-	this.applyGlobalSearch = applyGlobalSearch;
-    
-    function applyGlobalSearch(){
-      var term = this.globalSearchTerm;
-      this.tableParams.filter({ valor: term });
-    }
+	this.del = function ($event,$index){
+		console.log($scope.variableName);
+      if(confirm("Deseja realmente excluir? \n\n"+$scope.dados[$index].nome+" - ID: "+$scope.dados[$index].id+"")){
+    	  var $retorno = remover({id:[$scope.dados[$index].id]});
+    	  console.log($retorno);
+    	  /*if(){
+    		  $scope.dados.splice($index,1);
+    	  }*/
+    	  
+      }
+    };
 
 	// watch for check all checkbox
     $scope.$watch(function() {
@@ -61,3 +74,28 @@ app.controller('ca-usuario_index', ['$scope','NgTableParams','$http','$notify','
     }, true);
     
 }]);
+
+function remover(objeto){
+	return $.ajax({
+        url: _baseUrl+_controller+"/excluir",
+        data: {
+        	id: objeto.id
+        },
+        type: "post",
+        dataType: "json",
+        beforeSend: function() {
+            
+        },
+        error:function(data){
+            return false;
+        },
+        complete: function(data) {
+            if(data.responseJSON.status == "sucesso"){
+            	return true;
+           } else {
+
+           		return false;
+           }
+        }
+    });
+}

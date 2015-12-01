@@ -9,6 +9,7 @@ class App_Controller_BaseController extends Zend_Controller_Action
     public function init(){
     	// pega os dados da sessao
     	$identity = Zend_Auth::getInstance()->getIdentity();
+    	$this->view->sessao = $identity;
     	// importar o css de acordo com o controler
         $this->view->cssHelper = Painel_Plugin_CssHelper::CssHelper();
 		// importar o js de acordo com o controler

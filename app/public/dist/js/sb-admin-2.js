@@ -145,6 +145,27 @@ app.factory('$loader', function() {
 	}
 });
 
+app.factory('$sessao', function($http,$q) {
+	  var factory = {};
+	  factory.getSessions = function () {
+		  return $http.post( _baseUrl+_modulo+'/index/sessao').success(function($data, $status, $headers, $config){
+			  	if($data.situacao == "error"){
+					
+				}else if($data.situacao == "success"){
+					return $data;
+					
+				}else{
+					return false;
+				}
+				
+			}).error(function($data, $status, $headers, $config) {
+				return false;
+			});
+		   
+	   }
+  	   return factory;
+});
+
 $(function() {
 
     $('#side-menu').metisMenu();

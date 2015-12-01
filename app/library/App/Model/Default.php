@@ -36,7 +36,13 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
 	        )
 	);
 	
-	
+	/**
+	 * Salva um registro no banco de dados
+	 *
+	 * @param array $data
+	 * @param string $msg
+	 * @return mixed
+	 */
 	public function save(array $data, &$msg = null)
 	{
 	    try{
@@ -77,6 +83,13 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
         }
 	}
 	
+	/**
+	 * Localizar item por id
+	 *
+	 * @param array $condition
+	 * @param string $msg
+	 * @return boolean
+	 */
 	private function _dataExists($id, &$msg = null)
 	{
 	    try {
@@ -100,14 +113,22 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
 	}
 	
 	/**
-	 * Retorna a quantidade de páginas encontradas
+	 * Remove algum registro do banco de dados
 	 *
-	 * @param integer $qtde
+	 * @param string $condition
+	 * @param string $msg
+	 * @return boolean
 	 */
-	public function getPagesWithCount($qtde)
+	public function remove($condition, &$msg = null)
 	{
-	   // quantidade default 10
-	    return ceil($qtde / 10);
+		try {
+			$this->getAdapter()->delete($this->_name,$condition);
+			$msg = $this->msg['delete']['success'];
+			return true;
+		} catch (Zend_Exception $e) {
+	        $msg = $e->getMessage() . "\n";
+	        return false;
+	    }
 	}
 			
 }
