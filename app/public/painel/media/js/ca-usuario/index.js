@@ -23,6 +23,7 @@ app.controller('ca-usuario_index', ['$scope','NgTableParams','$http','$notify','
     				$scope.dados[key].del = true;
     				if($scope.dados[key].id == $scope.sessao.id){
     					$scope.dados[key].del = false;
+    					$scope.dados[key].selected = false;
     				}
 		        });
     			params.total(response.data.total); // recal. page nav controls
@@ -33,7 +34,7 @@ app.controller('ca-usuario_index', ['$scope','NgTableParams','$http','$notify','
       }
     });
 	
-	$scope.checkboxes = { 'checked': false, items: {} };
+	
 	this.changePageSize = function (newSize){
       this.tableParams.count(newSize);
     };
@@ -49,29 +50,72 @@ app.controller('ca-usuario_index', ['$scope','NgTableParams','$http','$notify','
     	  
       }
     };
-
-	// watch for check all checkbox
-    $scope.$watch(function() {
-      return $scope.checkboxes.checked;
-    }, function(value) {
-      angular.forEach($scope.dados, function(item) {
-    	  $scope.checkboxes.items[item.id] = value;
-      });
-    });
     
-    // watch for data checkboxes
-   $scope.$watch(function() {
-      return $scope.checkboxes.items;
-    }, function(values) {
-      var checked = 0, unchecked = 0,
-          total = $scope.dados.length;
-      angular.forEach($scope.dados, function(item) {
-        checked   +=  ($scope.checkboxes.items[item.id]) || 0;
-        unchecked += (!$scope.checkboxes.items[item.id]) || 0;
-      });
-      // grayed checkbox
-      angular.element($element[0].getElementsByClassName("select-all")).prop("indeterminate", (checked != 0 && unchecked != 0));
-    }, true);
+    $scope.removerSelecionados = function ($param){
+	  var $aExcluir = [];
+	  var $aKey = [];
+	  
+      if(confirm("Deseja realmente excluir os selecionados?")){
+    	  angular.forEach($scope.dados, function($value, $key) {
+    		  console.log($key);
+    		  if($scope.dados[$key].selected === true){
+    			  $aExcluir.push($scope.dados[$key].id);
+    			  $aKey.push($key);
+    		  }
+          });
+    	  if($aExcluir.length){
+	    	  var data = $.param({ id: $aExcluir});
+	    	  $loader.show("Carregando...");
+	    	  $http.post( _baseUrl+_modulo+'/'+_controller+'/remover',data).success(function($data){
+	  	    	if($data.situacao == "error"){
+	  	    		$loader.hide();
+	  	    		$notify.open($data.msg,2000,"error");
+	  	    	}else if($data.situacao == "success"){
+	  	    		$loader.hide();
+	  	    		$notify.open($data.msg,2000,"success");
+					//$scope.dados.splice($scope.flumps.indexOf($aExcluir),1);//remove a linha da view
+					this.selecionados = "";
+	  	    	}else{
+	  	    		$loader.hide();
+	  	    		$notify.open("Um erro inesperado aconteceu.",2000,"error");
+	  	    	}
+	  	    	
+	  	      }).error(function() {
+	  	    	$loader.hide();
+	  	    	$notify.open("Um erro inesperado aconteceu.",2000,"error");
+	  	      });
+    	  }else{
+    		  $notify.open("Não foi selecionado nenhum item para exclusão",2000,"error");
+    		  var element = angular.element('[ng-model="selecionados"]');
+    		  element.find("option")[0].selected = true;
+    		  this.selecionados = "";
+    	  }
+    	 /* var $retorno = remover({id:[$scope.dados[$index].id]});
+    	  console.log($retorno);*/
+    	  /*if(){
+    		  $scope.dados.splice($index,1);
+    	  }*/
+    	  
+      }else{
+    	  var element = angular.element('[ng-model="selecionados"]');
+		  element.find("option")[0].selected = true;
+		  this.selecionados = "";
+      }
+    };
+
+ // check todos os produtos do carrinho
+	$scope.checarAll = function($check){
+		if($check){
+			angular.forEach($scope.dados, function(value, key) {
+				if(value.del === true)
+					$scope.dados[key].selected = true;
+			});
+		}else{
+			angular.forEach($scope.dados, function(value, key) {
+				$scope.dados[key].selected = false;
+			});
+		}
+	};
     
 }]);
 

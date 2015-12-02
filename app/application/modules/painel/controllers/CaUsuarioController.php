@@ -100,20 +100,20 @@ class CaUsuarioController extends App_Controller_BaseController
         
         echo json_encode($values);*/
 	}
-	public function excluirAction()
+	public function removerAction()
 	{
 	    
 	    $resposta = array();
 	    $this->_helper->viewRenderer->setNoRender(true);
 	    $this->_helper->layout()->disableLayout();
-
-	    /*if($this->idusuariologado != $this->getRequest()->getParam('id')){
-    
+	    $ids = implode(",", $this->getRequest()->getParam('id'));
+	    
+	    if(!in_array($this->view->sessao->id, $this->getRequest()->getParam('id'))){
     	    // chama a funcao excluir
-    	    $result = $this->model->remove("id in()",$this->msg);
+    	    $result = $this->model->remove("id in(".$ids.")",$this->msg);
     	     
     	    if($result){
-    	        $resposta['situacao'] = "sucess";
+    	        $resposta['situacao'] = "success";
     	        $resposta['msg'] = $this->msg;
     	    }else{
     	        $resposta['situacao'] = "error";
@@ -126,7 +126,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	        $resposta['msg'] = "Erro ao Excluir, você não pode excluir seu usuário!";
 	        
 	        echo json_encode($resposta);
-	    }*/
+	    }
 	     
 	     
 	}
