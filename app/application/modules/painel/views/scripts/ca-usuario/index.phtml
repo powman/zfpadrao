@@ -93,7 +93,7 @@
             <table ng-table="ctrl.tableParams" class="table table-condensed table-striped table-hover table-bordered" show-filter="false">
                 <tr ng-repeat="dados in $data">
                     <td width="30" style="text-align: left" header="'ng-table/headers/checkbox.html'">
-                        <input type="checkbox" ng-model="dados.selected" ng-if="dados.del" />
+                        <input type="checkbox" ng-model="dados.selected" ng-if="dados.del == 'true'" />
                     </td>
                     <td title="'Id'" sortable="'u.id'">
                         {{dados.id}}
@@ -106,7 +106,7 @@
                     </td>
                     <td align="center">
                         <a href="<?php echo $this->url(array("controller"=>$this->controle, "action"=>"alterar"),null,true); ?>/id/{{dados.id}}" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"></span></a> 
-                        <button ng-if="dados.del" class="btn btn-danger btn-sm" ng-click="ctrl.del($event,$index)"><span class="glyphicon glyphicon-trash"></span></button>
+                        <button ng-if="dados.del == 'true'" class="btn btn-danger btn-sm" ng-click="ctrl.del($event,$index)"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                 </tr>
             </table>

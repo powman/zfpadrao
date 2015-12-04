@@ -8,7 +8,6 @@ class CaUsuarioController extends App_Controller_BaseController
 	
 	public function indexAction()
 	{
-
 	    if ($this->getRequest()->isXmlHttpRequest()) {
 	        $this->_helper->layout()->disableLayout();
 	        $this->_helper->viewRenderer->setNoRender(true);
@@ -35,8 +34,17 @@ class CaUsuarioController extends App_Controller_BaseController
 	        if($this->_getParam("sorting"))
 	           $order = key($this->_getParam("sorting"))." ".$this->_getParam("sorting")[key($this->_getParam("sorting"))];
 	        $res = $this->model->listarTodos($aPesquisa,$registroPagina,$offset,$order);
+	        
+	        foreach ($res["res"] as $key => $value)
+	        {
+	            $res["res"][$key]["del"] = "true";
+	            if($this->view->sessao->id == $res["res"][$key]["id"]){
+	               $res["res"][$key]["selected"] = "false";
+	               $res["res"][$key]["del"] = "false";
+	            }
+	        }
 
-	        echo json_encode($res);
+	        echo json_encode(array("msg"=>"Dados carregado","status" => "sucesso","dados" => $res));
 	    }
 		
 	}
@@ -104,25 +112,36 @@ class CaUsuarioController extends App_Controller_BaseController
 	{
 	    
 	    $resposta = array();
+	    $array = false;
+	    $condicao = true;
 	    $this->_helper->viewRenderer->setNoRender(true);
 	    $this->_helper->layout()->disableLayout();
-	    $ids = implode(",", $this->getRequest()->getParam('id'));
 	    
-	    if(!in_array($this->view->sessao->id, $this->getRequest()->getParam('id'))){
+	    $ids = $this->getRequest()->getParam('id');
+	    if(is_array($ids)){
+	       $array = true;
+	       $ids = implode(",", $this->getRequest()->getParam('id'));
+	    }
+	    if($array){
+	        if(!in_array($this->view->sessao->id, $this->getRequest()->getParam('id'))){
+	            $condicao = false;
+	        } 
+	    }
+	    if($condicao){
     	    // chama a funcao excluir
     	    $result = $this->model->remove("id in(".$ids.")",$this->msg);
     	     
     	    if($result){
-    	        $resposta['situacao'] = "success";
+    	        $resposta['status'] = "sucesso";
     	        $resposta['msg'] = $this->msg;
     	    }else{
-    	        $resposta['situacao'] = "error";
+    	        $resposta['status'] = "erro";
     	        $resposta['msg'] = $this->msg;
     	    }
     	     
     	    echo json_encode($resposta);
 	    }else{
-	        $resposta['situacao'] = "error";
+	        $resposta['status'] = "error";
 	        $resposta['msg'] = "Erro ao Excluir, você não pode excluir seu usuário!";
 	        
 	        echo json_encode($resposta);
