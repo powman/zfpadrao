@@ -6,6 +6,7 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 
    public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
+        
         $auth = Zend_Auth::getInstance();
         $authModel=new Painel_Model_CaAuth();
         if (!$auth->hasIdentity()){
@@ -39,18 +40,23 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         //Get role_id
         $grupo_id=$auth->getIdentity()->grupo_id;
 		$tblGrupo = new Painel_Model_CaGrupo();
-        $grupo=$tblGrupo->getById($grupo_id);
-        $grupo=isset($role['nome']) ? $role['nome'] : "";
         // Instancia a Acl
         $acl = new Zend_Acl();
         // adciona o grupo
-        $acl->addRole(new Zend_Acl_Role($grupo));
+        $acl->addRole(new Zend_Acl_Role($grupo_id));
         
 
         if($grupo_id==3){//If grupo_id=3 "Admin" não cria os resources
-            $acl->allow($grupo);
+            //Mostra todos os controllers
+            $resources=$aclResource->getAllResources();
+            // Add the existing resources to ACL
+            foreach($resources as $resource){
+                if(isset($resource["controller"]))
+                    $acl->add(new Zend_Acl_Resource($resource["controller"]));
+            }
+            $acl->allow($grupo_id);
+            Zend_Registry::set('acl', $acl);
         }else{
-            
             //Mostra todos os controllers
             $resources=$aclResource->getAllResources();  
             // Add the existing resources to ACL
@@ -63,20 +69,21 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
             $userAllowedResources=$aclResource->getCurrentRoleAllowedResources($grupo_id);
 			
 			// Adciona as permissão no ACL
-            $acl->allow($grupo, "index",array("login","logar"));
-            $acl->allow($grupo, "error",array("error"));
+            $acl->allow($grupo_id, "index",array("login","logar"));
+            $acl->allow($grupo_id, "error",array("error"));
             foreach($userAllowedResources as $controllerName =>$allowedActions){
                 $arrayAllowedActions=array();
                 foreach($allowedActions as $allowedAction){
                     $arrayAllowedActions[]=$allowedAction;
                 }
-                $acl->allow($grupo, $controllerName,$arrayAllowedActions);
+                $acl->allow($grupo_id, $controllerName,$arrayAllowedActions);
             }
 			
 			//Salva a Acl no Registro
 	        Zend_Registry::set('acl', $acl);
+	        
 	        //Verifica se você tem acesso, senão manda para o acesso negado.
-	        if(!$acl->isAllowed($grupo,$controller,$action)){
+	        if(!$acl->isAllowed($grupo_id,$controller,$action)){
 	            $request->setControllerName('error');
 	            $request->setActionName('acesso-negado');
 	            return;

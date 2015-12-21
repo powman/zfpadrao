@@ -1,5 +1,5 @@
 // Declare app level module which depends on views, and components
-var app = angular.module('painel',['ngTable']);
+var app = angular.module('painel',['ngTable','ui.bootstrap']);
 /*app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });*/

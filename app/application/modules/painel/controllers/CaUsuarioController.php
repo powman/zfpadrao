@@ -8,6 +8,10 @@ class CaUsuarioController extends App_Controller_BaseController
 	
 	public function indexAction()
 	{
+	    // verifica se tem acao para remover
+	    $this->view->remover = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "remover");
+	    $this->view->form_cadastro = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "form-cadastro");
+	    
 	    if ($this->getRequest()->isXmlHttpRequest()) {
 	        $this->_helper->layout()->disableLayout();
 	        $this->_helper->viewRenderer->setNoRender(true);
@@ -20,6 +24,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	        $order = "";
 	        $offset = ($registroPagina*$page)-$registroPagina;
 	        if($this->_getParam("filter")){
+	            
     	        // pega todos os dados do filtro de pesquisa
     	        foreach ($this->_getParam("filter") as $key => $value){
     	            if(!is_numeric($value)){
@@ -38,7 +43,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	        foreach ($res["res"] as $key => $value)
 	        {
 	            $res["res"][$key]["del"] = "true";
-	            if($this->view->sessao->id == $res["res"][$key]["id"]){
+	            if($this->view->sessao->id == $res["res"][$key]["id"] || !$this->view->remover){
 	               $res["res"][$key]["selected"] = "false";
 	               $res["res"][$key]["del"] = "false";
 	            }
@@ -47,6 +52,43 @@ class CaUsuarioController extends App_Controller_BaseController
 	        echo json_encode(array("msg"=>"Dados carregado","status" => "sucesso","dados" => $res));
 	    }
 		
+	}
+	
+	public function formAction()
+	{
+	    
+	}
+	
+	public function getAbasAction()
+	{
+	    $this->_helper->layout()->disableLayout();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    $request = Zend_Controller_Front::getInstance()->getRequest();
+	    
+	    $res = array(
+	        array(
+	            'title' => "Usuário",
+	            'url' => $this->_helper->url("aba-usuario",$this->controle),
+	            'disabled' => false
+	        ),
+	        array(
+	            'title' => "Avatar",
+	            'url' => $this->_helper->url("aba-avatar",$this->controle),
+	            'disabled' => false
+	        )
+	    );
+	    
+	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => $res));
+	}
+	
+	public function abaUsuarioAction()
+	{
+	    $this->_helper->layout()->disableLayout();
+	}
+	
+	public function abaAvatarAction()
+	{
+	    $this->_helper->layout()->disableLayout();
 	}
 	
 	public function listarAction()

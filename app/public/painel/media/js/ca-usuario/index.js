@@ -74,43 +74,48 @@ app.service(
 app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $notify,$loader,$element,$sessao,$model) {
 
 	$scope.dados = [];
-	this.changePageSize = mudarQtdeDeListagem;
-	this.del = deletar;
+	var $_this = this;
+	$_this.changePageSize = mudarQtdeDeListagem;
+	$scope.removerSelecionados = removerSelecionados;
+	$scope.checarTodos = checarTodos;
+	$scope.pesquisar = pesquisar;
+	$_this.del = deletar;
+	
+	loadDadosRemoto();
 	
 	/*
 	 * Pega os dados remoto
 	 */
-	this.tableParams = new NgTableParams({}, {
-      getData: function(params) {
-        // ajax request to api
-    	var $data = $.param(params.url());
-    	return $model.getAll($data)
-	    .then(
-	        function( data ) {
-	        	if(data.status == "sucesso" && data.dados.res){
-	        		aplicarDadosRemoto( data.dados.res );
-	        		params.total(data.dados.total); // recal. page nav controls
-	    	        return $scope.dados;
-	        	}
-	        }
-	    );
-      }
-    });
-	
-	/*
-	 * Pega os dados remoto
-	 */
-	function loadDadosRemoto() {
-		$model.getAll()
+	function loadDadosRemoto(){
+		$_this.tableParams = new NgTableParams({}, {
+	      getData: function(params) {
+	        // ajax request to api
+	    	var $data = $.param(params.url());
+	    	return $model.getAll($data)
 		    .then(
 		        function( data ) {
 		        	if(data.status == "sucesso" && data.dados.res){
 		        		aplicarDadosRemoto( data.dados.res );
+		        		params.total(data.dados.total); // recal. page nav controls
 		    	        return $scope.dados;
+		        	}else{
+		        		$notify.open(data.msg,3000,"error");
 		        	}
 		        }
-		    )
-		;
+		    );
+	      }
+	    });
+	}
+	
+	/*
+	 * Pesquisa no banco de dados
+	 */
+	function pesquisar(){
+		if($scope.pesquisa){
+			$_this.tableParams.filter({ valor: $scope.pesquisa });
+		}else{
+			loadDadosRemoto();
+		}
 	}
 	
 	/*
@@ -138,77 +143,66 @@ app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $n
 		        function( data ) {
 		        	if(data.status == "sucesso"){
 		        		loadDadosRemoto();
+		        	}else{
+		        		$notify.open(data.msg,3000,"error");
 		        	}
 		        }
 		    );
 	     }
 	}
-    
-    $scope.removerSelecionados = function ($param){
-	  var $aExcluir = [];
-	  var $aKey = [];
-	  
-      if(confirm("Deseja realmente excluir os selecionados?")){
-    	  angular.forEach($scope.dados, function($value, $key) {
-    		  console.log($key);
-    		  if($scope.dados[$key].selected === true){
-    			  $aExcluir.push($scope.dados[$key].id);
-    			  $aKey.push($key);
-    		  }
-          });
-    	  if($aExcluir.length){
-	    	  var data = $.param({ id: $aExcluir});
-	    	  $loader.show("Carregando...");
-	    	  $http.post( _baseUrl+_modulo+'/'+_controller+'/remover',data).success(function($data){
-	  	    	if($data.situacao == "error"){
-	  	    		$loader.hide();
-	  	    		$notify.open($data.msg,2000,"error");
-	  	    	}else if($data.situacao == "success"){
-	  	    		$loader.hide();
-	  	    		$notify.open($data.msg,2000,"success");
-					//$scope.dados.splice($scope.flumps.indexOf($aExcluir),1);//remove a linha da view
-					this.selecionados = "";
-	  	    	}else{
-	  	    		$loader.hide();
-	  	    		$notify.open("Um erro inesperado aconteceu.",2000,"error");
-	  	    	}
-	  	    	
-	  	      }).error(function() {
-	  	    	$loader.hide();
-	  	    	$notify.open("Um erro inesperado aconteceu.",2000,"error");
-	  	      });
-    	  }else{
-    		  $notify.open("Não foi selecionado nenhum item para exclusão",2000,"error");
-    		  var element = angular.element('[ng-model="selecionados"]');
-    		  element.find("option")[0].selected = true;
-    		  this.selecionados = "";
-    	  }
-    	 /* var $retorno = remover({id:[$scope.dados[$index].id]});
-    	  console.log($retorno);*/
-    	  /*if(){
-    		  $scope.dados.splice($index,1);
-    	  }*/
-    	  
-      }else{
-    	  var element = angular.element('[ng-model="selecionados"]');
+	
+	function removerSelecionados($param){
+		var $aRemover = [];
+		if($param == "ex"){
+			if(confirm("Deseja realmente excluir os selecionados?")){
+				$filtro = $scope.dados.filter(function(obj) {
+				  if(obj.selected === 'true')
+					  //$aRemover.push(obj.id);
+				  return obj.selected === false || obj.selected === "false"  ? obj.selected : "";
+				});
+				console.log($aRemover);
+				$model.remove({ id: $aRemover})
+			    .then(
+			        function( data ) {
+			        	if(data.status == "sucesso"){
+			        		loadDadosRemoto();
+			        		var element = angular.element('[ng-model="selecionados"]');
+			      		    element.find("option")[0].selected = true;
+			      		    $scope.selecionados = "";
+			        	}else{
+			        		var element = angular.element('[ng-model="selecionados"]');
+			      		    element.find("option")[0].selected = true;
+			      		    $scope.selecionados = "";
+			        		$notify.open(data.msg,3000,"error");
+			        	}
+			        }
+			    );
+			}else{
+				var element = angular.element('[ng-model="selecionados"]');
+				element.find("option")[0].selected = true;
+				$scope.selecionados = "";
+			}
+		}else{
+  		  $notify.open("Não foi selecionado nenhum item para exclusão",2000,"error");
+		  var element = angular.element('[ng-model="selecionados"]');
 		  element.find("option")[0].selected = true;
-		  this.selecionados = "";
-      }
-    };
-
- // check todos os produtos do carrinho
-	$scope.checarAll = function($check){
+		  $scope.selecionados = "";
+	    }
+	}
+	
+	function checarTodos($check){
 		if($check){
 			angular.forEach($scope.dados, function(value, key) {
-				if(value.del === true)
-					$scope.dados[key].selected = true;
+				if(value.del === 'true'){
+					$scope.dados[key].selected = "true";
+				}
 			});
 		}else{
 			angular.forEach($scope.dados, function(value, key) {
 				$scope.dados[key].selected = false;
 			});
 		}
-	};
+	}
     
 });
 

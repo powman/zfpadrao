@@ -18,10 +18,13 @@ class App_Controller_BaseController extends Zend_Controller_Action
         $this->uteis = new App_AbstractController();
 		// nome do modulo
 		$this->modulo = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+		$this->view->modulo = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
 		// nome do controller
 		$this->controle = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+		$this->view->controle = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
 		// nome da acao
 		$this->acao = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
+		$this->view->acao = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 		// pega o id do usuario logado
 		if(isset($identity->id))
 		  $this->idUsuario = $identity->id;
@@ -39,6 +42,10 @@ class App_Controller_BaseController extends Zend_Controller_Action
 			// inclue o model do controle atual
 			$modelAtualLoader = 'Painel_Model_'.$this->modelAtual.'';
 			$this->model = new $modelAtualLoader();
+		}
+		// Desabilita o layout sempre que uma requisição ajax ocorrer.
+		if($this->getRequest()->isXmlHttpRequest()) {
+		    $this->view->headLink()->appendStylesheet($this->view->baseUrl($this->view->JsHelper()));
 		}
     }
 
