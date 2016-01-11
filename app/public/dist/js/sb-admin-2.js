@@ -166,6 +166,85 @@ app.factory('$sessao', function($http,$q) {
   	   return factory;
 });
 
+app.directive('botaoAcao', function($http,$q,$location) {
+  var directive = {};
+  directive.restrict = 'E'; /* restrict this directive to elements */
+  var $completaurl = "";
+  var $id = "";
+  if($location.$$absUrl.indexOf('id') > -1){
+	  $id = $location.$$absUrl.match(/id\/[0-9]*/).toString().replace("id/",""); 
+  }
+  if($id){ 
+	  $completaurl = "/id/"+$id ;
+  }
+  directive.templateUrl =  _baseUrl+_modulo+'/'+_controller+'/get-botao'+$completaurl;
+  return directive;
+});
+
+app.directive('lookup', function($http,$q,$location,$uibModal,$loader) {
+  var directive = {};
+  directive.restrict = 'E'; /* restrict this directive to elements */
+  var $html = "";
+  $html  = '<span class="pull-right">';
+  $html += '	<button class="btn btn-default btn-sm-default" type="button">';
+  $html += '		<span class="glyphicon glyphicon glyphicon-search" aria-hidden="true"></span>';
+  $html += '	</button>';
+  $html += '</span>';
+  
+  directive.template =  function(elem, attr){
+	  return $html;
+  }
+  
+  directive.link = function(scope, elem, attrs) {
+	  elem.bind('click', function() {
+	  	  $loader.show("Carregando...");
+	  	  var $data = $.param({search:$('input[name='+attrs.search+']').val()});
+		  $http({
+                method: "post",
+                url: attrs.url,
+                data: $data
+            }).success(function($data, $status, $headers, $config){
+            	$loader.hide();
+            	var modalInstance = $uibModal.open({
+      		      animation: true,
+      		      template: $data
+      		    });
+			}).error(function($data, $status, $headers, $config) {
+				$loader.hide();
+			});
+      });
+    
+  }
+  return directive;
+});
+
+function enableCadastrar(){
+	$("#incluir").removeAttr("disabled");
+	$("#incluir").css("opacity",1);
+	$("#alterar").attr("disabled",true);
+	$("#alterar").css("opacity",0.1);
+	$("#remover").attr("disabled",true);
+	$("#remover").css("opacity",0.1);
+}
+
+function enableAlterar(){
+	$("#incluir").attr("disabled",true);
+	$("#incluir").css("opacity",0.1);
+	$("#alterar").removeAttr("disabled");
+	$("#alterar").css("opacity",1);
+	$("#remover").removeAttr("disabled");
+	$("#remover").css("opacity",1);
+}
+
+function preencheCampos($array){
+	angular.forEach($array, function(value, key) {
+		$('input[name='+key+']').val(value);
+		$('select[name='+key+']').find("option").each(function(index){
+			$(this).val() == value ? $(this).attr("selected",true) : "";
+		});
+	});
+}
+
 $(function() {
 
     $('#side-menu').metisMenu();

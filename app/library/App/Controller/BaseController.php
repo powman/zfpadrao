@@ -48,6 +48,37 @@ class App_Controller_BaseController extends Zend_Controller_Action
 		    $this->view->headLink()->appendStylesheet($this->view->baseUrl($this->view->JsHelper()));
 		}
     }
+    
+    public function getBotaoAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+        $id        		= $this->getRequest()->getParam('id');
+        $dados = array();
+        $podeIncluir = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "incluir");
+        $podeAlterar = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "alterar");
+        $podeRemover = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "remover");
+        if(!$id){
+            
+            $dados[] = array('text' => "Incluir",'classe' => 'btn btn-success','model' => "btn.incluir",'btn' => "incluir","disabled" => $podeIncluir ? "" : "disabled");
+            $dados[] = array('text' => "Alterar",'classe' => 'btn btn-info','model' => "btn.alterar",'btn' => "alterar","disabled" => 'disabled');
+            $dados[] = array('text' => "Remover",'classe' => 'btn btn-danger','model' => "btn.remover",'btn' => "remover","disabled" => 'disabled');
+            $dados[] = array('text' => "Limpar",'classe' => 'btn btn-default','model' => "btn.limpar",'btn' => "limpar","disabled" => "");
+            
+        }else if($id){
+            $dados[] = array('text' => "Incluir",'classe' => 'btn btn-success','model' => "btn.incluir",'btn' => "incluir","disabled" => "disabled");
+            $dados[] = array('text' => "Alterar",'classe' => 'btn btn-info','model' => "btn.alterar",'btn' => "alterar","disabled" => $podeAlterar ? "" : "disabled");
+            $dados[] = array('text' => "Remover",'classe' => 'btn btn-danger','model' => "btn.remover",'btn' => "remover","disabled" => $podeRemover ? "" : "disabled");
+            $dados[] = array('text' => "Limpar",'classe' => 'btn btn-default','model' => "btn.limpar",'btn' => "limpar","disabled" => "");
+        }
+        
+        $html = "";
+        foreach ($dados as $key => $value){
+            $html .= '<button '.$value['disabled'].' style="'.($value['disabled'] ? "opacity:0.1;" : "").'" type="button" id="'.$value['btn'].'" ng-model="'.$value['model'].'" ng-click="btnAcao(\''.$value['btn'].'\')" class="'.$value['classe'].'">'.$value['text'].'</button>';
+        }
+    
+        echo $html;
+    }
 
 	public function excluirAction()
 	{

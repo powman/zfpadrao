@@ -28,13 +28,13 @@ class IndexController extends App_Controller_BaseController
 	    $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
 	    $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
 	    
-	    $authAdapter->setTableName('usuario')
-	    ->setIdentityColumn('email')
-	    ->setCredentialColumn('senha');
+	    $authAdapter->setTableName('sca_usuario')
+	    ->setIdentityColumn('login_usuario')
+	    ->setCredentialColumn('password_usuario');
 	    
-	    $authAdapter->setIdentity($this->getRequest()->getParam('email'))
-	    ->setCredential($this->getRequest()->getParam('senha'))
-	    ->setCredentialTreatment('MD5(?) and status = 1');
+	    $authAdapter->setIdentity($this->getRequest()->getParam('login_usuario'))
+	    ->setCredential($this->getRequest()->getParam('password_usuario'))
+	    ->setCredentialTreatment('MD5(?) and st_usuario = 1');
 	    
 	    //Realiza autenticacao
 	    $result = $authAdapter->authenticate();

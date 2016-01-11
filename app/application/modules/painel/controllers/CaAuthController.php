@@ -2,7 +2,10 @@
 
 class CaAuthController extends Zend_Controller_Action
 {
-    
+    /**
+     * (non-PHPdoc)
+     * @see Zend_Controller_Action::init()
+     */
     public function init(){
         $this->model = new Painel_Model_CaAuth();
         $this->view->cssHelper = Painel_Plugin_CssHelper::CssHelper();
@@ -10,13 +13,16 @@ class CaAuthController extends Zend_Controller_Action
         $this->view->mostra_head_footer = false;
         $this->uteis = new App_AbstractController();
     }
+    /**
+     * 
+     */
 	public function indexAction()
 	{
-	    
-	    
- 	    
+  
 	}
-	
+	/**
+	 * 
+	 */
 	public function recuperarAction()
 	{
 
@@ -49,7 +55,7 @@ class CaAuthController extends Zend_Controller_Action
 	        );
 	        
 	        $aDados = array(
-	                'id' => $usuario['id'],
+	                'id' => $usuario['id_usuario'],
 	                'senha' => md5($novaSenha),
 	        );
 	        $this->model->save($aDados);
@@ -67,7 +73,9 @@ class CaAuthController extends Zend_Controller_Action
 	    echo json_encode($resposta);
 	}
 	
-	
+	/**
+	 * 
+	 */
 	public function logarAction()
 	{
 	
@@ -80,13 +88,13 @@ class CaAuthController extends Zend_Controller_Action
 	    $dbAdapter = Zend_Db_Table_Abstract::getDefaultAdapter();
 	    $authAdapter = new Zend_Auth_Adapter_DbTable($dbAdapter);
 	
-	    $authAdapter->setTableName('usuario')
-	    ->setIdentityColumn('email')
-	    ->setCredentialColumn('senha');
+	    $authAdapter->setTableName('sca_usuario')
+	    ->setIdentityColumn('login_usuario')
+	    ->setCredentialColumn('password_usuario');
 	
-	    $authAdapter->setIdentity($this->getRequest()->getParam('email'))
-	    ->setCredential($this->getRequest()->getParam('senha'))
-	    ->setCredentialTreatment('MD5(?) and status = 1');
+	    $authAdapter->setIdentity($this->getRequest()->getParam('login_usuario'))
+	    ->setCredential($this->getRequest()->getParam('password_usuario'))
+	    ->setCredentialTreatment('MD5(?) and st_usuario = 1');
 	     
 	    //Realiza autenticacao
 	    $result = $authAdapter->authenticate();
@@ -109,7 +117,9 @@ class CaAuthController extends Zend_Controller_Action
 	
 	     
 	}
-	
+	/**
+	 * 
+	 */
 	public function sairAction()
 	{
 	  $this->_helper->viewRenderer->setNoRender(true);

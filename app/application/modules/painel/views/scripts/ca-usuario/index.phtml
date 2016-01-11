@@ -1,47 +1,4 @@
-<?php /*<div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header"><?php echo $this->titulo(new Painel_Model_CgModuloSubmenu()); ?></h1>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-	<hr />
-	<div class="table-responsive">
-		<?php if (isset($this->res) && is_array($this->res) && count($this->res)): ?>
-			<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-						<th class="codigo">Código</th>
-						<th class="nome">Nome</th>
-						<th class="nome">Login</th>
-						<th class="action"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($this->res as $value): ?>
-						<tr>
-							<td class="codigo"><?php echo $value['id_usuario']; ?></td>
-							<td class="nome"><?php echo $value['nome']; ?></td>
-							<td class="nome"><?php echo $value['email']; ?></td>
-							<td class="action">
-								<?php //if ($this->helper->hasAction('form')): ?>
-									<a class="btn btn-default btn-xs" href="<?php echo $this->linkForm(array($value['id_usuario'])); ?>" role="button" title="Editar">
-										<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;Editar
-									</a>
-								<?php //endif; ?>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
-		<?php else: ?>
-			<?php echo $this->nenhumArquivoEncontrado(); ?>
-		<?php endif; ?>
-	</div>
-	<hr />
-	<?php echo $this->paginacao($this->pages, $this->page); ?>
-</div>
-<!-- /#page-wrapper --> */ ?>
+
 <div id="page-wrapper" ng-controller="<?php echo $this->controle;?>_<?php echo $this->acao;?> as ctrl">
     <div class="row">
         <div class="col-lg-12">
@@ -106,16 +63,16 @@
                     </td>
                     <?php endif;?>
                     <td title="'Id'" sortable="'u.id'">
-                        {{dados.id}}
+                        {{dados.id_usuario}}
                     </td>
                     <td title="'Nome'" sortable="'u.nome'">
-                        {{dados.nome}}
+                        {{dados.nm_usuario}}
                     </td>
                     <td title="'Email'" sortable="'u.email'">
                         {{dados.email}}
                     </td>
                     <td align="center">
-                        <a href="<?php echo $this->url(array("controller"=>$this->controle, "action"=>"alterar"),null,true); ?>/id/{{dados.id}}" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"></span></a> 
+                        <a href="<?php echo $this->url(array("controller"=>$this->controle, "action"=>"form"),null,true); ?>/id/{{dados.id_usuario}}" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"></span></a> 
                         <button ng-if="dados.del == 'true'" class="btn btn-danger btn-sm" ng-click="ctrl.del($event,$index)"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                 </tr>

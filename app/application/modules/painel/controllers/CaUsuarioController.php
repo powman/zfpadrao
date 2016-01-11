@@ -10,7 +10,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	{
 	    // verifica se tem acao para remover
 	    $this->view->remover = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "remover");
-	    $this->view->form_cadastro = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "form-cadastro");
+	    $this->view->form_cadastro = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "form");
 	    
 	    if ($this->getRequest()->isXmlHttpRequest()) {
 	        $this->_helper->layout()->disableLayout();
@@ -43,7 +43,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	        foreach ($res["res"] as $key => $value)
 	        {
 	            $res["res"][$key]["del"] = "true";
-	            if($this->view->sessao->id == $res["res"][$key]["id"] || !$this->view->remover){
+	            if($this->view->sessao->id_usuario == $res["res"][$key]["id_usuario"] || !$this->view->remover){
 	               $res["res"][$key]["selected"] = "false";
 	               $res["res"][$key]["del"] = "false";
 	            }
@@ -59,26 +59,48 @@ class CaUsuarioController extends App_Controller_BaseController
 	    
 	}
 	
+	public function incluirAction()
+	{
+	    $this->_helper->layout()->disableLayout();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	
+	
+	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => ''));
+	}
+	
+	public function getUsuarioAction()
+	{
+	    $this->_helper->layout()->disableLayout();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    $id = $this->_getParam("id");
+	    
+	    $res = $this->model->fetchByKey($id,$this->msg);
+
+	    echo json_encode(array("msg"=>$this->msg,"status" => "sucesso","dados" => $res));
+	}
+	
 	public function getAbasAction()
 	{
 	    $this->_helper->layout()->disableLayout();
 	    $this->_helper->viewRenderer->setNoRender(true);
 	    $request = Zend_Controller_Front::getInstance()->getRequest();
+	    $res = array();
 	    
-	    $res = array(
-	        array(
-	            'title' => "Usuário",
-	            'url' => $this->_helper->url("aba-usuario",$this->controle),
-	            'disabled' => false
-	        ),
-	        array(
-	            'title' => "Avatar",
-	            'url' => $this->_helper->url("aba-avatar",$this->controle),
-	            'disabled' => false
-	        )
-	    );
+	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "aba-usuario"))
+	       $res[] = array('title' => "Usuário",'url' => $this->_helper->url("aba-usuario",$this->controle),'disabled' => false);
+	    
+	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "aba-avatar"))
+	       $res[] = array('title' => "Avatar",'url' => $this->_helper->url("aba-avatar",$this->controle),'disabled' => false);
 	    
 	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => $res));
+	}
+	
+	public function modalAction()
+	{
+	    $this->_helper->layout()->disableLayout();
+
+	    $params = array("valor" => $this->_getParam("search"));
+	    $this->view->dados = $this->model->listarTodos($params);
 	}
 	
 	public function abaUsuarioAction()
@@ -163,15 +185,16 @@ class CaUsuarioController extends App_Controller_BaseController
 	    if(is_array($ids)){
 	       $array = true;
 	       $ids = implode(",", $this->getRequest()->getParam('id'));
+	       $integerIDs = array_map('intval', $this->getRequest()->getParam('id')); 
 	    }
 	    if($array){
-	        if(!in_array($this->view->sessao->id, $this->getRequest()->getParam('id'))){
+	        if(in_array((int)$this->view->sessao->id_usuario, $integerIDs)){
 	            $condicao = false;
 	        } 
 	    }
 	    if($condicao){
     	    // chama a funcao excluir
-    	    $result = $this->model->remove("id in(".$ids.")",$this->msg);
+    	    $result = $this->model->remove("id_usuario in(".$ids.")",$this->msg);
     	     
     	    if($result){
     	        $resposta['status'] = "sucesso";

@@ -12,9 +12,6 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         if (!$auth->hasIdentity()){
             $controller = $request->getControllerName();
             $action = $request->getActionName();
-            //Se o usuário site não existir, pega o usuario do banco com o id=1
-            //$authModel->authenticate(array('email'=>'demo@site.com','senha'=>'123'));
-            // se for diferente de logar e error redireciona para o login
             if($action != "logar" && $action != "error"){
                 $request->setControllerName('index');
                 $request->setActionName('login');
@@ -84,8 +81,10 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
 	        
 	        //Verifica se você tem acesso, senão manda para o acesso negado.
 	        if(!$acl->isAllowed($grupo_id,$controller,$action)){
-	            $request->setControllerName('error');
-	            $request->setActionName('acesso-negado');
+	            if(!$this->getRequest()->isXmlHttpRequest()) {
+    	            $request->setControllerName('error');
+    	            $request->setActionName('acesso-negado');
+	            }
 	            return;
 	        }
 

@@ -5,30 +5,18 @@ app.service(
     function( $http, $q, $loader ) {
         // Return
         return({
-            add: add,
             getAll: getAll,
             remove: remove
         });
         // ---
         // PUBLIC METHODS.
-        // ---
-        // Adciona os dados remoto
-        function add( obj ) {
-        	$loader.show("Carregando...");
-            var request = $http({
-                method: "post",
-                url: _baseUrl+_controller+"/salvar",
-                data: obj
-            });
-            return( request.then( handleSuccess, handleError ) );
-        }
         
         // Pega os dados todos remoto
         function getAll(obj) {
             var request = $http({
                 method: "post",
                 url: _baseUrl+_controller+"/index",
-                data: obj
+                data: $.param(obj)
             });
             return( request.then( handleSuccess, handleError ) );
         }
@@ -36,9 +24,9 @@ app.service(
         // Remove um dado remoto
         function remove( ids ) {
             var request = $http({
-                method: "delete",
+                method: "post",
                 url: _baseUrl+_controller+"/remover",
-                params: ids
+                data: $.param(ids)
             });
             return( request.then( handleSuccess, handleError ) );
         }
@@ -90,7 +78,7 @@ app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $n
 		$_this.tableParams = new NgTableParams({}, {
 	      getData: function(params) {
 	        // ajax request to api
-	    	var $data = $.param(params.url());
+	    	var $data = params.url();
 	    	return $model.getAll($data)
 		    .then(
 		        function( data ) {
@@ -136,9 +124,9 @@ app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $n
      * Muda a qtde de listagem por pagina
      */
 	function deletar($event,$index){
-		if(confirm("Deseja realmente excluir? \n\n"+$scope.dados[$index].nome+" - ID: "+$scope.dados[$index].id+"")){
+		if(confirm("Deseja realmente excluir? \n\n"+$scope.dados[$index].nm_usuario+" - ID: "+$scope.dados[$index].id_usuario+"")){
 	    	
-			$model.remove({id:$scope.dados[$index].id})
+			$model.remove({id:$scope.dados[$index].id_usuario})
 		    .then(
 		        function( data ) {
 		        	if(data.status == "sucesso"){
@@ -156,12 +144,12 @@ app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $n
 		if($param == "ex"){
 			if(confirm("Deseja realmente excluir os selecionados?")){
 				$filtro = $scope.dados.filter(function(obj) {
-				  if(obj.selected === 'true')
-					  //$aRemover.push(obj.id);
-				  return obj.selected === false || obj.selected === "false"  ? obj.selected : "";
+				  if(obj.selected === true || obj.selected === 'true')
+					  $aRemover.push(obj.id_usuario);
+
 				});
-				console.log($aRemover);
-				$model.remove({ id: $aRemover})
+				
+				$model.remove({id:$aRemover})
 			    .then(
 			        function( data ) {
 			        	if(data.status == "sucesso"){
@@ -205,30 +193,3 @@ app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $n
 	}
     
 });
-
-
-
-function remover(objeto){
-	return $.ajax({
-        url: _baseUrl+_controller+"/excluir",
-        data: {
-        	id: objeto.id
-        },
-        type: "post",
-        dataType: "json",
-        beforeSend: function() {
-            
-        },
-        error:function(data){
-            return false;
-        },
-        complete: function(data) {
-            if(data.responseJSON.status == "sucesso"){
-            	return true;
-           } else {
-
-           		return false;
-           }
-        }
-    });
-}
