@@ -8,7 +8,7 @@
 			<div class="col-sm-2 col-xs-12 col-lg-1">
 				<input name="id_usuario" value="" ng-blur="loadById({id: usuario.id_usuario})" ng-model="usuario.id_usuario" class="form-control">
 			</div>
-			<?php if(Zend_Registry::get('acl')->isAllowed($this->sessao->grupo_id, $this->controle, "modal")):?>
+			<?php if(Zend_Registry::get('acl')->isAllowed($this->sessao->id_grupo, $this->controle, "modal")):?>
 			<div class="col-sm-7 col-xs-12 col-lg-8">
 				<input name="nm_usuario" ng-model="usuario.nm_usuario" data-error="Nome obrigatório" data-type="string" required class="form-control">
 			</div>

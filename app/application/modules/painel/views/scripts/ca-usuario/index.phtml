@@ -39,18 +39,26 @@
                 </div>
             </form>
         </div>
-        <?php if($this->remover):?>
+        
         <div class="col-lg-6" align="right">
             <form class="form-inline" novalidate>
                 <div class="form-group">
-                  <select id="selecionados" ng-model="selecionados" ng-change="removerSelecionados(selecionados)" class="form-control">
+                  <select id="selecionados" ng-model="selecionados" ng-change="selecionar(selecionados)" class="form-control">
                     <option value="">Com selecionados:</option>
-                    <option value="ex">Excluir</option>
+                    <?php if($this->remover):?>
+                        <option value="ex">Excluir</option>
+                    <?php endif;?>
+                    <?php if($this->ativar):?>
+                    <option value="at">Ativar</option>
+                    <?php endif;?>
+                    <?php if($this->desativar):?>
+                    <option value="de">Desativar</option>
+                    <?php endif;?>
                   </select>
                 </div>
             </form>
         </div>
-        <?php endif;?>
+        
     </div>
     <!-- /.row -->
     <div class="row" style="padding: 10px 0px;">
@@ -62,14 +70,21 @@
                         <input type="checkbox" ng-checked="dados.selected == 'true'" ng-model="dados.selected" ng-if="dados.del == 'true'" />
                     </td>
                     <?php endif;?>
-                    <td title="'Id'" sortable="'u.id'">
+                    <td title="'Id'" sortable="'u.id_usuario'">
                         {{dados.id_usuario}}
                     </td>
-                    <td title="'Nome'" sortable="'u.nome'">
+                    <td title="'Nome'" sortable="'u.nm_usuario'">
                         {{dados.nm_usuario}}
                     </td>
-                    <td title="'Email'" sortable="'u.email'">
-                        {{dados.email}}
+                    <td title="'Login'" sortable="'u.login_usuario'">
+                        {{dados.login_usuario}}
+                    </td>
+                    <td align="center" title="'Grupo'" sortable="'g.nm_grupo'">
+                        <span class="label label-info">{{dados.nm_grupo}}</span>
+                    </td>
+                    <td title="'Status'" sortable="'u.st_usuario'" align="center">
+                        <span ng-if="dados.st_usuario == 1" class="label label-success">Ativo</span>
+                        <span ng-if="dados.st_usuario == 0" class="label label-danger">Inativo</span>
                     </td>
                     <td align="center">
                         <a href="<?php echo $this->url(array("controller"=>$this->controle, "action"=>"form"),null,true); ?>/id/{{dados.id_usuario}}" class="btn btn-default btn-sm" ><span class="glyphicon glyphicon-pencil"></span></a> 

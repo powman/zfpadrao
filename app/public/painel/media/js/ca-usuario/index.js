@@ -6,7 +6,8 @@ app.service(
         // Return
         return({
             getAll: getAll,
-            remove: remove
+            remove: remove,
+            ativar: ativar
         });
         // ---
         // PUBLIC METHODS.
@@ -26,6 +27,16 @@ app.service(
             var request = $http({
                 method: "post",
                 url: _baseUrl+_controller+"/remover",
+                data: $.param(ids)
+            });
+            return( request.then( handleSuccess, handleError ) );
+        }
+        
+        // Ativa um dado remoto
+        function ativar( ids ) {
+            var request = $http({
+                method: "post",
+                url: _baseUrl+_controller+"/ativar",
                 data: $.param(ids)
             });
             return( request.then( handleSuccess, handleError ) );
@@ -64,7 +75,7 @@ app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $n
 	$scope.dados = [];
 	var $_this = this;
 	$_this.changePageSize = mudarQtdeDeListagem;
-	$scope.removerSelecionados = removerSelecionados;
+	$scope.selecionar = selecionar;
 	$scope.checarTodos = checarTodos;
 	$scope.pesquisar = pesquisar;
 	$_this.del = deletar;
@@ -139,8 +150,9 @@ app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $n
 	     }
 	}
 	
-	function removerSelecionados($param){
+	function selecionar($param){
 		var $aRemover = [];
+		var $aAtivar = [];
 		if($param == "ex"){
 			if(confirm("Deseja realmente excluir os selecionados?")){
 				$filtro = $scope.dados.filter(function(obj) {
@@ -170,11 +182,42 @@ app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $n
 				element.find("option")[0].selected = true;
 				$scope.selecionados = "";
 			}
-		}else{
-  		  $notify.open("Não foi selecionado nenhum item para exclusão",2000,"error");
-		  var element = angular.element('[ng-model="selecionados"]');
-		  element.find("option")[0].selected = true;
-		  $scope.selecionados = "";
+		}else if($param == "at"){
+			if(confirm("Deseja realmente ativar os selecionados?")){
+				$filtro = $scope.dados.filter(function(obj) {
+				  if(obj.selected === true || obj.selected === 'true')
+					  $aAtivar.push(obj.id_usuario);
+
+				});
+				
+				$model.ativar({id:$aAtivar})
+			    .then(
+			        function( data ) {
+			        	if(data.status == "sucesso"){
+			        		loadDadosRemoto();
+			        		var element = angular.element('[ng-model="selecionados"]');
+			      		    element.find("option")[0].selected = true;
+			      		    $scope.selecionados = "";
+			        	}else{
+			        		var element = angular.element('[ng-model="selecionados"]');
+			      		    element.find("option")[0].selected = true;
+			      		    $scope.selecionados = "";
+			        		$notify.open(data.msg,3000,"error");
+			        	}
+			        }
+			    );
+			}else{
+				var element = angular.element('[ng-model="selecionados"]');
+				element.find("option")[0].selected = true;
+				$scope.selecionados = "";
+			}
+	    }else if($param == "de"){
+	    	
+	    }else{
+	    	$notify.open("Não foi selecionado nenhum item",2000,"error");
+			var element = angular.element('[ng-model="selecionados"]');
+			element.find("option")[0].selected = true;
+			$scope.selecionados = "";
 	    }
 	}
 	

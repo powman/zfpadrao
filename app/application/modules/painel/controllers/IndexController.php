@@ -30,7 +30,9 @@ class IndexController extends App_Controller_BaseController
 	    
 	    $authAdapter->setTableName('sca_usuario')
 	    ->setIdentityColumn('login_usuario')
-	    ->setCredentialColumn('password_usuario');
+	    ->setCredentialColumn('password_usuario')
+	    ->getDbSelect()
+	    ->join( array('g' => 'sca_grupo'), 'g.id_grupo = sca_usuario.id_grupo', array('nm_grupo','is_root') );
 	    
 	    $authAdapter->setIdentity($this->getRequest()->getParam('login_usuario'))
 	    ->setCredential($this->getRequest()->getParam('password_usuario'))

@@ -5,12 +5,16 @@ class CaUsuarioController extends App_Controller_BaseController
 	public $models = array('CaUsuarioGrupo');
 	public $modelAtual = 'CaUsuario';
 	public $msg = null;
-	
+	/**
+	 * Lista os dados na view
+	 */
 	public function indexAction()
 	{
 	    // verifica se tem acao para remover
-	    $this->view->remover = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "remover");
-	    $this->view->form_cadastro = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "form");
+	    $this->view->remover = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "remover");
+	    $this->view->form_cadastro = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "form");
+	    $this->view->ativar = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "ativar");
+	    $this->view->desativar = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "desativar");
 	    
 	    if ($this->getRequest()->isXmlHttpRequest()) {
 	        $this->_helper->layout()->disableLayout();
@@ -53,7 +57,9 @@ class CaUsuarioController extends App_Controller_BaseController
 	    }
 		
 	}
-	
+	/**
+	 * Formulario de incluir ou alterar
+	 */
 	public function formAction()
 	{
 	    
@@ -67,7 +73,9 @@ class CaUsuarioController extends App_Controller_BaseController
 	
 	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => ''));
 	}
-	
+	/**
+	 * Pega o usuario por id
+	 */
 	public function getUsuarioAction()
 	{
 	    $this->_helper->layout()->disableLayout();
@@ -78,7 +86,9 @@ class CaUsuarioController extends App_Controller_BaseController
 
 	    echo json_encode(array("msg"=>$this->msg,"status" => "sucesso","dados" => $res));
 	}
-	
+	/**
+	 * Pegas as abas e lista na view
+	 */
 	public function getAbasAction()
 	{
 	    $this->_helper->layout()->disableLayout();
@@ -86,15 +96,17 @@ class CaUsuarioController extends App_Controller_BaseController
 	    $request = Zend_Controller_Front::getInstance()->getRequest();
 	    $res = array();
 	    
-	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "aba-usuario"))
+	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "aba-usuario"))
 	       $res[] = array('title' => "Usuário",'url' => $this->_helper->url("aba-usuario",$this->controle),'disabled' => false);
 	    
-	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "aba-avatar"))
+	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "aba-avatar"))
 	       $res[] = array('title' => "Avatar",'url' => $this->_helper->url("aba-avatar",$this->controle),'disabled' => false);
 	    
 	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => $res));
 	}
-	
+	/**
+	 * Abre o modal de pesquisa
+	 */
 	public function modalAction()
 	{
 	    $this->_helper->layout()->disableLayout();
@@ -102,76 +114,84 @@ class CaUsuarioController extends App_Controller_BaseController
 	    $params = array("valor" => $this->_getParam("search"));
 	    $this->view->dados = $this->model->listarTodos($params);
 	}
-	
+	/**
+	 * Lista a aba de usuário
+	 */
 	public function abaUsuarioAction()
 	{
 	    $this->_helper->layout()->disableLayout();
 	}
-	
+	/**
+	 * Aba de Foto
+	 */
 	public function abaAvatarAction()
 	{
 	    $this->_helper->layout()->disableLayout();
 	}
+	/**
+	 * Função para Ativar os cadastros
+	 */
+	public function ativarAction()
+	{
+	     
+	    $resposta = array();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    $this->_helper->layout()->disableLayout();
+	     
+	    $ids = $this->getRequest()->getParam('id');
+
+        // chama a funcao excluir
+        foreach ($ids as $value){
+            $form = array('id_usuario'=>$value,"st_usuario" => 1);
+            $result = $this->model->save($form,$this->msg);
+        }
+
+        if($result){
+            $resposta['status'] = "sucesso";
+            $resposta['msg'] = $this->msg;
+        }else{
+            $resposta['status'] = "erro";
+            $resposta['msg'] = $this->msg;
+        }
+
+        echo json_encode($resposta);
 	
-	public function listarAction()
+	
+	}
+	
+	/**
+	 * Função para Desativar os cadastros
+	 */
+	public function desativarAction()
 	{
 	
-       /* $resposta = array();
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
-        
-        $sql = $this->model->getAdapter()->select()->from('usuario')->joinLeft(
-                    'role',
-                    'role.id = usuario.role_id',
-                    array('role.role as grupo')
-                    );
-        
-        // Parametros para busca
-        if($this->getRequest()->getParam('pesquisa'))
-            $sql->orWhere('role.role LIKE ?', "%".$this->getRequest()->getParam('pesquisa')."%");
-        
-        // Parametros para busca
-        if($this->getRequest()->getParam('pesquisa'))
-            $sql->orWhere('usuario.nome LIKE ?', "%".$this->getRequest()->getParam('pesquisa')."%");
-        
-        // Parametros para busca
-        if($this->getRequest()->getParam('pesquisa'))
-            $sql->orWhere('usuario.status = ?', "".$this->getRequest()->getParam('pesquisa')."");
-        
-        if($this->getRequest()->getParam('pesquisa'))
-            $sql->orWhere('usuario.email LIKE ?', "%".$this->getRequest()->getParam('pesquisa')."%");
-        
-        if($this->getRequest()->getParam('pesquisa'))
-            $sql->orWhere('usuario.id = ?', $this->getRequest()->getParam('pesquisa'));
-        // fim Parametros para busca
-        
-        // total com a pesquisa
-        $totalTudo = $this->model->getAdapter()->fetchAll($sql);
-
-        // Verifica a ordenacao
-        if($this->getRequest()->getParam('sort') && $this->getRequest()->getParam('order')){
-            $ordernar = $this->getRequest()->getParam('sort')." ".$this->getRequest()->getParam('order');
-            $sql->order($ordernar);
-        }
-        
-        // Verifica o limit e o offset
-        if($this->getRequest()->getParam('limit') || $this->getRequest()->getParam('offset'))
-            $sql->limit($this->getRequest()->getParam('limit'),$this->getRequest()->getParam('offset'));
-        
-        $logs = $this->model->getAdapter()->fetchAll($sql);
-        $total = count($logs);
-        $values['total'] = count($totalTudo);
-        
-        for($i=0;$i<$total;$i++){
-            $values['rows'][$i]['id'] = $logs[$i]['id'];
-            $values['rows'][$i]['nome'] = $logs[$i]['nome'];
-            $values['rows'][$i]['email'] = $logs[$i]['email'];
-            $values['rows'][$i]['grupo'] = $logs[$i]['grupo'];
-            $values['rows'][$i]['status'] = $logs[$i]['status'] ? "Ativo" : "Inativo";
-        }
-        
-        echo json_encode($values);*/
+	    $resposta = array();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    $this->_helper->layout()->disableLayout();
+	
+	    $ids = $this->getRequest()->getParam('id');
+	
+	    // chama a funcao excluir
+	    foreach ($ids as $value){
+	        $form = array('id_usuario'=>$value,"st_usuario" => 0);
+	        $result = $this->model->save($form,$this->msg);
+	    }
+	
+	    if($result){
+	        $resposta['status'] = "sucesso";
+	        $resposta['msg'] = $this->msg;
+	    }else{
+	        $resposta['status'] = "erro";
+	        $resposta['msg'] = $this->msg;
+	    }
+	
+	    echo json_encode($resposta);
+	
+	
 	}
+	/**
+	 * Remover um dado
+	 */
 	public function removerAction()
 	{
 	    

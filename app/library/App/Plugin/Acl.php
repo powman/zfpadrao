@@ -35,7 +35,8 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
             $aclResource->createResource($controller,$action);
         }
         //Get role_id
-        $grupo_id=$auth->getIdentity()->grupo_id;
+        $grupo_id=$auth->getIdentity()->id_grupo;
+        $is_root=$auth->getIdentity()->is_root;
 		$tblGrupo = new Painel_Model_CaGrupo();
         // Instancia a Acl
         $acl = new Zend_Acl();
@@ -43,7 +44,7 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
         $acl->addRole(new Zend_Acl_Role($grupo_id));
         
 
-        if($grupo_id==3){//If grupo_id=3 "Admin" não cria os resources
+        if($is_root){//If grupo for root não cria os resources e tem acesso total
             //Mostra todos os controllers
             $resources=$aclResource->getAllResources();
             // Add the existing resources to ACL

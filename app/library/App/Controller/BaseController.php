@@ -55,9 +55,9 @@ class App_Controller_BaseController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender(true);
         $id        		= $this->getRequest()->getParam('id');
         $dados = array();
-        $podeIncluir = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "incluir");
-        $podeAlterar = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "alterar");
-        $podeRemover = Zend_Registry::get('acl')->isAllowed($this->view->sessao->grupo_id, $this->controle, "remover");
+        $podeIncluir = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "incluir");
+        $podeAlterar = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "alterar");
+        $podeRemover = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "remover");
         if(!$id){
             
             $dados[] = array('text' => "Incluir",'classe' => 'btn btn-success','model' => "btn.incluir",'btn' => "incluir","disabled" => $podeIncluir ? "" : "disabled");
