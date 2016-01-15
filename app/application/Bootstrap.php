@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * 
+ * @author Paulo Henrique
+ * @see http://www.pauloph.com.br
+ *
+ */
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 	
@@ -8,6 +13,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	    $modules = array(
 	            'Site',
 		        'Painel',
+	            'Webservice',
 	    );
 	
 	    foreach ($modules as $module) {

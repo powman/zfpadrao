@@ -16,7 +16,7 @@ class IndexController extends App_Controller_BaseController
 	
 	public function loginAction()
 	{
-	
+	      $this->view->Serviceimagem(1);
 	}
 	
 	public function logarAction()

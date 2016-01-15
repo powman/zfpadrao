@@ -1,8 +1,8 @@
 <?php
 /**
  *
- * @author Steve Rhoades
- * @see http://www.stephenrhoades.com
+ * @author Paulo Henrique
+ * @see http://www.pauloph.com.br
  */
 class Painel_Bootstrap extends Zend_Application_Module_Bootstrap
 {
