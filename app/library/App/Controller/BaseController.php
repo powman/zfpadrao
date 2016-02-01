@@ -45,7 +45,7 @@ class App_Controller_BaseController extends Zend_Controller_Action
 		}
 		// Desabilita o layout sempre que uma requisição ajax ocorrer.
 		if($this->getRequest()->isXmlHttpRequest()) {
-		    $this->view->headLink()->appendStylesheet($this->view->baseUrl($this->view->JsHelper()));
+		    
 		}
     }
     

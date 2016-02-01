@@ -1,11 +1,11 @@
 <?php 
-class Zend_View_Helper_Serviceimagem extends Zend_View_Helper_Abstract
+class Zend_View_Helper_GetImagemSoap extends Zend_View_Helper_Abstract
 {
     /**
      * Helper para pegar as imagens do webservice
      *
      */
-    public function Serviceimagem($id){
+    public function GetImagemSoap($id){
         // initialize SOAP client
         $options = array(
             'location' => 'http://painel.local/webservice/index',
@@ -21,5 +21,14 @@ class Zend_View_Helper_Serviceimagem extends Zend_View_Helper_Abstract
             die('ERROR: ' . $e->getMessage());
         }
         
+    }
+    
+    /**
+     * Helper para pegar as imagens do webservice
+     *
+     */
+    public function sai($id){
+        
+    
     }
 }

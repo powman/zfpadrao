@@ -1,0 +1,51 @@
+<script>
+    var $parametros = <?php echo json_encode($_POST);?>;
+</script>
+<hr />
+<div align="center" style="padding: 10px;" load-ctrl="sca-usuario_modal" caminho-js="<?php echo $this->baseUrl($this->JsHelper())?>">
+    <div class="table-responsive" ng-if="!dados.length">
+    	<div style="margin-top: 10px;" role="alert" class="alert alert-info">	
+    	   <strong>Oops!</strong> Nenhum arquivo encontrado
+    	</div>
+    </div>
+    <div class="row" style="padding: 20px 0px;">
+        <div class="col-lg-12">
+            <form name="formpesquisar" novalidate ng-submit="pesquisar()">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="Pesquisar" name="pesquisa" ng-model="pesquisa" />
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">
+                      <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                  </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" style="padding: 10px 0px;">
+        <div class="col-lg-12">
+            <table ng-table="tableParams" class="table table-condensed table-striped table-hover table-bordered" show-filter="false">
+                <tr ng-repeat="dados in $data" ng-click="addSelecao({id_usuario:dados.id_usuario,nm_usuario:dados.nm_usuario},dados.id_usuario)" style="cursor: pointer;">
+                    <td title="'Id'" sortable="'u.id_usuario'">
+                        {{dados.id_usuario}}
+                    </td>
+                    <td title="'Nome'" sortable="'u.nm_usuario'">
+                        {{dados.nm_usuario}}
+                    </td>
+                    <td title="'Login'" sortable="'u.login_usuario'">
+                        {{dados.login_usuario}}
+                    </td>
+                    <td align="center" title="'Grupo'" sortable="'g.nm_grupo'">
+                        <span class="label label-info">{{dados.nm_grupo}}</span>
+                    </td>
+                    <td title="'Status'" sortable="'u.st_usuario'" align="center">
+                        <span ng-if="dados.st_usuario == 1" class="label label-success">Ativo</span>
+                        <span ng-if="dados.st_usuario == 0" class="label label-danger">Inativo</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <hr />
+</div>
+

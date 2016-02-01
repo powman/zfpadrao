@@ -1,6 +1,6 @@
 <?php
 
-class Painel_Model_CaUsuario extends App_Model_Default
+class Painel_Model_ScaUsuario extends App_Model_Default
 {
     
     protected $_name = 'sca_usuario';
@@ -52,7 +52,8 @@ class Painel_Model_CaUsuario extends App_Model_Default
 	public function fetchByKey($id, &$msg = null)
 	{
 	    $sql = $this->getAdapter()->select()
-		->from(array('u' => $this->_name));
+		->from(array('u' => $this->_name))
+		->join( array('g' => 'sca_grupo'), 'g.id_grupo = u.id_grupo', array('nm_grupo','is_root') );
 		$sql->where('u.id_usuario = ?', $id);
 		
 		$res = $this->getAdapter()->fetchRow($sql);

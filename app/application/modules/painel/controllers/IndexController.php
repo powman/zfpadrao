@@ -16,7 +16,17 @@ class IndexController extends App_Controller_BaseController
 	
 	public function loginAction()
 	{
-	      $this->view->Serviceimagem(1);
+	      
+	}
+	
+	public function saiAction()
+	{
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    $this->_helper->layout()->disableLayout();
+	   $opa =  $this->view->SaveImagemSoap($_FILES);
+	   print_r($opa);
+	    ///print_r($_FILES);
+	    //echo "sai";
 	}
 	
 	public function logarAction()

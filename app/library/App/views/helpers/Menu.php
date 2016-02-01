@@ -6,28 +6,30 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
         $view = Zend_Layout::getMvcInstance()->getView();
         $registy = Zend_Auth::getInstance()->getIdentity();
         $modulo = $this->_getModulo();
-        $params = array("grupo_id" => 2);
+        $params = array("grupo_id" => $registy->id_grupo,'is_root' => $registy->is_root);
         $menu = $this->_getMenu($params);
+        
         $i = 0;
         $html = '';
         foreach ($modulo as $val) {
-            $html  .= '<li>';
-            $html  .= '    <a href="javascript:;" >';
-            $html  .= '        <i class="fa fa-'.$val['icone'].'"></i>';
-            $html  .= '            '.$val['nome'].'';
-			if(count($menu))
-            	$html  .= '        <span class="caret"></span>';
-            $html  .= '    </a>';
-            $html  .= '    <ul class="nav nav-second-level">';
-            foreach ($menu as $value){
-                $html  .= '    <li>';
-                $html  .= '        <a href="'.$view->baseUrl().'/'.$value['controller'].'/'.$value['action'].'">';
-                $html  .= '            '.$value['nome'].'';
-                $html  .= '        </a>';
-                $html  .= '    </li>';
+            if(count($menu)){
+                $html  .= '<li>';
+                $html  .= '    <a href="javascript:;" >';
+                $html  .= '        <i class="fa fa-'.$val['icone'].'"></i>';
+                $html  .= '            '.$val['nome'].'';
+                $html  .= '        <span class="caret"></span>';
+                $html  .= '    </a>';
+                $html  .= '    <ul class="nav nav-second-level">';
+                foreach ($menu as $value){
+                    $html  .= '    <li>';
+                    $html  .= '        <a href="'.$view->baseUrl().'/'.$value['controller'].'/'.$value['action'].'">';
+                    $html  .= '            '.$value['nome'].'';
+                    $html  .= '        </a>';
+                    $html  .= '    </li>';
+                }
+                $html  .= '    </ul>';
+                $html  .= '</li>';
             }
-            $html  .= '    </ul>';
-            $html  .= '</li>';
             $i++;
         }
         return $html;
@@ -67,7 +69,7 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
 		$sql .= 'where m.status = 1 ';
 		if(isset($condicao["modulo_id"]) && $condicao["modulo_id"])
 		    $sql .= 'and m.modulo_id = '.$condicao["modulo_id"].' ';
-		if(isset($condicao["grupo_id"]) && $condicao["grupo_id"])
+		if(isset($condicao["grupo_id"]) && $condicao["grupo_id"] && !$condicao['is_root'])
 		    $sql .= 'and ag.grupo_id = '.$condicao["grupo_id"].' ';
         
         $result = $db->fetchAll($sql);

@@ -13,7 +13,7 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
             if (!$auth->hasIdentity()){
                 $controller = $request->getControllerName();
                 $action = $request->getActionName();
-                if($action != "logar" && $action != "error"){
+                if($action != "logar" && $action != "error" && $action != "sai"){
                     $request->setControllerName('index');
                     $request->setActionName('login');
                 }
@@ -38,7 +38,6 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
             //Get role_id
             $grupo_id=$auth->getIdentity()->id_grupo;
             $is_root=$auth->getIdentity()->is_root;
-    		$tblGrupo = new Painel_Model_CaGrupo();
             // Instancia a Acl
             $acl = new Zend_Acl();
             // adciona o grupo
@@ -68,7 +67,7 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
                 $userAllowedResources=$aclResource->getCurrentRoleAllowedResources($grupo_id);
     			
     			// Adciona as permissão no ACL
-                $acl->allow($grupo_id, "index",array("login","logar"));
+                $acl->allow($grupo_id, "index",array("login","logar","index"));
                 $acl->allow($grupo_id, "error",array("error"));
                 foreach($userAllowedResources as $controllerName =>$allowedActions){
                     $arrayAllowedActions=array();

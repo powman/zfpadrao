@@ -4,9 +4,23 @@ var app = angular.module('painel',['ngTable','ui.bootstrap']);
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });*/
 
-app.config(function($httpProvider) {
+app.config(function($httpProvider,$controllerProvider,$provide) {
     $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
     $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+    app.register = {
+    		controller: $controllerProvider.register
+    };
+    // To register the following which will be loaded lazily later for future use
+    // * Constant   -   app.regiser.value     -   To register constant
+    // * Factory    -   app.regiser.factory   -   To register factory
+    // * service    -   app.regiser.service   -   To register service
+    app.$register = $provide;
+});
+
+app.run(function ($rootScope) {
+    $rootScope.$on('scope.stored', function (event, data) {
+        console.log("scope.stored", data);
+    });
 });
 
 app.factory('$validator', function() {
@@ -74,6 +88,21 @@ app.factory('$validator', function() {
             }else{
             	return true;
             }
+        }
+    };
+});
+
+app.factory('Scopes', function ($rootScope) {
+	
+    var mem = {};
+
+    return {
+        store: function (key, value) {
+            $rootScope.$emit('scope.stored', key);
+            mem[key] = value;
+        },
+        get: function (key) {
+            return mem[key];
         }
     };
 });
@@ -182,6 +211,7 @@ app.directive('botaoAcao', function($http,$q,$location) {
 });
 
 app.directive('lookup', function($http,$q,$location,$uibModal,$loader) {
+  var modalInstance;
   var directive = {};
   directive.restrict = 'E'; /* restrict this directive to elements */
   var $html = "";
@@ -198,7 +228,7 @@ app.directive('lookup', function($http,$q,$location,$uibModal,$loader) {
   directive.link = function(scope, elem, attrs) {
 	  elem.bind('click', function() {
 	  	  $loader.show("Carregando...");
-	  	  var $data = $.param({search:$('input[name='+attrs.search+']').val()});
+	  	  var $data = $.param({islocation:attrs.islocation,returncontrole:attrs.returncontrole});
 		  $http({
                 method: "post",
                 url: attrs.url,
@@ -213,10 +243,48 @@ app.directive('lookup', function($http,$q,$location,$uibModal,$loader) {
 				$loader.hide();
 			});
       });
+	  
+	  if(attrs.search){
+		  $('input[name='+attrs.search+']').click(function(){
+			  $(elem).click();
+		  });
+		  
+	  }
     
   }
   return directive;
 });
+
+//should be like load-ctrl="myNoteCtrl" caminho-js="controller.js"
+app.directive('loadCtrl', ['$compile', function($compile) {
+  return {
+    restrict: 'A',
+    terminal: true,
+    priority: 100000,
+    link: function(scope, element, attrs, ctrl) {
+      
+      var controllerName = attrs.loadCtrl;
+      var path = attrs.caminhoJs;
+      if(path && element.attr('ng-controller') == undefined || element.attr('ng-controller') == "") {
+    	  //if(!$('script[src="'+path+'"]').length){
+	          // append script tag to head
+	          var script = document.createElement( 'script' );
+	          script.type = 'application/javascript';
+	          script.src = path;
+	          $('div[load-ctrl]').append(script);
+	
+	        // add ng-controller
+	        element.attr('ng-controller', controllerName);
+	        element.removeAttr('load-ctrl');
+	        $compile(element)(scope);
+    	 // }
+      }
+      else {
+        console.log('Controller path for '+controllerName+' not found!');
+      }
+    }
+  };
+}]);
 
 function enableCadastrar(){
 	$("#incluir").removeAttr("disabled");

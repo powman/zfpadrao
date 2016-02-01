@@ -70,8 +70,7 @@ app.service(
     }
 );
 
-app.controller('ca-usuario_index', function Ctrl($scope,NgTableParams, $http, $notify,$loader,$element,$sessao,$model) {
-
+app.controller('sca-usuario_index', function Ctrl($scope,NgTableParams, $http, $notify,$loader,$element,$sessao,$model) {
 	$scope.dados = [];
 	var $_this = this;
 	$_this.changePageSize = mudarQtdeDeListagem;

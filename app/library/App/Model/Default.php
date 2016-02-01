@@ -45,9 +45,10 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
 	 */
 	public function save(array $data, &$msg = null)
 	{
+	    
 	    try{
     	    // limpar os arrays vazios
-    	    $data = array_filter($data);
+    	    //$data = array_filter($data);
     	    // trim em todos os valores
     	    $data = array_map('trim', $data);
     	    $id = isset($data[$this->primarykey]) ? $data[$this->primarykey] : '';
@@ -56,10 +57,10 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
     	        // deleta o id para nao conflitar
     	        unset($data[$this->primarykey]);
     	        $result = $this->update($data, $this->primarykey." = {$id}");
-    	        $result === 0 || $result === true || $result >= 1 ? true : false;
-    	        if ($result) {
+    	        $retorno = $result === 0 || $result === true || $result >= 1 ? true : false;
+    	        if ($retorno) {
     	            $msg = $this->msg['update']['success'];
-    	            return $result;
+    	            return $retorno;
     	        } else {
     	            $msg = $this->msg['update']['error'];
     	            return false;

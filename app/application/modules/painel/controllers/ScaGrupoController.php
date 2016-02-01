@@ -1,15 +1,18 @@
 <?php
 
-class CaUsuarioController extends App_Controller_BaseController
+class ScaGrupoController extends App_Controller_BaseController
 {
-	public $models = array('CaUsuarioGrupo');
-	public $modelAtual = 'CaUsuario';
+	public $models = array('ScaGrupo');
+	public $modelAtual = 'ScaGrupo';
 	public $msg = null;
 	/**
 	 * Lista os dados na view
 	 */
 	public function indexAction()
 	{
+	    $this->_helper->layout()->disableLayout();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    
 	    // verifica se tem acao para remover
 	    $this->view->remover = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "remover");
 	    $this->view->form_cadastro = Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "form");
@@ -47,7 +50,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	        foreach ($res["res"] as $key => $value)
 	        {
 	            $res["res"][$key]["del"] = "true";
-	            if($this->view->sessao->id_usuario == $res["res"][$key]["id_usuario"] || !$this->view->remover){
+	            if($this->view->sessao->id_grupo == $res["res"][$key]["id_grupo"] || !$this->view->remover){
 	               $res["res"][$key]["selected"] = "false";
 	               $res["res"][$key]["del"] = "false";
 	            }
@@ -74,9 +77,9 @@ class CaUsuarioController extends App_Controller_BaseController
 	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => ''));
 	}
 	/**
-	 * Pega o usuario por id
+	 * Pega o grupo por id
 	 */
-	public function getUsuarioAction()
+	public function getGrupoAction()
 	{
 	    $this->_helper->layout()->disableLayout();
 	    $this->_helper->viewRenderer->setNoRender(true);
@@ -96,8 +99,8 @@ class CaUsuarioController extends App_Controller_BaseController
 	    $request = Zend_Controller_Front::getInstance()->getRequest();
 	    $res = array();
 	    
-	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "aba-usuario"))
-	       $res[] = array('title' => "Usuário",'url' => $this->_helper->url("aba-usuario",$this->controle),'disabled' => false);
+	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "aba-grupo"))
+	       $res[] = array('title' => "Usuário",'url' => $this->_helper->url("aba-grupo",$this->controle),'disabled' => false);
 	    
 	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "aba-avatar"))
 	       $res[] = array('title' => "Avatar",'url' => $this->_helper->url("aba-avatar",$this->controle),'disabled' => false);
@@ -112,12 +115,12 @@ class CaUsuarioController extends App_Controller_BaseController
 	    $this->_helper->layout()->disableLayout();
 
 	    $params = array("valor" => $this->_getParam("search"));
-	    $this->view->dados = $this->model->listarTodos($params);
+	    $this->view->dados = json_encode($this->model->listarTodos($params));
 	}
 	/**
 	 * Lista a aba de usuário
 	 */
-	public function abaUsuarioAction()
+	public function abaGrupoAction()
 	{
 	    $this->_helper->layout()->disableLayout();
 	}
@@ -142,7 +145,7 @@ class CaUsuarioController extends App_Controller_BaseController
 
         // chama a funcao excluir
         foreach ($ids as $value){
-            $form = array('id_usuario'=>$value,"st_usuario" => 1);
+            $form = array('id_grupo'=>$value,"st_grupo" => 1);
             $result = $this->model->save($form,$this->msg);
         }
 
@@ -173,7 +176,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	
 	    // chama a funcao excluir
 	    foreach ($ids as $value){
-	        $form = array('id_usuario'=>$value,"st_usuario" => 0);
+	        $form = array('id_grupo'=>$value,"st_grupo" => 0);
 	        $result = $this->model->save($form,$this->msg);
 	    }
 	
@@ -208,13 +211,13 @@ class CaUsuarioController extends App_Controller_BaseController
 	       $integerIDs = array_map('intval', $this->getRequest()->getParam('id')); 
 	    }
 	    if($array){
-	        if(in_array((int)$this->view->sessao->id_usuario, $integerIDs)){
+	        if(in_array((int)$this->view->sessao->id_grupo, $integerIDs)){
 	            $condicao = false;
 	        } 
 	    }
 	    if($condicao){
     	    // chama a funcao excluir
-    	    $result = $this->model->remove("id_usuario in(".$ids.")",$this->msg);
+    	    $result = $this->model->remove("id_grupo in(".$ids.")",$this->msg);
     	     
     	    if($result){
     	        $resposta['status'] = "sucesso";
@@ -283,8 +286,8 @@ class CaUsuarioController extends App_Controller_BaseController
 	        $data['metodo'] = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 	        $data['ip'] = $_SERVER['REMOTE_ADDR'];
 	        $data['data'] = time();
-	        $data['usuario_id'] = Zend_Auth::getInstance()->getIdentity()->id;
-	        $data['usuario_nome'] = Zend_Auth::getInstance()->getIdentity()->nome;
+	        $data['grupo_id'] = Zend_Auth::getInstance()->getIdentity()->id;
+	        $data['grupo_nome'] = Zend_Auth::getInstance()->getIdentity()->nome;
 	        $data['descricao'] = "Cadastro de Usuário";
 	        $this->modelLog->save($data);
 	    }else{
@@ -297,7 +300,7 @@ class CaUsuarioController extends App_Controller_BaseController
 	public function editarRapidoAction()
 	{
 	    
-	    $sql = $this->model->getAdapter()->select()->from('usuario');
+	    $sql = $this->model->getAdapter()->select()->from('grupo');
 	     
 	    // Parametros para busca
 	    if($this->getRequest()->getParam('id'))
@@ -306,9 +309,9 @@ class CaUsuarioController extends App_Controller_BaseController
 	     
 	    // total com a pesquisa
 	    $data = $this->model->getAdapter()->fetchRow($sql);
-	    $this->view->usuario = $data;
+	    $this->view->grupo = $data;
 	    
-	    $sql = $this->modelUsuarioGrupo->getAdapter()->select()->from('role');
+	    $sql = $this->modelGrupoGrupo->getAdapter()->select()->from('role');
 	    
 	    $data = $this->model->getAdapter()->fetchAll($sql);
 	    $this->view->grupos = $data;
@@ -362,8 +365,8 @@ class CaUsuarioController extends App_Controller_BaseController
 	        $data['metodo'] = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 	        $data['ip'] = $_SERVER['REMOTE_ADDR'];
 	        $data['data'] = time();
-	        $data['usuario_id'] = Zend_Auth::getInstance()->getIdentity()->id;
-	        $data['usuario_nome'] = Zend_Auth::getInstance()->getIdentity()->nome;
+	        $data['grupo_id'] = Zend_Auth::getInstance()->getIdentity()->id;
+	        $data['grupo_nome'] = Zend_Auth::getInstance()->getIdentity()->nome;
 	        $data['descricao'] = "Edição de Usuário";
 	        $this->modelLog->save($data);
 	        
