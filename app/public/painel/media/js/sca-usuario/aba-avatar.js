@@ -6,8 +6,11 @@
 app.register.controller('sca-usuario_aba-avatar', function Ctrl($scope, Upload, Scopes) {
 	Scopes.store('sca-usuario_aba-avatar', $scope);
 	
+	
+	
 	// upload on file select or drop
 	$scope.upload = function (dataUrl) {
+		Webcam.attach( '#my_camera' );
         Upload.upload({
             url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
             data: {
