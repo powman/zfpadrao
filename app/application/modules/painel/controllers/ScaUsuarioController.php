@@ -62,18 +62,83 @@ class ScaUsuarioController extends App_Controller_BaseController
 	 */
 	public function formAction()
 	{
-	    
+	   
 	}
 	/**
 	 * Incluir um usuario
 	 */
 	public function incluirAction()
 	{
+	    $resposta = array();
 	    $this->_helper->layout()->disableLayout();
 	    $this->_helper->viewRenderer->setNoRender(true);
+	    if ($this->getRequest()->isPost()){
+	        $post = $this->getRequest()->getPost();
+	        if($post['senha']){
+	            $post['password_usuario'] = md5($post['senha']);
+	            unset($post['senha']);
+	        }
+	        unset($post['id_usuario']);
+	        unset($post['nm_grupo']);
+	        $result = $this->model->save($post,$this->msg);
+	        if($result){
+	            $resposta['status'] = "sucesso";
+	            $resposta['msg'] = $this->msg;
+	            $resposta['dados'] = $result;
+	        }else{
+	            $resposta['status'] = "erro";
+	            $resposta['msg'] = $this->msg;
+	        }
+	    }else{
+	        $resposta['status'] = "erro";
+	        $resposta['msg'] = "Um erro inesperado aconteceu.";
+	    }
+	    
+	    echo json_encode($resposta);
+	}
 	
-	
-	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => ''));
+	/**
+	 * Incluir um usuario
+	 */
+	public function verificaLoginAction()
+	{
+	    $resposta = array();
+	    $this->_helper->layout()->disableLayout();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    
+	    $resposta['status'] = "error";
+	     
+	    echo json_encode($resposta);
+	}
+	/**
+	 * Alterar um usuario
+	 */
+	public function alterarAction()
+	{
+	    $resposta = array();
+	    $this->_helper->layout()->disableLayout();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    if ($this->getRequest()->isPost()){
+	        $post = $this->getRequest()->getPost();
+	        unset($post['password_usuario']);
+	        unset($post['ultimo_acesso_usuario']);
+	        unset($post['is_root']);
+	        unset($post['nm_grupo']);
+	        $result = $this->model->save($post,$this->msg);
+	        if($result){
+	            $resposta['status'] = "sucesso";
+	            $resposta['msg'] = $this->msg;
+	        }else{
+	            $resposta['status'] = "erro";
+	            $resposta['msg'] = $this->msg;
+	        }
+	    }else{
+	        $resposta['status'] = "erro";
+	        $resposta['msg'] = "Um erro inesperado aconteceu.";
+	    }
+	    
+	    echo json_encode($resposta);
+	    
 	}
 	/**
 	 * Pega o usuario por id
@@ -122,6 +187,7 @@ class ScaUsuarioController extends App_Controller_BaseController
 	public function abaUsuarioAction()
 	{
 	    $this->_helper->layout()->disableLayout();
+
 	}
 	/**
 	 * Aba de Foto

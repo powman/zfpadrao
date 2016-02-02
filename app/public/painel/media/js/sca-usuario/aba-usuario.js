@@ -6,7 +6,8 @@ app.$register.service(
         // Return
         return({
         	getById: getById,
-        	incluir: incluir
+        	incluir: incluir,
+        	alterar: alterar
         });
         // ---
         // PUBLIC METHODS.
@@ -25,7 +26,17 @@ app.$register.service(
         function incluir(obj) {
             var request = $http({
                 method: "post",
-                url: _baseUrl+_controller+"/get-usuario",
+                url: _baseUrl+_controller+"/incluir",
+                data: obj
+            });
+            return( request.then( handleSuccess, handleError ) );
+        }
+        
+        // Pega os dados remoto por id
+        function alterar(obj) {
+            var request = $http({
+                method: "post",
+                url: _baseUrl+_controller+"/alterar",
                 data: obj
             });
             return( request.then( handleSuccess, handleError ) );
@@ -83,6 +94,7 @@ app.register.controller('sca-usuario_aba-usuario', function Ctrl($scope,Scopes,$
 	// verifica se tem o id na url
 	if($location.$$absUrl.indexOf('id') > -1){
 		$id = $location.$$absUrl.match(/id\/[0-9]*/).toString().replace("id/",""); 
+		$("input[name=password_usuario]").removeAttr('required');
 	}
 	
 	if($id)
@@ -130,10 +142,37 @@ app.register.controller('sca-usuario_aba-usuario', function Ctrl($scope,Scopes,$
 			});
 			window.location.href= _baseUrl+_controller+"/form";
 		}else if($tipo == "alterar"){
-			alert(JSON.stringify($scope.dados));
+			if($validator.validar('form')){
+				var $data = $.param($scope.dados);
+		    	return $modelabausuario.alterar($data)
+			    .then(
+			        function( data ) {
+			        	if(data.status == "sucesso"){
+			        		$notify.open(data.msg,2000,"success");
+			        	}else{
+			        		$notify.open(data.msg,2000,"error");
+			        	}
+			        }
+			    );
+			}
+
 		}else if($tipo == "incluir"){
-			$validator.validar('form');
-			//alert(JSON.stringify($scope.dados));
+			if($validator.validar('form')){
+				var $data = $.param($scope.dados);
+		    	return $modelabausuario.incluir($data)
+			    .then(
+			        function( data ) {
+			        	if(data.status == "sucesso" && data.dados){
+			        		console.log(data.dados);
+			        		$notify.open(data.msg,2000,"success",function(){
+			        			window.location.href= _baseUrl+_controller+"/form/id/"+data.dados.id_usuario;
+			        		});
+			        	}else{
+			        		$notify.open(data.msg,2000,"error");
+			        	}
+			        }
+			    );
+			}
 		}
 	}
 	

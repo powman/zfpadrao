@@ -114,6 +114,34 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
 	}
 	
 	/**
+	 *
+	 * @param int $id
+	 * @param string $msg
+	 * @return mixed
+	 */
+	public function fetchByKey($id, &$msg = null)
+	{
+	    try {
+	        if($id){
+        	    $sql = 'SELECT * FROM '.$this->_schema.'.'.$this->_name.' WHERE '.$this->primarykey.' = ?';
+        	    $res = $this->getAdapter()->fetchRow($sql,$id);
+        	
+        	    if (!$res) {
+        	        $msg = $this->msg['select']['not-found'];
+        	    }
+        	
+        	    return $res;
+	        }else{
+	            $msg = "O Id não foi recebido";
+	            return false;
+	        }
+	    }catch (Zend_Exception $e) {
+	        $msg = $e->getMessage() . "\n";
+	        return false;
+	    }
+	}
+	
+	/**
 	 * Remove algum registro do banco de dados
 	 *
 	 * @param string $condition

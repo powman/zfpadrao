@@ -1,5 +1,5 @@
 // Declare app level module which depends on views, and components
-var app = angular.module('painel',['ngTable','ui.bootstrap']);
+var app = angular.module('painel',['ngTable','ui.bootstrap','ngFileUpload','ngImgCrop']);
 /*app.run(function(editableOptions) {
   editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });*/
@@ -23,7 +23,7 @@ app.run(function ($rootScope) {
     });
 });
 
-app.factory('$validator', function() {
+app.factory('$validator', function($http,$q) {
     return {
     	/*
     	 * Exemplo 
@@ -65,12 +65,28 @@ app.factory('$validator', function() {
         	                });
                 		}
                 	}
+                }else if($obj.attr("data-type") == "external" && $obj.attr("data-valida-url")){
+	          	  var $data = $.param({campo:$($obj).val()});
+          		     $http({
+                          method: "post",
+                          url: $obj.attr("data-valida-url"),
+                          data: $data
+                      }).success(function($data, $status, $headers, $config){
+                      	if($data.status == "error"){
+                      		erros.push({
+        	                    msg: $("input[name="+$tipos+"]").attr("data-error")
+        	                });
+                      	}
+          			  }).error(function($data, $status, $headers, $config) {
+          				
+          			  });
                 }
                  
             });
             
             var msg = erros.map(function(obj) { return obj.msg; });
             erros = msg.filter(function(v,i) { return msg.indexOf(v) == i; });
+            console.log(erros,"erros");
             if(erros.length > 0){
 	            var _mensagem = "";
 	            $(erros).each(function(idx, item) {
@@ -109,7 +125,7 @@ app.factory('Scopes', function ($rootScope) {
 
 app.factory('$notify', function() {
     return {
-        open: function($msg, $time, $type) {
+        open: function($msg, $time, $type, $onComplete) {
         	$type ? $type : "information";
         	noty({
     		    text: $msg,
@@ -126,9 +142,14 @@ app.factory('$notify', function() {
 	    	        onClose: function() {
 	    	        	$.noty.closeAll();
 	    		    	$.noty.clearQueue();
+	    		    	if($onComplete)
+	    		    		$onComplete();
 	    	        },
 	    	        afterClose: function() {},
-	    	        onCloseClick: function() {},
+	    	        onCloseClick: function() {
+	    	        	if($onComplete)
+	    		    		$onComplete();
+	    	        },
 	    	    },
     		});
         
@@ -138,6 +159,8 @@ app.factory('$notify', function() {
 	    	setTimeout(function(){ 
 	    		$.noty.closeAll();
 		    	$.noty.clearQueue();
+		    	if($onComplete)
+		    		$onComplete();
 	    	}, 1000);
 	    	
 	    }	

@@ -24,6 +24,7 @@
 			->appendStylesheet($this->baseUrl("/dist/css/timeline.css"))
 			->appendStylesheet($this->baseUrl("/dist/css/sb-admin-2.css"))
 			->appendStylesheet($this->baseUrl("/dist/css/ng-table.min.css"))
+			->appendStylesheet($this->baseUrl("/dist/css/ng-img-crop.css"))
 			->appendStylesheet($this->baseUrl("/bower_components/morrisjs/morris.css"))
 			->appendStylesheet($this->baseUrl("/bower_components/font-awesome/css/font-awesome.min.css"))
     ?>
@@ -177,6 +178,9 @@
 								  ->appendFile($this->baseUrl('/js/morris-data.js'))
 								  ->appendFile($this->baseUrl('/dist/js/angular.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/ng-table.min.js'))
+								  ->appendFile($this->baseUrl('/dist/js/angular-file-upload/ng-file-upload-shim.min.js'))
+								  ->appendFile($this->baseUrl('/dist/js/angular-file-upload/ng-file-upload.min.js'))
+								  ->appendFile($this->baseUrl('/dist/js/angular-crop/ng-img-crop.js'))
 								  ->appendFile($this->baseUrl('/dist/js/ui-bootstrap-tpls-0.14.3.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/sb-admin-2.js'))
     ?>
