@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 01, 2016 at 01:16 PM
+-- Generation Time: Feb 03, 2016 at 01:43 PM
 -- Server version: 5.6.26
 -- PHP Version: 5.5.28
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `acl` (
   `id` int(10) NOT NULL,
   `controller` varchar(100) NOT NULL,
   `action` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 
 --
 -- Dumping data for table `acl`
@@ -47,6 +47,7 @@ INSERT INTO `acl` (`id`, `controller`, `action`) VALUES
 (23, 'sca-grupo', 'modal'),
 (16, 'sca-usuario', 'aba-avatar'),
 (14, 'sca-usuario', 'aba-usuario'),
+(27, 'sca-usuario', 'alterar'),
 (22, 'sca-usuario', 'ativar'),
 (26, 'sca-usuario', 'desativar'),
 (9, 'sca-usuario', 'excluir'),
@@ -58,7 +59,10 @@ INSERT INTO `acl` (`id`, `controller`, `action`) VALUES
 (8, 'sca-usuario', 'index'),
 (21, 'sca-usuario', 'modal'),
 (20, 'sca-usuario', 'modal-usuario'),
-(11, 'sca-usuario', 'remover');
+(30, 'sca-usuario', 'recortar-imagem'),
+(11, 'sca-usuario', 'remover'),
+(28, 'sca-usuario', 'verifica-login'),
+(29, 'sca-usuario', 'webcam');
 
 -- --------------------------------------------------------
 
@@ -162,6 +166,7 @@ INSERT INTO `sca_grupo` (`id_grupo`, `nm_grupo`, `dh_cadastro`, `id_usuario_cada
 
 CREATE TABLE IF NOT EXISTS `sca_usuario` (
   `id_usuario` int(11) NOT NULL,
+  `id_pessoa` int(11) NOT NULL,
   `nm_usuario` varchar(255) NOT NULL DEFAULT '',
   `password_usuario` varchar(255) NOT NULL DEFAULT '',
   `login_usuario` varchar(255) NOT NULL DEFAULT '',
@@ -169,15 +174,24 @@ CREATE TABLE IF NOT EXISTS `sca_usuario` (
   `st_usuario` tinyint(1) NOT NULL DEFAULT '0',
   `id_grupo` int(11) NOT NULL,
   `ultimo_acesso_usuario` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `sca_usuario`
 --
 
-INSERT INTO `sca_usuario` (`id_usuario`, `nm_usuario`, `password_usuario`, `login_usuario`, `id_avatar`, `st_usuario`, `id_grupo`, `ultimo_acesso_usuario`) VALUES
-(1, 'Demo', '202cb962ac59075b964b07152d234b70', 'paulophpweb@gmail.com', 2, 1, 3, '2016-01-21 21:54:08'),
-(3, 'Demo 2', '202cb962ac59075b964b07152d234b70', 'paulophpweb2@gmail.com', 2, 1, 3, '2016-01-21 21:54:08');
+INSERT INTO `sca_usuario` (`id_usuario`, `id_pessoa`, `nm_usuario`, `password_usuario`, `login_usuario`, `id_avatar`, `st_usuario`, `id_grupo`, `ultimo_acesso_usuario`) VALUES
+(1, 1, 'Paulo Henrique', '202cb962ac59075b964b07152d234b70', 'admin', 2, 1, 3, '2016-02-02 11:02:19'),
+(3, 1, 'Demo 2', '202cb962ac59075b964b07152d234b70', 'paulophpweb2@gmail.com', 2, 1, 3, '2016-02-02 11:51:43'),
+(6, 0, 'Paulo', '202cb962ac59075b964b07152d234b70', 'teste', 0, 1, 1, '2016-02-02 11:51:43'),
+(8, 0, 'teste', '202cb962ac59075b964b07152d234b70', 'teste2', 0, 1, 2, '2016-02-02 11:51:43'),
+(12, 0, 'Paulo', '202cb962ac59075b964b07152d234b70', 'teste4', 0, 1, 1, '2016-02-02 11:51:43'),
+(13, 0, 'teste', '202cb962ac59075b964b07152d234b70', 'teste5', 0, 1, 2, '2016-02-02 11:51:43'),
+(14, 0, 'teste', '202cb962ac59075b964b07152d234b70', 'teste7', 0, 1, 3, '2016-02-02 11:51:43'),
+(15, 0, 'teste', '202cb962ac59075b964b07152d234b70', 'admin5', 0, 1, 3, '2016-02-02 11:51:43'),
+(16, 0, 'gfdgfds', '202cb962ac59075b964b07152d234b70', 'gfdsgds', 0, 1, 3, '2016-02-02 11:51:43'),
+(17, 0, 'hfghfgh', '202cb962ac59075b964b07152d234b70', 'hgfhgf', 0, 1, 2, '2016-02-02 11:51:43'),
+(18, 0, 'gfdgfds', '202cb962ac59075b964b07152d234b70', 'gfdgdsfgs', 0, 0, 3, '2016-02-02 11:47:45');
 
 -- --------------------------------------------------------
 
@@ -248,7 +262,8 @@ ALTER TABLE `sca_usuario`
   ADD PRIMARY KEY (`id_usuario`),
   ADD UNIQUE KEY `email` (`login_usuario`),
   ADD KEY `grupo_id` (`id_grupo`),
-  ADD KEY `id_avatar` (`id_avatar`);
+  ADD KEY `id_avatar` (`id_avatar`),
+  ADD KEY `id_pessoa` (`id_pessoa`);
 
 --
 -- Indexes for table `sgg_avatar`
@@ -264,7 +279,7 @@ ALTER TABLE `sgg_avatar`
 -- AUTO_INCREMENT for table `acl`
 --
 ALTER TABLE `acl`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT for table `acl_to_grupo`
 --
@@ -289,7 +304,7 @@ ALTER TABLE `sca_grupo`
 -- AUTO_INCREMENT for table `sca_usuario`
 --
 ALTER TABLE `sca_usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
 --
 -- Constraints for dumped tables
 --
@@ -311,7 +326,6 @@ ALTER TABLE `menu`
 -- Constraints for table `sca_usuario`
 --
 ALTER TABLE `sca_usuario`
-  ADD CONSTRAINT `sca_usuario_ibfk_1` FOREIGN KEY (`id_avatar`) REFERENCES `sgg_avatar` (`id_avatar`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `sca_usuario_ibfk_2` FOREIGN KEY (`id_grupo`) REFERENCES `sca_grupo` (`id_grupo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

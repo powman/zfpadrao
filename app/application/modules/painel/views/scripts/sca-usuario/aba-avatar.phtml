@@ -2,32 +2,36 @@
 
     <div class="row">
     	<div class="col-md-3">
-    	   <div style="position: relative; height: 192px;">
-        		<img style="border:1px solid #000; width:192px; height: 192px; position: absolute; z-index: 1;" ng-src="<?php echo $this->baseUrl('assets/images/person.png')?>"/>
-        		<img ngf-select ng-model="file" name="file" ngf-pattern="'image/*'"
-                        ngf-accept="'image/*'" ngf-max-size="20MB" style="border:1px solid #000; width:192px; height: 192px; position: absolute; z-index: 2;" ng-src="{{croppedDataUrl}}">
+    	   <div style="width:192px; overflow: hidden; border:1px solid #000;">
+        	   <div style="position: relative; width: 192px; height: 192px;">
+            		<img id="sai" ngf-select="upload($file)" ng-model="imagePerfil" name="imagePerfil" ngf-pattern="'image/*'"
+                            ngf-accept="'image/*'" src="<?php echo $this->baseUrl('assets/images/person.png')?>" ngf-max-size="20MB" style="height: 192px; position: absolute; z-index: 2;" ng-src="{{imagePerfil}}">
+               </div>
            </div>
-           <div id="my_camera" style="width:320px; height:240px;"></div>
+           <div align="center" style="margin-top: 5px; width:192px;">
+                <a class="btn btn-success btn-sm" href="javascript:;" ng-click="clickWebcam()">Usar Webcam</a>
+                <a ng-if="imagePerfil" class="btn btn-info btn-sm" href="javascript:;" ng-click="clickRecortarImagem()">Recortar</a>
+           </div>
     	</div>
     	<div class="col-md-9">
-    		<?php //echo $this->form->start('avatar-upload', $this->url_post, 'post', array('enctype' => 'multipart/form-data')); ?>
-    			<?php //echo $this->form->input('id_usuario_avatar', $this->id_usuario, 'hidden'); ?>
-    			<div class="form-inline">
-    				<div ngf-drop ng-model="file" ngf-pattern="image/*"
-                         class="cropArea">
-                        <img-crop area-min-size="192" area-type="square" image="file  | ngfDataUrl"                 
-                        result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
-                        </img-crop>
-                    </div>
-    			</div>
-    			<div class="form-inline">
-    				<?php //echo $this->helper->botoes(array('bt-avatar-upload' => 'Enviar', 'bt-remover-avatar' => array('class' => 'btn btn-danger', 'label' => 'Remover <i class="icon-trash icon-white"></i>'))); ?>
-    			</div>
-    		<?php //echo $this->form->end(); ?>
+			<div class="form-inline">
+				<!-- <div ngf-drop ng-model="file" ngf-pattern="image/*"
+                     class="cropArea">
+                     <img-crop area-min-size="192" area-type="square" image="file  | ngfDataUrl"                 
+                    result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
+                    </img-crop>
+                </div>-->
+			</div>
+			<div class="form-inline">
+			As imagem devem ter 192px de largura e 192px de altura.<br/>
+				<a class="btn btn-success btn-sm" href="javascript:;" ng-click="clickWebcam()">Salvar</a>
+			</div>
     	</div>
     </div>
+   
     
 </div>
+
    
     <!--  <form name="myForm">
         <div>Crop Image and Upload</div>

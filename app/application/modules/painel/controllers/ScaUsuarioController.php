@@ -347,6 +347,16 @@ class ScaUsuarioController extends App_Controller_BaseController
 	
 	    echo $html;
 	}
+	
+	public function webcamAction()
+	{
+	    $this->_helper->layout()->disableLayout();
+	}
+	
+	public function recortarImagemAction()
+	{
+	    $this->_helper->layout()->disableLayout();
+	}
 
 
 }

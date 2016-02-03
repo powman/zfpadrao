@@ -1,0 +1,20 @@
+<script>
+    var $parametros = <?php echo json_encode($_POST);?>;
+</script>
+<div load-ctrl="<?php echo $this->controle;?>_<?php echo $this->acao;?>" caminho-js="<?php echo $this->baseUrl($this->JsHelper())?>" align="center">
+   <ng-camera
+        capture-message="Diga X"
+        viewer-height="192"
+        viewer-width="250"
+        output-height="252"
+        output-width="350"
+        image-format="jpeg"
+        jpeg-quality="100"
+        action-message="Tirar foto"
+        snapshot="picture"
+        flash-fallback-url="<?php echo $this->baseUrl('/dist/js/webcam/webcam.swf'); ?>"
+        overlay-url="<?php echo $this->baseUrl('/assets/images/person.png'); ?>"
+        shutter-url="<?php echo $this->baseUrl('/dist/js/webcam/shutter.mp3'); ?>"
+    ></ng-camera>
+</div>
+<link href="<?php echo $this->baseUrl($this->CssHelper());?>" media="screen" rel="stylesheet" type="text/css">

@@ -1,0 +1,11 @@
+<script>
+    var $parametros = <?php echo json_encode($_POST);?>;
+</script>
+<div load-ctrl="<?php echo $this->controle;?>_<?php echo $this->acao;?>" caminho-js="<?php echo $this->baseUrl($this->JsHelper())?>" align="center">
+   <div ng-model="picture" ngf-pattern="image/*"
+     class="cropArea">
+     <img-crop area-min-size="192" area-type="square" image="picture"                 
+    result-image="croppedDataUrl">
+    </img-crop>
+</div>
+<link href="<?php echo $this->baseUrl($this->CssHelper());?>" media="screen" rel="stylesheet" type="text/css">
