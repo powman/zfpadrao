@@ -1,17 +1,26 @@
+
 <div load-ctrl="<?php echo $this->controle;?>_<?php echo $this->acao;?>" caminho-js="<?php echo $this->baseUrl($this->JsHelper())?>">
 
     <div class="row">
     	<div class="col-md-3">
+    	   <div ng-if="progress">
+                <uib-progressbar type="success" value="progress"><span style="color:white; white-space:nowrap;">{{progress}}%</span></uib-progressbar>
+           </div>
     	   <div style="width:192px; overflow: hidden; border:1px solid #000;">
         	   <div style="position: relative; width: 192px; height: 192px;">
-            		<img id="sai" ngf-select="upload($file)" ng-model="imagePerfil" name="imagePerfil" ngf-pattern="'image/*'"
-                            ngf-accept="'image/*'" src="<?php echo $this->baseUrl('assets/images/person.png')?>" ngf-max-size="20MB" style="height: 192px; position: absolute; z-index: 2;" ng-src="{{imagePerfil}}">
+            		<img id="imagePerfil" ngf-select="upload($file)" ng-model="imagePerfil" name="imagePerfil" ngf-pattern="'image/*'"
+                            ngf-accept="'image/*'" ng-init="imagePerfil = '<?php echo $this->avatar['imagemBase64'];?>'" src="<?php  echo $this->avatar['id_avatar'] ? $this->avatar['imagemBase64'] : $this->baseUrl('assets/images/person.png')?>" ngf-max-size="20MB" style="height: 192px; position: absolute; z-index: 1;" ng-src="{{imagePerfil}}">
                </div>
            </div>
            <div align="center" style="margin-top: 5px; width:192px;">
+                <?php if(Zend_Registry::get('acl')->isAllowed($this->sessao->id_grupo, $this->controle, "webcam")):?>
                 <a class="btn btn-success btn-sm" href="javascript:;" ng-click="clickWebcam()">Usar Webcam</a>
+                <?php endif;?>
+                <?php if(Zend_Registry::get('acl')->isAllowed($this->sessao->id_grupo, $this->controle, "recortar-imagem")):?>
                 <a ng-if="imagePerfil" class="btn btn-info btn-sm" href="javascript:;" ng-click="clickRecortarImagem()">Recortar</a>
+                <?php endif;?>
            </div>
+           
     	</div>
     	<div class="col-md-9">
 			<div class="form-inline">
@@ -23,41 +32,13 @@
                 </div>-->
 			</div>
 			<div class="form-inline">
-			As imagem devem ter 192px de largura e 192px de altura.<br/>
-				<a class="btn btn-success btn-sm" href="javascript:;" ng-click="clickWebcam()">Salvar</a>
+			    <div>
+			         As imagens devem ter 192px de largura e 192px de altura<br/><br/>
+			    </div>
+				<a class="btn btn-success btn-sm" href="javascript:;" ng-click="clickSalvar()">Salvar</a>
+				<a class="btn btn-info btn-sm" href="javascript:;" ng-click="clickRemover()">Remover</a>
 			</div>
     	</div>
     </div>
-   
-    
 </div>
-
-   
-    <!--  <form name="myForm">
-        <div>Crop Image and Upload</div>
-        <button ngf-select ng-model="picFile" accept="image/*">
-            Select Picture</button>
-        <div ngf-drop ng-model="picFile" ngf-pattern="image/*"
-             class="cropArea">
-            <img-crop area-min-size="192" area-type="square" image="picFile  | ngfDataUrl"                 
-            result-image="croppedDataUrl" ng-init="croppedDataUrl=''">
-            </img-crop>
-        </div>
-        <div>
-            <img ng-src="{{croppedDataUrl}}" />
-        </div>
-        <button ng-click="upload(croppedDataUrl)">Submit</button> 
-            
-        <span class="progress" ng-show="progress >= 0">
-          <div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
-        </span>
-        <span ng-show="result">Upload Successful</span>
-        <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
-    </form>-->
-
-    
-  
-
-</div>
-
-</div>
+<link href="<?php echo $this->baseUrl($this->CssHelper());?>" media="screen" rel="stylesheet" type="text/css">

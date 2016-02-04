@@ -8,8 +8,9 @@ app.register.controller('sca-usuario_aba-avatar', function Ctrl($scope, Upload, 
 	
 	$scope.clickWebcam = clickWebcam;
 	$scope.clickRecortarImagem = clickRecortarImagem;
-	$scope.modalInstance = "";
-	$scope.imagePerfil = '';
+	$scope.clickSalvar = clickSalvar;
+	$scope.clickRemover = clickRemover;
+	$scope.progress = '';
 	
 	function clickWebcam(){
 		$http({
@@ -45,37 +46,41 @@ app.register.controller('sca-usuario_aba-avatar', function Ctrl($scope, Upload, 
 		
 	}
 	
+	function clickSalvar(){
+	    Upload.upload({
+            url: _baseUrl+_controller+"/salvar-avatar",
+            data: {
+                file: dataURLtoBlob($scope.imagePerfil),
+                id_usuario: Scopes.get("sca-usuario_aba-usuario").dados.id_usuario,
+                id_avatar: Scopes.get("sca-usuario_aba-usuario").dados.id_avatar
+            },
+        }).then(function (response) {
+        	$scope.progress = '';
+        }, function (response) {
+            //if (response.status > 0) $scope.errorMsg = response.status 
+               // + ': ' + response.data;
+        }, function (evt) {
+            $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
+        });
+		
+	}
 	
-	
+	function clickRemover(){
+		
+		
+	}
 	
 	// upload on file select or drop
 	$scope.upload = function (dataUrl) {
-		console.log(dataUrl);
-		var FR = new FileReader();
-        FR.onload = function(e) {
-        	  //$scope.sai = e.target.result;
-              $('#sai').attr( "src", e.target.result );
-              $scope.imagePerfil = e.target.result;
-             //$('#base').text( e.target.result );
-        };       
-        FR.readAsDataURL( dataUrl );
-		//$scope.file = dataUrl;
-       /* Upload.upload({
-            url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
-            data: {
-                file: Upload.dataUrltoBlob(dataUrl)
-            },
-        }).then(function (response) {
-        	console.log(response.data);
-            $timeout(function () {
-                $scope.file = response.data;
-            });
-        }, function (response) {
-            if (response.status > 0) $scope.errorMsg = response.status 
-                + ': ' + response.data;
-        }, function (evt) {
-            $scope.progress = parseInt(100.0 * evt.loaded / evt.total);
-        });*/
+		if(dataUrl){
+			var FR = new FileReader();
+	        FR.onload = function(e) {
+	              $('#imagePerfil').attr( "src", e.target.result );
+	              $scope.imagePerfil = e.target.result;
+	             //$('#base').text( e.target.result );
+	        };       
+	        FR.readAsDataURL( dataUrl );
+		}
     }
 	
 	

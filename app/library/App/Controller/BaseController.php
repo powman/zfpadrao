@@ -27,7 +27,7 @@ class App_Controller_BaseController extends Zend_Controller_Action
 		$this->view->acao = Zend_Controller_Front::getInstance()->getRequest()->getActionName();
 		// pega o id do usuario logado
 		if(isset($identity->id))
-		  $this->idUsuario = $identity->id;
+		  $this->idUsuario = $identity->id_usuario;
 		if(count($this->models)){
 			// loader dos models $models 
 			foreach ($this->models as $value) {

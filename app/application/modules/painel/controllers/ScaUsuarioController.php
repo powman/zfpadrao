@@ -2,7 +2,7 @@
 
 class ScaUsuarioController extends App_Controller_BaseController
 {
-	public $models = array('ScaUsuario');
+	public $models = array('ScaUsuario','SggAvatar');
 	public $modelAtual = 'ScaUsuario';
 	public $msg = null;
 	/**
@@ -97,6 +97,29 @@ class ScaUsuarioController extends App_Controller_BaseController
 	    echo json_encode($resposta);
 	}
 	
+	public function salvarAvatarAction()
+	{
+	    $this->_helper->layout()->disableLayout();
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    if ($this->getRequest()->isPost()){
+    	    $form = array(
+    	        "nm_avatar" => $_FILES["file"]["name"],
+    	        "tp_avatar" => $_FILES["file"]["type"],
+    	        "sz_avatar" => $_FILES["file"]["size"],
+    	        "arquivo" =>   file_get_contents($_FILES["file"]["tmp_name"])
+    	    );
+    	    $result = $this->modelSggAvatar->save($form,$this->msg);
+    	    if($result){
+    	        $post = $this->getRequest()->getPost();
+    	        $this->modelSggAvatar->remove("id_avatar = ".$post['id_avatar']);
+    	        unset($post['id_avatar']);
+    	        $post['id_avatar'] = $result['id_avatar'];
+    	        $result = $this->model->save($post,$this->msg);
+    	        
+    	    }
+	    }
+	}
+	
 	/**
 	 * Incluir um usuario
 	 */
@@ -162,12 +185,13 @@ class ScaUsuarioController extends App_Controller_BaseController
 	    $this->_helper->viewRenderer->setNoRender(true);
 	    $request = Zend_Controller_Front::getInstance()->getRequest();
 	    $res = array();
+	    $usuario = $this->model->fetchByKey($this->view->sessao->id_usuario,$this->msg);
 	    
 	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "aba-usuario"))
 	       $res[] = array('title' => "Usuário",'url' => $this->_helper->url("aba-usuario",$this->controle),'disabled' => false);
 	    
 	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "aba-avatar"))
-	       $res[] = array('title' => "Avatar",'url' => $this->_helper->url("aba-avatar",$this->controle),'disabled' => false);
+	       $res[] = array('title' => "Avatar",'url' => $this->view->url(array('controller' => $this->controle,'action' => "aba-avatar","id_avatar" => $usuario['id_avatar'])),'disabled' => false);
 	    
 	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => $res));
 	}
@@ -195,6 +219,9 @@ class ScaUsuarioController extends App_Controller_BaseController
 	public function abaAvatarAction()
 	{
 	    $this->_helper->layout()->disableLayout();
+	    $this->view->avatar = $this->modelSggAvatar->fetchByKey($this->getRequest()->getParam('id_avatar'),$this->msg);
+	    $this->view->avatar['imagemBase64'] = "data:".$this->view->avatar['tp_avatar'].";base64,".chunk_split(base64_encode($this->view->avatar['arquivo']));
+	    
 	}
 	/**
 	 * Função para Ativar os cadastros
