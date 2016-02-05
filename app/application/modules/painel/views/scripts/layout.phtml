@@ -20,11 +20,11 @@
     <!-- Custom Fonts -->
     <?php echo $this->headLink()
 	    	->appendStylesheet($this->baseUrl("/bower_components/bootstrap/dist/css/bootstrap.min.css")) 
-	    	->appendStylesheet($this->baseUrl("/bower_components/metisMenu/dist/metisMenu.min.css"))
-			->appendStylesheet($this->baseUrl("/dist/css/timeline.css"))
 			->appendStylesheet($this->baseUrl("/dist/css/sb-admin-2.css"))
 			->appendStylesheet($this->baseUrl("/dist/css/ng-table.min.css"))
 			->appendStylesheet($this->baseUrl("/dist/css/ng-img-crop.css"))
+			->appendStylesheet($this->baseUrl("/dist/js/alertify/alertify.core.css"))
+			->appendStylesheet($this->baseUrl("/dist/js/alertify/alertify.default.css"))
 			->appendStylesheet($this->baseUrl("/bower_components/morrisjs/morris.css"))
 			->appendStylesheet($this->baseUrl("/bower_components/font-awesome/css/font-awesome.min.css"))
     ?>
@@ -53,21 +53,23 @@
         ?>
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
+            <div class="navbar-header customTextCenter">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Painel Administrativo</a>
+                <a class="navbar-brand" href="#">
+                    <img src="<?php echo $this->baseUrl("assets/images/logo.png") ?>" alt="">
+                </a>
             </div>
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    <a class="dropdown-toggle yellow" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i>  <span class="badge bgyellow">0</span>
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
                     	<?php for($i=0;$i<4;$i++):?>
@@ -95,8 +97,8 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    <a class="dropdown-toggle green" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i>  <span class="badge bggreen">0</span>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
                     	<?php for($i=0;$i<4;$i++):?>
@@ -122,16 +124,19 @@
                 </li>
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    <a class="dropdown-toggle black" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down black"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
+                        <li class="text-center">
+                            <img style="margin: 10px; border: 1px solid #000;" ng-src="<?php echo $this->GetDadosUsuario()['arquivo'];?>" width="150" height="150"/>
+                        </li>
                         <li><a href="#"><i class="fa fa-user fa-fw"></i> Perfil</a>
                         </li>
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Configurações</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href=""><i class="fa fa-sign-out fa-fw"></i> Sair</a>
+                        <li><a href="<?php echo $this->url(array("controller"=>"index","action"=>"sair"),null,true); ?>"><i class="fa fa-sign-out fa-fw"></i> Sair</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -148,7 +153,7 @@
                     </div>
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="<?php echo $this->url(array("controller"=>"index","action"=>"index"),null,true); ?>"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a class="black" href="<?php echo $this->url(array("controller"=>"index","action"=>"index"),null,true); ?>"><i class="fa fa-dashboard fa-fw black"></i> Dashboard</a>
                         </li>
                         <?php echo $this->menu(); ?>
                     </ul>
@@ -171,20 +176,17 @@
 	<!-- Custom Theme JavaScript -->
 	<?php echo $this->headScript()->appendFile($this->baseUrl('/bower_components/jquery/dist/jquery.min.js'))
                                   ->appendFile($this->baseUrl('/bower_components/bootstrap/dist/js/bootstrap.min.js'))
-								  ->appendFile($this->baseUrl('/bower_components/metisMenu/dist/metisMenu.min.js'))
-								  ->appendFile($this->baseUrl('/bower_components/raphael/raphael-min.js'))
-								  ->appendFile($this->baseUrl('/bower_components/morrisjs/morris.min.js'))
 								  ->appendFile($this->baseUrl('/bower_components/notify/jquery.noty.packaged.min.js'))
-								  ->appendFile($this->baseUrl('/js/morris-data.js'))
 								  ->appendFile($this->baseUrl('/dist/js/angular.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/ng-table.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/angular-file-upload/ng-file-upload-shim.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/angular-file-upload/ng-file-upload.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/angular-crop/ng-img-crop.js'))
-								  ->appendFile($this->baseUrl('/dist/js/angular-crop/ng-img-crop.js'))
 								  ->appendFile($this->baseUrl('/dist/js/ui-bootstrap-tpls-0.14.3.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/webcam/webcam.min.js'))
 								  ->appendFile($this->baseUrl('/dist/js/webcam/ng-camera.js'))
+								  ->appendFile($this->baseUrl('/dist/js/alertify/alertify.js'))
+								  ->appendFile($this->baseUrl('/dist/js/confirm-click.js'))
 								  ->appendFile($this->baseUrl('/dist/js/sb-admin-2.js'))
     ?>
     <?php if($this->CssHelper()): ?>

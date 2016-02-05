@@ -1,3 +1,31 @@
 .progress{margin-bottom: 5px !important; width:192px; border:0px;}
 .progress-bar{line-height: 17px !important;}
 .progress-bar{background-color:#28b62c !important; }
+.av1{margin-top: 5px; width:192px;}
+.av2{width:192px; overflow: hidden; border:1px solid #000;}
+.av3{position: relative; width: 192px; height: 192px;}
+.av4{height: 192px; position: absolute; z-index: 1;}
+.custominput{margin-top: 10px;}
+
+/* RESPONSIVE */
+
+@media only screen and (max-width : 1200px) {
+    
+}
+
+@media only screen and (max-width : 979px) {
+	
+}
+
+@media only screen and (max-width : 767px) {
+
+}
+
+@media only screen and (max-width : 480px) {
+	.custominput{text-align: center;}
+}
+
+@media only screen and (max-width : 320px) {
+	.custominput{text-align: center;}
+
+}

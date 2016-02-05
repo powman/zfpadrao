@@ -16,8 +16,8 @@ class Zend_View_Helper_Titulo extends Zend_View_Helper_Abstract
 		$sql .= '	left join acl a on a.id = m.acl_id ';
 		$sql .= '	left join modulo mo on mo.id = m.modulo_id ';
 		$sql .= 'where m.status = 1 ';
-		$sql .= 'and a.controller = "'.$chController.'" ';
-		$sql .= 'and a.action = "'.$chAction.'" ';
+		$sql .= 'and a.controller = "'.$chController.'" LIMIT 1 ';
+		//$sql .= 'and a.action = "'.$chAction.'" ';
 		
 		$result = $db->fetchRow($sql);
 		

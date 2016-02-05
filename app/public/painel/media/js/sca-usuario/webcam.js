@@ -8,6 +8,7 @@ app.register.controller('sca-usuario_webcam', function Ctrl($scope, Scopes) {
 	modalInstance.result.then(function (selectedItem) {
       
     }, function () {
-    	Scopes.get($parametros.returncontrole).imagePerfil = $scope.picture;
+    	if($scope.picture)
+    		Scopes.get($parametros.returncontrole).imagePerfil = $scope.picture;
     });
 });

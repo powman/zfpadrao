@@ -1,0 +1,27 @@
+
+<div load-ctrl="<?php echo $this->controle;?>_<?php echo $this->acao;?>" caminho-js="<?php echo $this->baseUrl($this->JsHelper())?>">
+
+    <form action="" id="form" novalidate="novalidate">
+		<div class="form-group">
+			<label for="nm_grupo" class="col-sm-2 col-xs-3 control-label">Nome:</label>
+			<div class="col-sm-10 col-xs-9 col-lg-10">
+				<input name="nm_grupo" ng-model="dados.nm_grupo" data-error="Nome do usuário obrigatório" data-type="string" required class="form-control"/>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="form-group">
+			<label for="st_grupo" class="col-sm-2 col-xs-3 col-lg-2 control-label">E root?</label>
+			<div class="col-sm-10 col-xs-9 col-lg-4">
+				<select name="st_grupo" data-error="Nome obrigatório" data-type="string" required ng-model="dados.st_grupo" class="form-control">
+				    <option value="0">Não</option>
+                    <option value="1">Sim</option>
+                </select>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div class="form-group" align="center">
+		<botao-acao></botao-acao>
+		</div>
+	</form>
+
+</div>

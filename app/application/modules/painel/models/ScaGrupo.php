@@ -26,7 +26,7 @@ class Painel_Model_ScaGrupo extends App_Model_Default
 		}
 	
 		if (isset($arraySearch['valor']) && $arraySearch['valor'] && !is_int($arraySearch['valor'])) {
-			$sql->where('g.nm_grupo LIKE ?', "%{$arraySearch['valor']}");
+			$sql->where('g.nm_grupo LIKE ?', "%{$arraySearch['valor']}%");
 		}
 		
 		// SQL para buscar a quantidade de páginas existentes

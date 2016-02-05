@@ -27,8 +27,8 @@ class Painel_Model_ScaUsuario extends App_Model_Default
 		}
 	
 		if (isset($arraySearch['valor']) && $arraySearch['valor'] && !is_int($arraySearch['valor'])) {
-			$sql->where('u.nm_usuario LIKE ?', "%{$arraySearch['valor']}");
-			$sql->orWhere('u.login_usuario LIKE ?', "%{$arraySearch['valor']}");
+			$sql->where('u.nm_usuario LIKE ?', "%{$arraySearch['valor']}%");
+			$sql->orWhere('u.login_usuario LIKE ?', "%{$arraySearch['valor']}%");
 		}
 		
 		// SQL para buscar a quantidade de páginas existentes
@@ -53,10 +53,13 @@ class Painel_Model_ScaUsuario extends App_Model_Default
 	{
 	    $sql = $this->getAdapter()->select()
 		->from(array('u' => $this->_name))
-		->join( array('g' => 'sca_grupo'), 'g.id_grupo = u.id_grupo', array('nm_grupo','is_root') );
+		->join( array('g' => 'sca_grupo'), 'g.id_grupo = u.id_grupo', array('nm_grupo','is_root') )
+	    ->joinLeft( array('a' => 'sgg_avatar'), 'a.id_avatar = u.id_avatar', array('nm_avatar','tp_avatar','arquivo') );
 		$sql->where('u.id_usuario = ?', $id);
 		
 		$res = $this->getAdapter()->fetchRow($sql);
+		if($res['arquivo'])
+		  $res['arquivo'] = "data:".$res['tp_avatar'].";base64,".base64_encode($res['arquivo']);
 	
 	    if (!$res) {
 	        $msg = $this->msg['select']['not-found'];

@@ -7,12 +7,15 @@ app.$register.service(
         return({
         	getById: getById,
         	incluir: incluir,
-        	alterar: alterar
+        	alterar: alterar,
+        	remove: remove
         });
         // ---
         // PUBLIC METHODS.
-        // ---
-        // Pega os dados remoto por id
+        //
+        /**
+         * pega os dados remoto por id
+         */
         function getById(obj) {
             var request = $http({
                 method: "post",
@@ -22,7 +25,21 @@ app.$register.service(
             return( request.then( handleSuccess, handleError ) );
         }
         
-        // Pega os dados remoto por id
+        /**
+         * Remove um dado remoto
+         */
+        function remove( ids ) {
+            var request = $http({
+                method: "post",
+                url: _baseUrl+_controller+"/remover",
+                data: $.param(ids)
+            });
+            return( request.then( handleSuccess, handleError ) );
+        }
+        
+        /**
+         * inclui os dados remoto por id
+         */
         function incluir(obj) {
             var request = $http({
                 method: "post",
@@ -32,7 +49,9 @@ app.$register.service(
             return( request.then( handleSuccess, handleError ) );
         }
         
-        // Pega os dados remoto por id
+        /**
+         * altera os dados remoto por id
+         */
         function alterar(obj) {
             var request = $http({
                 method: "post",
@@ -76,20 +95,13 @@ app.$register.service(
  */
 app.register.controller('sca-usuario_aba-usuario', function Ctrl($scope,Scopes,$notify,$location,$element,$uibModalStack,$modelabausuario,$validator) {
 	Scopes.store('sca-usuario_aba-usuario', $scope);
+	
 	$scope.btn = [];
 	$scope.botaoAcao = [];
 	$scope.btnAcao = btnAcao;
 	$scope.setUsuario = setUsuario;
 	$scope.loadById = loadById;
 	$id = "";
-	$scope.dados = {
-			id_usuario:"",
-			nm_usuario:"",
-			login_usuario:"",
-			id_grupo:"",
-			nm_grupo:"",
-			st_usuario:0
-	};
 	
 	// verifica se tem o id na url
 	if($location.$$absUrl.indexOf('id') > -1){
@@ -128,11 +140,12 @@ app.register.controller('sca-usuario_aba-usuario', function Ctrl($scope,Scopes,$
 	 * Grava os dados do usuario no scope
 	 */
 	function setUsuario( dados ) {
+		delete dados.password_usuario;
         $scope.dados = dados;
     }
 	
 	/**
-	 * Verfica o tipo de acao dos botoes
+	 * Verfica o tipo de acao dos botoes e faz a acao
 	 */
 	function btnAcao($tipo){
 		if($tipo == "limpar"){
@@ -173,6 +186,23 @@ app.register.controller('sca-usuario_aba-usuario', function Ctrl($scope,Scopes,$
 			        }
 			    );
 			}
+		}else if($tipo == "remover"){
+			alertify.confirm("Deseja realmente excluir este usuário? Nome: "+$scope.dados.nm_usuario+" - ID: "+$scope.dados.id_usuario+"",function(status){
+				if(status){
+					$modelabausuario.remove({id:$scope.dados.id_usuario})
+				    .then(
+				        function( data ) {
+				        	if(data.status == "sucesso"){
+				        		$notify.open(data.msg,2000,"success",function(){
+				        			window.location.href= _baseUrl+_controller+"/index";
+				        		});
+				        	}else{
+				        		$notify.open(data.msg,3000,"error");
+				        	}
+				        }
+				    );
+				}
+			});
 		}
 	}
 	

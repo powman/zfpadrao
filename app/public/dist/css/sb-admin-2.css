@@ -364,3 +364,36 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+#side-menu li a i{color:#000;}
+.green{color: green !important;}
+.yellow{color: #f0ad4e !important;}
+.black{color: #000 !important;}
+.bggreen{background: green;}
+.bgyellow{background: #f0ad4e;}
+.bgblack{background: #000;}
+.nav li a:hover{background: #158cba;}
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus{background: #158cba;}
+.sidebar ul li a.active{background: #158cba;}
+
+/* RESPONSIVE */
+
+@media only screen and (max-width : 1200px) {
+    
+}
+
+@media only screen and (max-width : 979px) {
+	
+}
+
+@media only screen and (max-width : 767px) {
+
+}
+
+@media only screen and (max-width : 480px) {
+	.customTextCenter{text-align: center;}
+}
+
+@media only screen and (max-width : 320px) {
+	.customTextCenter{text-align: center;}
+
+}

@@ -50,7 +50,7 @@ class App_Model_Default extends Zend_Db_Table_Abstract {
     	    // limpar os arrays vazios
     	    //$data = array_filter($data);
     	    // trim em todos os valores
-    	    $data = array_map('trim', $data);
+    	    //$data = array_map('trim', $data);
     	    $id = isset($data[$this->primarykey]) ? $data[$this->primarykey] : '';
     	    // se existir o id no banco faz um update
     	    if ($this->_dataExists($id) && $id) {

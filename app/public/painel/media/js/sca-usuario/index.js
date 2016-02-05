@@ -1,4 +1,4 @@
-// angular calendario
+// angular usuario
 
 app.service(
     "$modelusuario",
@@ -13,7 +13,9 @@ app.service(
         // ---
         // PUBLIC METHODS.
         
-        // Pega os dados todos remoto
+        /**
+         * Pega os dados todos remoto
+         */
         function getAll(obj) {
             var request = $http({
                 method: "post",
@@ -23,7 +25,9 @@ app.service(
             return( request.then( handleSuccess, handleError ) );
         }
         
-        // Remove um dado remoto
+        /**
+         * Remove um dado remoto
+         */
         function remove( ids ) {
             var request = $http({
                 method: "post",
@@ -33,7 +37,9 @@ app.service(
             return( request.then( handleSuccess, handleError ) );
         }
         
-        // Ativa um dado remoto
+        /**
+         * Ativa um dado remoto
+         */
         function ativar( ids ) {
             var request = $http({
                 method: "post",
@@ -43,7 +49,9 @@ app.service(
             return( request.then( handleSuccess, handleError ) );
         }
         
-        // Ativa um dado remoto
+        /**
+         * Desativa um dado remoto
+         */
         function desativar( ids ) {
             var request = $http({
                 method: "post",
@@ -80,7 +88,7 @@ app.service(
         }
     }
 );
-
+// controller usuario index
 app.controller('sca-usuario_index', function Ctrl($scope,NgTableParams, $http, $notify,$loader,$element,$sessao,$modelusuario) {
 
 	$scope.dados = [];
@@ -89,17 +97,18 @@ app.controller('sca-usuario_index', function Ctrl($scope,NgTableParams, $http, $
 	$scope.selecionar = selecionar;
 	$scope.checarTodos = checarTodos;
 	$scope.pesquisar = pesquisar;
+	$scope.removeFiltro = removeFiltro;
 	$_this.del = deletar;
 	
 	loadDadosRemoto();
 	
-	/*
+	/**
 	 * Pega os dados remoto
 	 */
 	function loadDadosRemoto(){
 		$_this.tableParams = new NgTableParams({}, {
 	      getData: function(params) {
-	        // ajax request to api
+	        // ajax request
 	    	var $data = params.url();
 	    	return $modelusuario.getAll($data)
 		    .then(
@@ -117,7 +126,7 @@ app.controller('sca-usuario_index', function Ctrl($scope,NgTableParams, $http, $
 	    });
 	}
 	
-	/*
+	/**
 	 * Pesquisa no banco de dados
 	 */
 	function pesquisar(){
@@ -127,131 +136,148 @@ app.controller('sca-usuario_index', function Ctrl($scope,NgTableParams, $http, $
 			loadDadosRemoto();
 		}
 	}
+	/**
+	 * funcao para remover o texto na pesquisa
+	 */
+	function removeFiltro(){
+		$scope.pesquisa = '';
+		loadDadosRemoto();
+	}
 	
-	/*
+	
+	/**
 	 * Aplica os dados remoto a view
 	 */
     function aplicarDadosRemoto( dados ) {
         $scope.dados = dados;
     }
 	
-    /*
+    /**
      * Muda a qtde de listagem por pagina
      */
 	function mudarQtdeDeListagem(valor){
 		this.tableParams.count(valor);
 	}
 	
-	/*
-     * Muda a qtde de listagem por pagina
+	/**
+     * Deletar um usuario
      */
 	function deletar($event,$index){
-		if(confirm("Deseja realmente excluir? \n\n"+$scope.dados[$index].nm_usuario+" - ID: "+$scope.dados[$index].id_usuario+"")){
-	    	
-			$modelusuario.remove({id:$scope.dados[$index].id_usuario})
-		    .then(
-		        function( data ) {
-		        	if(data.status == "sucesso"){
-		        		loadDadosRemoto();
-		        	}else{
-		        		$notify.open(data.msg,3000,"error");
-		        	}
-		        }
-		    );
-	     }
+		alertify.confirm("Deseja realmente excluir este usuário? Nome: "+$scope.dados[$index].nm_usuario+" - ID: "+$scope.dados[$index].id_usuario+"",function(status){
+			if(status){
+				$modelusuario.remove({id:$scope.dados[$index].id_usuario})
+			    .then(
+			        function( data ) {
+			        	if(data.status == "sucesso"){
+			        		loadDadosRemoto();
+			        	}else{
+			        		$notify.open(data.msg,3000,"error");
+			        	}
+			        }
+			    );
+			}
+		});
 	}
-	
+	/**
+	 * com os selecionados
+	 */
 	function selecionar($param){
 		var $aRemover = [];
 		var $aAtivar = [];
 		var $aDesativar = [];
 		if($param == "ex"){
-			if(confirm("Deseja realmente excluir os selecionados?")){
-				$filtro = $scope.dados.filter(function(obj) {
-				  if(obj.selected === true || obj.selected === 'true')
-					  $aRemover.push(obj.id_usuario);
+			alertify.confirm("Deseja realmente excluir os selecionados?",function(status){
+				if(status){
+					$filtro = $scope.dados.filter(function(obj) {
+					  if(obj.selected === true || obj.selected === 'true')
+						  $aRemover.push(obj.id_usuario);
 
-				});
-				
-				$modelusuario.remove({id:$aRemover})
-			    .then(
-			        function( data ) {
-			        	if(data.status == "sucesso"){
-			        		loadDadosRemoto();
-			        		var element = angular.element('[ng-model="selecionados"]');
-			      		    element.find("option")[0].selected = true;
-			      		    $scope.selecionados = "";
-			        	}else{
-			        		var element = angular.element('[ng-model="selecionados"]');
-			      		    element.find("option")[0].selected = true;
-			      		    $scope.selecionados = "";
-			        		$notify.open(data.msg,3000,"error");
-			        	}
-			        }
-			    );
-			}else{
-				var element = angular.element('[ng-model="selecionados"]');
-				element.find("option")[0].selected = true;
-				$scope.selecionados = "";
-			}
+					});
+					
+					$modelusuario.remove({id:$aRemover})
+				    .then(
+				        function( data ) {
+				        	if(data.status == "sucesso"){
+				        		loadDadosRemoto();
+				        		var element = angular.element('[ng-model="selecionados"]');
+				      		    element.find("option")[0].selected = true;
+				      		    $scope.selecionados = "";
+				        	}else{
+				        		var element = angular.element('[ng-model="selecionados"]');
+				      		    element.find("option")[0].selected = true;
+				      		    $scope.selecionados = "";
+				        		$notify.open(data.msg,3000,"error");
+				        	}
+				        }
+				    );
+				}else{
+					var element = angular.element('[ng-model="selecionados"]');
+					element.find("option")[0].selected = true;
+					$scope.selecionados = "";
+				}
+			});
 		}else if($param == "at"){
-			if(confirm("Deseja realmente ativar os selecionados?")){
-				$filtro = $scope.dados.filter(function(obj) {
-				  if(obj.selected === true || obj.selected === 'true')
-					  $aAtivar.push(obj.id_usuario);
+			alertify.confirm("Deseja realmente ativar os selecionados?",function(status){
+				if(status){
+					$filtro = $scope.dados.filter(function(obj) {
+					  if(obj.selected === true || obj.selected === 'true')
+						  $aAtivar.push(obj.id_usuario);
 
-				});
-				
-				$modelusuario.ativar({id:$aAtivar})
-			    .then(
-			        function( data ) {
-			        	if(data.status == "sucesso"){
-			        		loadDadosRemoto();
-			        		var element = angular.element('[ng-model="selecionados"]');
-			      		    element.find("option")[0].selected = true;
-			      		    $scope.selecionados = "";
-			        	}else{
-			        		var element = angular.element('[ng-model="selecionados"]');
-			      		    element.find("option")[0].selected = true;
-			      		    $scope.selecionados = "";
-			        		$notify.open(data.msg,3000,"error");
-			        	}
-			        }
-			    );
-			}else{
-				var element = angular.element('[ng-model="selecionados"]');
-				element.find("option")[0].selected = true;
-				$scope.selecionados = "";
-			}
+					});
+					
+					$modelusuario.ativar({id:$aAtivar})
+				    .then(
+				        function( data ) {
+				        	if(data.status == "sucesso"){
+				        		loadDadosRemoto();
+				        		var element = angular.element('[ng-model="selecionados"]');
+				      		    element.find("option")[0].selected = true;
+				      		    $scope.selecionados = "";
+				        	}else{
+				        		var element = angular.element('[ng-model="selecionados"]');
+				      		    element.find("option")[0].selected = true;
+				      		    $scope.selecionados = "";
+				        		$notify.open(data.msg,3000,"error");
+				        	}
+				        }
+				    );
+				}else{
+					var element = angular.element('[ng-model="selecionados"]');
+					element.find("option")[0].selected = true;
+					$scope.selecionados = "";
+				}
+			});
 	    }else if($param == "de"){
-	    	if(confirm("Deseja realmente desativar os selecionados?")){
-				$filtro = $scope.dados.filter(function(obj) {
-				  if(obj.selected === true || obj.selected === 'true')
-					  $aDesativar.push(obj.id_usuario);
+	    	alertify.confirm("Deseja realmente desativar os selecionados?",function(status){
+	    		if(status){
+	    			$filtro = $scope.dados.filter(function(obj) {
+	  				  if(obj.selected === true || obj.selected === 'true')
+	  					  $aDesativar.push(obj.id_usuario);
 
-				});
-				
-				$modelusuario.desativar({id:$aDesativar})
-			    .then(
-			        function( data ) {
-			        	if(data.status == "sucesso"){
-			        		loadDadosRemoto();
-			        		var element = angular.element('[ng-model="selecionados"]');
-			      		    element.find("option")[0].selected = true;
-			      		    $scope.selecionados = "";
-			        	}else{
-			        		var element = angular.element('[ng-model="selecionados"]');
-			      		    element.find("option")[0].selected = true;
-			      		    $scope.selecionados = "";
-			        		$notify.open(data.msg,3000,"error");
-			        	}
-			        }
-			    );
-			}else{
-				var element = angular.element('[ng-model="selecionados"]');
-				element.find("option")[0].selected = true;
-				$scope.selecionados = "";
-			}
+	  				});
+	  				
+	  				$modelusuario.desativar({id:$aDesativar})
+	  			    .then(
+	  			        function( data ) {
+	  			        	if(data.status == "sucesso"){
+	  			        		loadDadosRemoto();
+	  			        		var element = angular.element('[ng-model="selecionados"]');
+	  			      		    element.find("option")[0].selected = true;
+	  			      		    $scope.selecionados = "";
+	  			        	}else{
+	  			        		var element = angular.element('[ng-model="selecionados"]');
+	  			      		    element.find("option")[0].selected = true;
+	  			      		    $scope.selecionados = "";
+	  			        		$notify.open(data.msg,3000,"error");
+	  			        	}
+	  			        }
+	  			    );
+	    		}else{
+	    			var element = angular.element('[ng-model="selecionados"]');
+					element.find("option")[0].selected = true;
+					$scope.selecionados = "";
+	    		}
+	    	});
 	    }else{
 	    	$notify.open("Não foi selecionado nenhum item",2000,"error");
 			var element = angular.element('[ng-model="selecionados"]');
@@ -259,7 +285,9 @@ app.controller('sca-usuario_index', function Ctrl($scope,NgTableParams, $http, $
 			$scope.selecionados = "";
 	    }
 	}
-	
+	/**
+	 * Funcao de checar todos da tabela
+	 */
 	function checarTodos($check){
 		if($check){
 			angular.forEach($scope.dados, function(value, key) {

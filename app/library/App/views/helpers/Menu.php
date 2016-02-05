@@ -14,15 +14,15 @@ class Zend_View_Helper_Menu extends Zend_View_Helper_Abstract
         foreach ($modulo as $val) {
             if(count($menu)){
                 $html  .= '<li>';
-                $html  .= '    <a href="javascript:;" >';
+                $html  .= '    <a href="javascript:;" class="black" >';
                 $html  .= '        <i class="fa fa-'.$val['icone'].'"></i>';
                 $html  .= '            '.$val['nome'].'';
-                $html  .= '        <span class="caret"></span>';
+                $html  .= '        <span class="caret black"></span>';
                 $html  .= '    </a>';
                 $html  .= '    <ul class="nav nav-second-level">';
                 foreach ($menu as $value){
                     $html  .= '    <li>';
-                    $html  .= '        <a href="'.$view->baseUrl().'/'.$value['controller'].'/'.$value['action'].'">';
+                    $html  .= '        <a class="black '.(strtolower(Zend_Controller_Front::getInstance()->getRequest()->getActionName()) == $value['action'] && strtolower(Zend_Controller_Front::getInstance()->getRequest()->getControllerName()) == $value['controller']  ? "active" : "").'" href="'.$view->baseUrl().'/'.$value['controller'].'/'.$value['action'].'">';
                     $html  .= '            '.$value['nome'].'';
                     $html  .= '        </a>';
                     $html  .= '    </li>';

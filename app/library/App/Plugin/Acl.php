@@ -67,7 +67,7 @@ class App_Plugin_Acl extends Zend_Controller_Plugin_Abstract
                 $userAllowedResources=$aclResource->getCurrentRoleAllowedResources($grupo_id);
     			
     			// Adciona as permissão no ACL
-                $acl->allow($grupo_id, "index",array("login","logar","index"));
+                $acl->allow($grupo_id, "index",array("login","logar","index",'sair','sessao'));
                 $acl->allow($grupo_id, "error",array("error"));
                 foreach($userAllowedResources as $controllerName =>$allowedActions){
                     $arrayAllowedActions=array();

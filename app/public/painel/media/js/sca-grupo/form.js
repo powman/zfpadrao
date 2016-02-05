@@ -48,7 +48,8 @@ app.service(
     }
 );
 
-app.controller('sca-usuario_form', function Ctrl($scope,$loader,$modelform,$notify) {
+app.controller('sca-grupo_form', function Ctrl($scope,$loader,$modelform,$notify,Scopes) {
+	Scopes.store('sca-grupo_form', $scope);
 	
 	$scope.tabs = [];
 	
@@ -85,3 +86,4 @@ app.controller('sca-usuario_form', function Ctrl($scope,$loader,$modelform,$noti
 	});
     
 });
+

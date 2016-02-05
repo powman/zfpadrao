@@ -9,7 +9,6 @@ class IndexController extends App_Controller_BaseController
 	public function indexAction()
 	{
 	 $tblModulo = new Painel_Model_CgModulo();
-	 //$params = array("nome" => "teste");
 	 $tblModulo->listarTodos();
 
 	}
@@ -17,16 +16,6 @@ class IndexController extends App_Controller_BaseController
 	public function loginAction()
 	{
 	      
-	}
-	
-	public function saiAction()
-	{
-	    $this->_helper->viewRenderer->setNoRender(true);
-	    $this->_helper->layout()->disableLayout();
-	   $opa =  $this->view->SaveImagemSoap($_FILES);
-	   print_r($opa);
-	    ///print_r($_FILES);
-	    //echo "sai";
 	}
 	
 	public function logarAction()
@@ -71,6 +60,16 @@ class IndexController extends App_Controller_BaseController
 	    }
 	    
 	    echo json_encode($resposta);
+	}
+	
+	public function sairAction()
+	{
+	    $this->_helper->viewRenderer->setNoRender(true);
+	    $this->_helper->layout()->disableLayout();
+	    Zend_Auth::getInstance()->clearIdentity();
+	    return $this->_helper->redirector->goToRoute( array('controller' => 'index'), null, true);
+	
+	
 	}
 	
 	public function sessaoAction()

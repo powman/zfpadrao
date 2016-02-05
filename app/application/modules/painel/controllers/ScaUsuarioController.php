@@ -2,7 +2,7 @@
 
 class ScaUsuarioController extends App_Controller_BaseController
 {
-	public $models = array('ScaUsuario','SggAvatar');
+	public $models = array('SggAvatar');
 	public $modelAtual = 'ScaUsuario';
 	public $msg = null;
 	/**
@@ -74,9 +74,15 @@ class ScaUsuarioController extends App_Controller_BaseController
 	    $this->_helper->viewRenderer->setNoRender(true);
 	    if ($this->getRequest()->isPost()){
 	        $post = $this->getRequest()->getPost();
-	        if($post['senha']){
-	            $post['password_usuario'] = md5($post['senha']);
-	            unset($post['senha']);
+	        $validaLogin = $this->model->fetchRow($this->model->select()->where('login_usuario = ?', $post['login_usuario']));
+	        if($validaLogin){
+	            $resposta['status'] = "erro";
+	            $resposta['msg'] = "Este login esta sendo usado.";
+	            echo json_encode($resposta);
+	            exit();
+	        }
+	        if(isset($post['password_usuario'])){
+	            $post['password_usuario'] = md5($post['password_usuario']);
 	        }
 	        unset($post['id_usuario']);
 	        unset($post['nm_grupo']);
@@ -96,11 +102,14 @@ class ScaUsuarioController extends App_Controller_BaseController
 	    
 	    echo json_encode($resposta);
 	}
-	
+	/**
+	 * Salvar o avatar
+	 */
 	public function salvarAvatarAction()
 	{
 	    $this->_helper->layout()->disableLayout();
 	    $this->_helper->viewRenderer->setNoRender(true);
+	    $resposta = array();
 	    if ($this->getRequest()->isPost()){
     	    $form = array(
     	        "nm_avatar" => $_FILES["file"]["name"],
@@ -111,28 +120,75 @@ class ScaUsuarioController extends App_Controller_BaseController
     	    $result = $this->modelSggAvatar->save($form,$this->msg);
     	    if($result){
     	        $post = $this->getRequest()->getPost();
-    	        $this->modelSggAvatar->remove("id_avatar = ".$post['id_avatar']);
-    	        unset($post['id_avatar']);
-    	        $post['id_avatar'] = $result['id_avatar'];
-    	        $result = $this->model->save($post,$this->msg);
+    	        $form = array();
+    	        $form['id_avatar'] = $result['id_avatar'];
+    	        $form['id_usuario'] = $post['id_usuario'];
+    	        if($post['id_avatar'] != null && $post['id_avatar'] != 'null'){
+    	           $this->modelSggAvatar->remove("id_avatar = ".$post['id_avatar']);
+    	        }
+    	        if($form['id_avatar'] && $form['id_usuario']){
+    	            //print_r($form);
+    	            //exit();
+    	            $resultUsuario = $this->model->save($form,$this->msg);
+        	        if($resultUsuario){
+        	            $resposta['status'] = "sucesso";
+        	            $resposta['msg'] = $this->msg;
+        	            $resposta['dados'] = array('id_avatar' => $result['id_avatar']);
+        	        }else{
+        	            $resposta['status'] = "erro";
+        	            $resposta['msg'] = "Um erro inesperado aconteceu.";
+        	        }
+    	        }else{
+    	            $resposta['status'] = "sucesso";
+        	        $resposta['msg'] = $this->msg;
+        	        $resposta['dados'] = array('id_avatar' => $result['id_avatar']);
+    	        }
     	        
     	    }
+	    }else{
+	        $resposta['status'] = "erro";
+	        $resposta['msg'] = "Um erro inesperado aconteceu.";
+	        
 	    }
+	    echo json_encode($resposta);
+	    
 	}
-	
 	/**
-	 * Incluir um usuario
+	 * Remover o avatar
 	 */
-	public function verificaLoginAction()
+	public function removerAvatarAction()
 	{
-	    $resposta = array();
 	    $this->_helper->layout()->disableLayout();
 	    $this->_helper->viewRenderer->setNoRender(true);
-	    
-	    $resposta['status'] = "error";
-	     
+	    $resposta = array();
+	    if ($this->getRequest()->isPost()){
+	        $post = $this->getRequest()->getPost();
+	        $form = array(
+	            'id_avatar' => null,
+	            'id_usuario' => $post['id_usuario']
+	        );
+	        $result = $this->model->save($form,$this->msg);
+            if($result){
+                $resultAvatar = $this->modelSggAvatar->remove("id_avatar = ".$post['id_avatar']);
+                if($resultAvatar){
+                    $resposta['status'] = "sucesso";
+                    $resposta['msg'] = $this->msg;
+                    $resposta['dados'] = array('id_avatar' => 0);
+                }else{
+                    $resposta['status'] = "erro";
+                    $resposta['msg'] = "Um erro inesperado aconteceu.";
+                }
+            }
+	
+	    }else{
+	        $resposta['status'] = "erro";
+	        $resposta['msg'] = "Um erro inesperado aconteceu.";
+	         
+	    }
 	    echo json_encode($resposta);
+	     
 	}
+	
 	/**
 	 * Alterar um usuario
 	 */
@@ -143,11 +199,17 @@ class ScaUsuarioController extends App_Controller_BaseController
 	    $this->_helper->viewRenderer->setNoRender(true);
 	    if ($this->getRequest()->isPost()){
 	        $post = $this->getRequest()->getPost();
-	        unset($post['password_usuario']);
-	        unset($post['ultimo_acesso_usuario']);
-	        unset($post['is_root']);
-	        unset($post['nm_grupo']);
-	        $result = $this->model->save($post,$this->msg);
+	        $form = array();
+	        if(isset($post['password_usuario']))
+	            $form['password_usuario'] = md5($post['password_usuario']);
+	        $form['id_usuario'] = $post['id_usuario'];
+	        $form['id_pessoa'] = $post['id_pessoa'];
+	        $form['nm_usuario'] = $post['nm_usuario'];
+	        $form['login_usuario'] = $post['login_usuario'];
+	        $form['st_usuario'] = $post['st_usuario'];
+	        $form['id_grupo'] = $post['id_grupo'];
+	       
+	        $result = $this->model->save($form,$this->msg);
 	        if($result){
 	            $resposta['status'] = "sucesso";
 	            $resposta['msg'] = $this->msg;
@@ -191,7 +253,7 @@ class ScaUsuarioController extends App_Controller_BaseController
 	       $res[] = array('title' => "Usuário",'url' => $this->_helper->url("aba-usuario",$this->controle),'disabled' => false);
 	    
 	    if(Zend_Registry::get('acl')->isAllowed($this->view->sessao->id_grupo, $this->controle, "aba-avatar"))
-	       $res[] = array('title' => "Avatar",'url' => $this->view->url(array('controller' => $this->controle,'action' => "aba-avatar","id_avatar" => $usuario['id_avatar'])),'disabled' => false);
+	       $res[] = array('title' => "Avatar",'url' => $this->view->url(array('controller' => $this->controle,'action' => "aba-avatar")),'disabled' => true);
 	    
 	    echo json_encode(array("msg"=>"Abas carregada","status" => "sucesso","dados" => $res));
 	}
@@ -214,13 +276,11 @@ class ScaUsuarioController extends App_Controller_BaseController
 
 	}
 	/**
-	 * Aba de Foto
+	 * Aba de avatar
 	 */
 	public function abaAvatarAction()
 	{
 	    $this->_helper->layout()->disableLayout();
-	    $this->view->avatar = $this->modelSggAvatar->fetchByKey($this->getRequest()->getParam('id_avatar'),$this->msg);
-	    $this->view->avatar['imagemBase64'] = "data:".$this->view->avatar['tp_avatar'].";base64,".chunk_split(base64_encode($this->view->avatar['arquivo']));
 	    
 	}
 	/**
@@ -293,7 +353,7 @@ class ScaUsuarioController extends App_Controller_BaseController
 	
 	}
 	/**
-	 * Remove um dado
+	 * 
 	 */
 	public function removerAction()
 	{
@@ -317,6 +377,11 @@ class ScaUsuarioController extends App_Controller_BaseController
     	        } 
     	    }
     	    if($condicao){
+    	        // deleta os avatar destes usuários
+    	        $usuarios = $this->model->fetchAll("id_usuario in(".$ids.")")->toArray();
+    	        foreach ($usuarios as $usuario){
+    	            $resultAvatar = $this->modelSggAvatar->remove($usuario['id_avatar']);
+    	        }
         	    // chama a funcao excluir
         	    $result = $this->model->remove("id_usuario in(".$ids.")",$this->msg);
         	     
@@ -341,7 +406,11 @@ class ScaUsuarioController extends App_Controller_BaseController
 	        echo json_encode($resposta);
 	    }
 	}
-	
+	/**
+	 * (non-PHPdoc)
+	 * @see App_Controller_BaseController::getBotaoAction()
+	 * Pega o botao verificando as permissoes
+	 */
 	public function getBotaoAction()
 	{
 	    $this->_helper->layout()->disableLayout();
@@ -374,12 +443,16 @@ class ScaUsuarioController extends App_Controller_BaseController
 	
 	    echo $html;
 	}
-	
+	/**
+	 * Metodo para abrir o modal da webcam
+	 */
 	public function webcamAction()
 	{
 	    $this->_helper->layout()->disableLayout();
 	}
-	
+	/**
+	 * metodo para recortar a imagem
+	 */
 	public function recortarImagemAction()
 	{
 	    $this->_helper->layout()->disableLayout();
